@@ -18,7 +18,7 @@ public:
 	void bind() const;
 	void unbind() const;
 
-	void fill(uint32_t* arr, size_t size /* Buffer size in bytes */) const;
+	void fill(uint32_t* arr, std::size_t size /* Buffer size in bytes */) const;
 
 	uint32_t getRenderId() const;
 

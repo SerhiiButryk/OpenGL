@@ -34,7 +34,12 @@ std::string time_in_HH_MM_SS_MMM()
     // convert to broken time
     time_t t = time(NULL);
     std::tm bt;
-    localtime_s(&bt, &t);
+
+    #ifndef LINUX_PLATFORM
+        localtime_s(&bt, &t);
+    #else 
+        localtime_r( &t, &bt);
+    #endif
 
     std::ostringstream oss;
 
