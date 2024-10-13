@@ -19,7 +19,15 @@ Ref: https://glew.sourceforge.net/
 
 # Platforms
 
-This is a Visual Studio project for windows platform
+Currently there are the next platforms available:
+
+1) Windows (Visual Studio 2022) - Check out 'window' project folder
+
+# Repository structure
+
+dependencies/ - project dependencies
+engine/ - OpenGL code
+window/ - windows platform files and code
 
 # Some notes
 
@@ -27,7 +35,7 @@ This is a Visual Studio project for windows platform
 
 This is a platform dependent process. It has 2 steps:
 
-	1. The creation of an OpenGL Context
+	1. The creation of an OpenGL Context.
 	2. Loading all the necessary functions to use OpenGL.
 
 	The 2 step is handled by Glew library.

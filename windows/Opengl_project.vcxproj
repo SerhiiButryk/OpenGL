@@ -106,13 +106,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\GLEW\include;$(SolutionDir)dependencies\GLFW\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\dependencies\GLEW\include;$(SolutionDir)..\engine;$(SolutionDir)..\dependencies\GLFW\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\GLEW\lib\Release\x64;$(SolutionDir)dependencies\GLFW\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\dependencies\GLEW\lib\Release\x64;$(SolutionDir)..\dependencies\GLFW\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glew32s.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -137,22 +137,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\engine\opengl\external\GLFBridge.cpp" />
+    <ClCompile Include="..\engine\opengl\IndexBuffer.cpp" />
+    <ClCompile Include="..\engine\opengl\Layout.cpp" />
+    <ClCompile Include="..\engine\opengl\VertexArray.cpp" />
+    <ClCompile Include="..\engine\opengl\VertexBuffer.cpp" />
+    <ClCompile Include="..\engine\opengl\window\Window.cpp" />
     <ClCompile Include="src\Application.cpp" />
-    <ClCompile Include="src\opengl\external\GLFBridge.cpp" />
-    <ClCompile Include="src\opengl\IndexBuffer.cpp" />
-    <ClCompile Include="src\opengl\Layout.cpp" />
-    <ClCompile Include="src\opengl\VertexArray.cpp" />
-    <ClCompile Include="src\opengl\VertexBuffer.cpp" />
-    <ClCompile Include="src\opengl\window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\common\Log.h" />
-    <ClInclude Include="src\opengl\external\GLFBridge.h" />
-    <ClInclude Include="src\opengl\IndexBuffer.h" />
-    <ClInclude Include="src\opengl\Layout.h" />
-    <ClInclude Include="src\opengl\VertexArray.h" />
-    <ClInclude Include="src\opengl\VertexBuffer.h" />
-    <ClInclude Include="src\opengl\window\Window.h" />
+    <ClInclude Include="..\engine\common\Log.h" />
+    <ClInclude Include="..\engine\opengl\external\GLFBridge.h" />
+    <ClInclude Include="..\engine\opengl\IndexBuffer.h" />
+    <ClInclude Include="..\engine\opengl\Layout.h" />
+    <ClInclude Include="..\engine\opengl\VertexArray.h" />
+    <ClInclude Include="..\engine\opengl\VertexBuffer.h" />
+    <ClInclude Include="..\engine\opengl\window\Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

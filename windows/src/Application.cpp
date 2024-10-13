@@ -79,7 +79,7 @@ static ShaderFile readShaders()
 
     logInfo("Working dir: ", current_path);
 
-    std::string file_name = "res/shader/Basic.shader";
+    std::string file_name = "../engine/res/shader/Basic.shader";
     std::ifstream istream(file_name);
 
     std::string line;
