@@ -138,14 +138,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\opengl\external\GLFBridge.cpp" />
     <ClCompile Include="src\opengl\IndexBuffer.cpp" />
+    <ClCompile Include="src\opengl\Layout.cpp" />
     <ClCompile Include="src\opengl\VertexArray.cpp" />
     <ClCompile Include="src\opengl\VertexBuffer.cpp" />
+    <ClCompile Include="src\opengl\window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\common\Log.h" />
+    <ClInclude Include="src\opengl\external\GLFBridge.h" />
     <ClInclude Include="src\opengl\IndexBuffer.h" />
+    <ClInclude Include="src\opengl\Layout.h" />
     <ClInclude Include="src\opengl\VertexArray.h" />
     <ClInclude Include="src\opengl\VertexBuffer.h" />
+    <ClInclude Include="src\opengl\window\Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

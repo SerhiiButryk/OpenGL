@@ -5,8 +5,8 @@
 /*
 	This class is a representation of index buffer in OpenGL.
 	
-	A index buffer is a buffer which holds indices of data from a vertex buffer.
-	A index buffer allows to reuse data without dublicating it.
+	An index buffer is a buffer which holds indices of data from a vertex buffer.
+	An index buffer allows to reuse data without dublicating it.
 */
 
 class IndexBuffer

@@ -2,47 +2,20 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include <iostream>
 #include <fstream>
 #include <filesystem>
 #include <string>
 #include <sstream>
-#include <ctime>
-#include <chrono>
-#include <iomanip>
-#include <time.h>
 
 #include "opengl/IndexBuffer.h"
 #include "opengl/VertexBuffer.h"
+#include "opengl/VertexArray.h"
+#include "opengl/Layout.h"
+#include "opengl/window/Window.h"
+#include "opengl/external/GLFBridge.h"
+#include "common/Log.h"
 
 void printGLInfo();
-
-std::string time_in_HH_MM_SS_MMM()
-{
-    using namespace std::chrono;
-
-    // get current time
-    auto now = system_clock::now();
-
-    // get number of milliseconds for the current second
-    // (remainder after division into seconds)
-    auto ms = duration_cast<milliseconds>(now.time_since_epoch()) % 1000;
-
-    // convert to std::time_t in order to convert to std::tm (broken time)
-    auto timer = system_clock::to_time_t(now);
-
-    // convert to broken time
-    time_t t = time(NULL);
-    std::tm bt;
-    localtime_s(&bt, &t);
-
-    std::ostringstream oss;
-
-    oss << std::put_time(&bt, "%H:%M:%S"); // HH:MM:SS
-    oss << '.' << std::setfill('0') << std::setw(3) << ms.count();
-
-    return oss.str();
-}
 
 struct ShaderFile
 {
@@ -72,8 +45,7 @@ static unsigned int compileShader(unsigned int type, const std::string& source)
 
         glGetShaderInfoLog(id, length, &length, message);
 
-        std::cout << "Failed to compile: " << std::endl;
-        std::cout << "Message: " << message << std::endl;
+        logInfo("Failed to compile: ", message);
 
         glDeleteShader(id);
 
@@ -105,7 +77,7 @@ static ShaderFile readShaders()
 {
     std::filesystem::path current_path = std::filesystem::current_path();
 
-    std::cout << "\nWorking dir: " << current_path << std::endl;
+    logInfo("Working dir: ", current_path);
 
     std::string file_name = "res/shader/Basic.shader";
     std::ifstream istream(file_name);
@@ -135,8 +107,8 @@ static ShaderFile readShaders()
 
     ShaderFile shaderFile { vertexShaderStream.str(), fragmentShaderStream.str() };
 
-    std::cout << "\nVertex shader: \n" << shaderFile.vertexShader << std::endl;
-    std::cout << "\nFragment shader: \n" << shaderFile.fragmentShader << std::endl;
+    logInfo("Vertex shader: \n \"", shaderFile.vertexShader, "\"");
+    logInfo("Fragment shader: \n \"", shaderFile.fragmentShader, "\"");
 
     return shaderFile;
 }
@@ -145,31 +117,26 @@ int main(void)
 {
     /* Initializing the GLFW library */
 
-    if (!glfwInit()) {
-        std::cout << "Error: failed to init GLFW library\n";
-        glfwTerminate();
+    bool result = GLFBridge::init();
+
+    if (!result) {
+        GLFBridge::cleanup();
         return 1;
     }
 
-    /* Setup OpenGL profile and version */
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-
     /* Create a window and its OpenGL context */
 
-    GLFWwindow* window;
+    Window window;
+
     int width = 1200;
     int height = 800;
     const char* title = "Application";
 
-    window = glfwCreateWindow(width, height, title, NULL, NULL);
-    if (!window)
+    result = window.create(title, width, height);
+
+    if (!result)
     {
-        std::cout << "Error: failed to create a window\n";
-        glfwTerminate();
+        GLFBridge::cleanup();
         return 1;
     }
 
@@ -178,13 +145,13 @@ int main(void)
     */
     int bufferWidth, bufferHeight;
 
-    glfwGetFramebufferSize(window, &bufferWidth, &bufferHeight);
+    glfwGetFramebufferSize((GLFWwindow*) window.getWindow(), &bufferWidth, &bufferHeight);
 
-    std::cout << "View port information: " << bufferWidth << " " << bufferHeight << std::endl;
+    logInfo("View port information: ", bufferWidth, bufferHeight);
 
     /* Set the window's OpenGL context to be the current on this thread */
 
-    glfwMakeContextCurrent(window);
+    glfwMakeContextCurrent((GLFWwindow*) window.getWindow());
 
     /* Enable modern extension features  */
 
@@ -196,9 +163,9 @@ int main(void)
     if (GLEW_OK != err)
     {
         /* Error: glewInit failed, something is seriously wrong. */
-        std::cout << "Error: failed to init GLEW library\n";
-        glfwDestroyWindow(window);
-        glfwTerminate();
+        logError("Error: failed to init GLEW library");
+        window.destroy();
+        GLFBridge::cleanup();
         return 1;
     }
 
@@ -219,23 +186,6 @@ int main(void)
  
     */
 
-    /*
-        Create a vartex array object
-        
-        A vao holds a reference of vertex buffer and verter pointer attribs together.
-        By changing it we can change vertex buffer and therefore draw a different shape. 
-    */
-    unsigned int vao;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-    
-    /*
-        Create a vertex buffer.
-
-        A vertex buffer in this context just means a data to be used for drawing
-        a shape on a screen.
-    */
-
     const int size = 8;
     float positions[size] = {
         -0.5f, -0.5f, // 0
@@ -244,32 +194,26 @@ int main(void)
         -0.5f, 0.5f // 3
     };
 
+    VertexArray vertexArray;
     VertexBuffer vertexBuffer;
 
+    /*
+       Specify the layout of the data.
+    */
+
+    BufferLayout layout;
+    layout.add({2, GL_FLOAT, GL_FALSE,  sizeof(float) * 2});
+
+    vertexArray.bind();
+    
     vertexBuffer.bind();
     vertexBuffer.fill(positions, size * sizeof(float));
 
     /*
-        At this moment we must specify the layout of the data.
-        In other words, what it is and what attributes or properties it has.
-        
-        To do this we use the below settings.
+        Bind vertex buffer and layout into array buffer
     */
 
-    glEnableVertexAttribArray(0); 
-
-    /*
-        The next functions tell OpenGL that what the attribute index​ 
-        will get its attribute data from whatever buffer object is 
-        currently bound to GL_ARRAY_BUFFER
-    */
-
-    glVertexAttribPointer(0 /* Index of the first vertex data element */, 
-        2 /* The number of elements we are using , a kind of 2d coordinates */,
-        GL_FLOAT /* Type of the data buffer that we selected */,
-        GL_FALSE /* Do not normalize */,
-        sizeof(float) * 2 /* Byte size between vertex elements, in our case it's 2 floats so it's 8 bytes */,
-        0 /* The pointer to our first vertex attribute. It matches index 0 */);
+    vertexArray.add(vertexBuffer, layout);
 
     /*
         Generate & bind index buffer object
@@ -301,14 +245,14 @@ int main(void)
 
     /* Clear all states */
 
-    glBindVertexArray(0);
+    vertexArray.unbind();
     glUseProgram(0);
     vertexBuffer.unbind();
     indexBuffer.unbind();
 
     /* Loop until the user closes the window */
 
-    while (!glfwWindowShouldClose(window))
+    while (!glfwWindowShouldClose((GLFWwindow*)window.getWindow()))
     {
         // Nice grey color
         float red = 192 / 255.0;
@@ -326,7 +270,7 @@ int main(void)
         glUseProgram(shader);
         glUniform4f(location, 0.2f, 0.3f, 0.8f, 1.0f);
         
-        glBindVertexArray(vao);
+        vertexArray.bind();
         indexBuffer.bind();
 
         /* Send a draw command */
@@ -341,7 +285,7 @@ int main(void)
            things on the screen.
         */
 
-        glfwSwapBuffers(window);
+        glfwSwapBuffers((GLFWwindow*) window.getWindow());
 
         /* Get user or process events */
 
@@ -352,10 +296,10 @@ int main(void)
 
     /* Release resources */
 
-    glfwDestroyWindow(window);
-    glfwTerminate();
+    window.destroy();
+    GLFBridge::cleanup();
 
-    std::cout << "Program has finished" << std::endl;
+    logInfo("Program has finished");
 
     return 0;
 }
@@ -364,13 +308,13 @@ void printGLInfo()
 {
     auto version = glGetString(GL_VERSION);
     if (version != nullptr)
-        std::cout << "GL version: " << version << std::endl;
+        logInfo("GL version: ", version);
 
     auto vendor = glGetString(GL_VENDOR);
     if (vendor != nullptr)
-        std::cout << "GL vendor: " << vendor << std::endl;
+        logInfo("GL vendor: ", vendor);
 
     auto render = glGetString(GL_RENDER);
     if (render != nullptr)
-        std::cout << "GPU name: " << render << std::endl;
+        logInfo("GPU name: ", render);
 }
