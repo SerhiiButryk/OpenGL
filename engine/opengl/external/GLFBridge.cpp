@@ -1,5 +1,3 @@
-#pragma once
-
 #include "GLFBridge.h"
 #include "../window/Window.h"
 

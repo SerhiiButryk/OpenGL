@@ -19,15 +19,15 @@ Ref: https://glew.sourceforge.net/
 
 # Platforms
 
-Currently there are the next platforms available:
-
-1) Windows (Visual Studio 2022) - Check out 'window' project folder
+1) Windows (Visual Studio 2022). Check out 'window' project folder
+2) Linux (with CMake). Check out 'linux' project folder
 
 # Repository structure
 
 dependencies/ - project dependencies
-engine/ - OpenGL code
+engine/ - common OpenGL code
 window/ - windows platform files and code
+window/ - linux platform files and code
 
 # Some notes
 
@@ -35,15 +35,17 @@ window/ - windows platform files and code
 
 This is a platform dependent process. It has 2 steps:
 
-	1. The creation of an OpenGL Context.
-	2. Loading all the necessary functions to use OpenGL.
+	1. The creation of OpenGL context and attaching it to the window.
+	2. Loading all the necessary OpenGL APIs during runtime.
 
-	The 2 step is handled by Glew library.
+	The 2 step is handled by Glew library and the 1 step is managed by GLFW library.
 
 # Get started
 
 https://www.khronos.org/opengl/wiki/Getting_Started#Tutorials_and_How_To_Guides
 
-# OpenGL docs
+# OpenGL docs & refs
 
 https://docs.gl/
+https://www.opengl.org/
+https://www.khronos.org/opengl/wiki/Getting_Started

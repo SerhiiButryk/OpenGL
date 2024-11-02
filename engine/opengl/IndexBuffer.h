@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <cstddef>
 
 /*
 	This class is a representation of index buffer in OpenGL.

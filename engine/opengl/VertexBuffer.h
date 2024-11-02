@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <cstddef>
 
 /*
 	This class is a representation of vertex buffer in OpenGL.
