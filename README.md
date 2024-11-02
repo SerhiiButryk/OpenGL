@@ -19,7 +19,8 @@ Ref: https://glew.sourceforge.net/
 
 # Platforms
 
-This is a Visual Studio project for windows platform
+- Linux (with CMake)
+- Windows (with Visual Studio)
 
 # Some notes
 
@@ -27,15 +28,17 @@ This is a Visual Studio project for windows platform
 
 This is a platform dependent process. It has 2 steps:
 
-	1. The creation of an OpenGL Context
-	2. Loading all the necessary functions to use OpenGL.
+	1. The creation of OpenGL context and attaching it to the window.
+	2. Loading all the necessary OpenGL APIs during runtime.
 
-	The 2 step is handled by Glew library.
+	The 2 step is handled by Glew library and the 1 step is managed by GLFW library.
 
 # Get started
 
 https://www.khronos.org/opengl/wiki/Getting_Started#Tutorials_and_How_To_Guides
 
-# OpenGL docs
+# OpenGL docs & refs
 
 https://docs.gl/
+https://www.opengl.org/
+https://www.khronos.org/opengl/wiki/Getting_Started
