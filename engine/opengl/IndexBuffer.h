@@ -7,7 +7,7 @@
 	This class is a representation of index buffer in OpenGL.
 	
 	An index buffer is a buffer which holds indices of data from a vertex buffer.
-	An index buffer allows to reuse data without dublicating it.
+	An index buffer allows to reuse data without duplication.
 */
 
 class IndexBuffer
@@ -24,6 +24,6 @@ public:
 	uint32_t getRenderId() const;
 
 private:
-	uint32_t m_RenderId;
+	uint32_t m_RenderId {};
 };
 

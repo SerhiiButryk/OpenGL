@@ -20,7 +20,7 @@ public:
 	void add(const VertexBuffer& vb, const BufferLayout& l);
 
 private:
-	uint32_t m_RenderId;
+	uint32_t m_RenderId {};
 
 };
 

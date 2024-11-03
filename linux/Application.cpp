@@ -2,10 +2,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include <fstream>
-#include <filesystem>
 #include <string>
-#include <sstream>
 
 #include "opengl/IndexBuffer.h"
 #include "opengl/VertexBuffer.h"
@@ -14,106 +11,13 @@
 #include "opengl/window/Window.h"
 #include "opengl/external/GLFBridge.h"
 #include "common/Log.h"
+#include "opengl/Shader.h"
+
+// TODO: Implement error handling
 
 void printGLInfo();
 
-struct ShaderFile
-{
-    std::string vertexShader;
-    std::string fragmentShader;
-};
-
-static unsigned int compileShader(unsigned int type, const std::string& source)
-{
-    unsigned int id = glCreateShader(type);
-
-    const char* src = source.c_str();
-    glShaderSource(id, 1, &src, nullptr);
-    glCompileShader(id);
-
-    // Error handling
-
-    int result;
-    glGetShaderiv(id, GL_COMPILE_STATUS, &result);
-
-    if (result == GL_FALSE)
-    {
-        int length;
-        glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
-
-        char* message = (char*)alloca(length * sizeof(char));
-
-        glGetShaderInfoLog(id, length, &length, message);
-
-        logInfo("Failed to compile: ", message);
-
-        glDeleteShader(id);
-
-        return 0;
-    }
-
-    return id;
-}
-
-static unsigned int createShader(const std::string& vertexShader, const std::string& fragmentShader)
-{
-    unsigned int program = glCreateProgram();
-    unsigned int vs = compileShader(GL_VERTEX_SHADER, vertexShader);
-    unsigned int fs = compileShader(GL_FRAGMENT_SHADER, fragmentShader);
-
-    glAttachShader(program, vs);
-    glAttachShader(program, fs);
-
-    glLinkProgram(program);
-    glValidateProgram(program);
-
-    glDeleteShader(vs);
-    glDeleteShader(fs);
-
-    return program;
-}
-
-static ShaderFile readShaders()
-{
-    std::filesystem::path current_path = std::filesystem::current_path();
-
-    logInfo("Working dir: ", current_path);
-
-    std::string file_name = "../engine/res/shader/Basic.shader";
-    std::ifstream istream(file_name);
-
-    std::string line;
-    std::stringstream vertexShaderStream;
-    std::stringstream fragmentShaderStream;
-
-    std::stringstream* current = nullptr;
-
-    while (std::getline(istream, line))
-    {
-        if (line.find("#vertex_shader") != std::string::npos)
-        {
-            current = &vertexShaderStream;
-        } 
-        else if (line.find("#fragment_shader") != std::string::npos) 
-        {
-            current = &fragmentShaderStream;
-        }
-        else 
-        {
-            current->write(line.c_str(), line.size());
-            current->put('\n');
-        }
-    }
-
-    ShaderFile shaderFile { vertexShaderStream.str(), fragmentShaderStream.str() };
-
-    logInfo("Vertex shader: \n \"", shaderFile.vertexShader, "\"");
-    logInfo("Fragment shader: \n \"", shaderFile.fragmentShader, "\"");
-
-    return shaderFile;
-}
-
-int main(void)
+int main()
 {
     /* Initializing the GLFW library */
 
@@ -232,21 +136,16 @@ int main(void)
 
     /* Create a shader program */
 
-    ShaderFile shaderFile = readShaders();
+    Shader shader("../engine/res/shader/Basic.shader");
 
-    unsigned int shader = createShader(shaderFile.vertexShader, shaderFile.fragmentShader);
-
-    glUseProgram(shader);
-
-    /* Set uniform */
-
-    int location = glGetUniformLocation(shader, "u_Color"); // Get the id of uniform variable
-    glUniform4f(location, 0.2f, 0.3f, 0.8f, 1.0f); // Set a color in RGB format
+    shader.bind();
+    // Set a color in RGB format
+    shader.setUniform(0.2f, 0.3f, 0.8f, 1.0f);
 
     /* Clear all states */
 
     vertexArray.unbind();
-    glUseProgram(0);
+    shader.unBind();
     vertexBuffer.unbind();
     indexBuffer.unbind();
 
@@ -267,8 +166,8 @@ int main(void)
 
         /* Bind everything before sending a draw call */
 
-        glUseProgram(shader);
-        glUniform4f(location, 0.2f, 0.3f, 0.8f, 1.0f);
+        shader.bind();
+        shader.setUniform(0.2f, 0.3f, 0.8f, 1.0f);
         
         vertexArray.bind();
         indexBuffer.bind();
@@ -291,8 +190,6 @@ int main(void)
 
         glfwPollEvents();
     }
-
-    glDeleteProgram(shader);
 
     /* Release resources */
 

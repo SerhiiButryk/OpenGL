@@ -17,6 +17,7 @@ add_executable(app
     ../engine/opengl/Layout.cpp
     ../engine/opengl/window/Window.cpp
     ../engine/opengl/external/GLFBridge.cpp
+    ../engine/opengl/Shader.cpp
 )
 
 # Define macros

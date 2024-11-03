@@ -25,7 +25,7 @@ void VertexBuffer::fill(float* arr, size_t size) const
     glBufferData(
         GL_ARRAY_BUFFER /* Buffer type */,
         size /* Buffer size */,
-        arr, /* Actuall data */
+        arr, /* Actually data */
         GL_STATIC_DRAW /* A hint for GPU see docs for details */
     );
 }

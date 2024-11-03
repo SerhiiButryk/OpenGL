@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string>
 #include <iostream>
 #include <sstream>
@@ -6,6 +8,7 @@
 #include <ctime>
 #include <iomanip>
 #include <time.h>
+#include <algorithm>
 
 static std::string getTimestamp()
 {
@@ -28,7 +31,7 @@ static std::string getTimestamp()
     #ifndef LINUX_PLATFORM
         localtime_s(&bt, &t);
     #else 
-        localtime_r( &t, &bt);
+        return asctime(localtime(&t));
     #endif
 
     std::ostringstream oss;
@@ -39,13 +42,32 @@ static std::string getTimestamp()
     return oss.str();
 }
 
+static std::string trimString(std::string string)
+{
+    string.erase(std::find_if(string.rbegin(), string.rend(), [](unsigned char ch) {
+        return !std::isspace(ch);
+    }).base(), string.end());
+
+    return string;
+}
+
+static std::string getTidFormatted()
+{
+    std::thread::id tid = std::this_thread::get_id();
+
+    std::stringstream ss;
+    ss << tid;
+    std::string tidStr = ss.str();
+
+    return tidStr.substr(0, 5);
+}
+
 template < typename... Args >
 static auto logError(const Args&... args)
 {
-    std::thread::id tid = std::this_thread::get_id();
     std::string timestamp = getTimestamp();
 
-    std::cout << tid << "::" << timestamp << "  INFO:  ";
+    std::cout << trimString(timestamp) << "  " << getTidFormatted() << "  ERROR:  ";
 
     // lambda used as decorator to add a space
     // expands to ( ( ( std::cout << v1 ) << v2 ) << ... )
@@ -55,10 +77,9 @@ static auto logError(const Args&... args)
 template < typename... Args >
 static auto logInfo(const Args&... args)
 {
-    std::thread::id tid = std::this_thread::get_id();
     std::string timestamp = getTimestamp();
 
-    std::cout << tid << "::" << timestamp << "  INFO:  ";
+    std::cout << trimString(timestamp) << "  " << getTidFormatted() << "  INFO:  ";
 
     // lambda used as decorator to add a space
     // expands to ( ( ( std::cout << v1 ) << v2 ) << ... )

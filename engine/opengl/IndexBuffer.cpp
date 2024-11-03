@@ -21,7 +21,7 @@ void IndexBuffer::unbind() const
 void IndexBuffer::fill(uint32_t* arr, size_t size) const
 {
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size /* Buffer size in bytes */,
-		arr /* Actuall data */, GL_STATIC_DRAW /* A hint for GPU see docs for details */);
+		arr /* Actually data */, GL_STATIC_DRAW /* A hint for GPU see docs for details */);
 }
 
 uint32_t IndexBuffer::getRenderId() const

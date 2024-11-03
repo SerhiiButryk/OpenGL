@@ -1,10 +1,10 @@
 #include "GLFBridge.h"
+
 #include "../window/Window.h"
+#include "../../common/Log.h"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-
-#include "../../common/Log.h"
 
 bool GLFBridge::init()
 {
@@ -50,5 +50,5 @@ void GLFBridge::destroyWindow(const Window& window)
 {
     logInfo("GLFBridge::destroyWindow()");
 
-    glfwDestroyWindow((GLFWwindow*)window.getWindow());
+    glfwDestroyWindow(static_cast<GLFWwindow *>(window.getWindow()));
 }

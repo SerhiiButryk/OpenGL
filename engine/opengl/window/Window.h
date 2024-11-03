@@ -1,7 +1,7 @@
 #pragma once
 
 /*
-	Creates and manages application window
+	A class which represents a window in our application
 */
 
 class Window

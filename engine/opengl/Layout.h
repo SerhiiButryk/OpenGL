@@ -4,11 +4,14 @@
 
 #include <GL/glew.h>
 
-/* Represent a layout specification of vertex buffer */
+/*
+ * Represent a layout specification of vertex buffer.
+ * Basically layout is some information about the data in vertex buffer
+ */
 
 struct LayoutDefinition
 {
-	/* The number of elements we are using, a kind of 2d coordinates */
+	/* The number of elements we are using, a kind of 2d or 3d coordinates */
 	int count;
 	/* Type of the data buffer that we selected */
 	int dataType;
