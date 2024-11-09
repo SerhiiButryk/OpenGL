@@ -32,6 +32,7 @@ void VertexArray::unbind() const
 
 void VertexArray::add(const VertexBuffer& vb, const BufferLayout& l)
 {
+    vb.bind();
 
 	const auto& elements = l.get();
 
@@ -58,17 +59,17 @@ void VertexArray::add(const VertexBuffer& vb, const BufferLayout& l)
         const auto& layout = elements[i];
 
         logInfo("VertexArray::add() index = ", i, ", count = ", layout.count, ", data type = ",
-            layout.dataType, ", normalize = ", layout.nomalize, ", stride = ", layout.stride,
+            layout.dataType, ", normalize = ", layout.nomalize, ", stride = ", l.getStride(),
             ", offset = ", offset);
 
         glVertexAttribPointer(i /* Index of the first vertex data element */,
             layout.count /* The number of elements we are using , a kind of 2d or 3d coordinates */,
             layout.dataType /* Type of the data buffer that we selected */,
             layout.nomalize /* Whether to normalize */,
-            layout.stride /* Byte size between vertex elements, if it's 2 floats then it's 8 bytes */,
+            l.getStride() /* Byte size between vertex elements, if it's 2 floats then it's 8 bytes */,
             reinterpret_cast<const void *>(offset /* The offset of data in vertex buffer */) /* The offset of data in vertex buffer */);
 
-        offset = layout.count * LayoutDefinition::getSizeOfType(layout.dataType);
+        offset += layout.count * LayoutDefinition::getSizeOfType(layout.dataType);
 	}
 
 }

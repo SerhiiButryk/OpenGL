@@ -31,10 +31,21 @@ void Shader::unBind() const
     glUseProgram(0);
 }
 
-void Shader::setUniform(float red, float green, float blue, float opacity) const
+void Shader::setUniform(const std::string& name, float red, float green, float blue, float opacity) const
 {
-    int location = glGetUniformLocation(m_RenderId, "u_Color"); // Get the id of uniform variable
+    int location = glGetUniformLocation(m_RenderId, name.c_str()); // Get the id of uniform variable
+    if (location == -1) {
+        logError("Shader::setUniform() unable to get uniform location for ", name);
+    }
     glUniform4f(location, red, green, blue, opacity); // Set a color in RGB format
+}
+
+void Shader::setTexture(const std::string& name, int slotLocation) const {
+    int location = glGetUniformLocation(m_RenderId, name.c_str()); // Get the id of uniform variable
+    if (location == -1) {
+        logError("Shader::setTexture() unable to get uniform location for ", name);
+    }
+    glUniform1i(location, slotLocation);
 }
 
 ShaderFile Shader::parseShader(const std::string& filePath) const

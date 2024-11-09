@@ -19,11 +19,13 @@ public:
 	void bind() const;
 	void unbind() const;
 
-	void fill(uint32_t* arr, size_t size /* Buffer size in bytes */) const;
+	void fill(uint32_t* arr, size_t size /* Buffer size in bytes */);
 
-	uint32_t getRenderId() const;
+	inline uint32_t getRenderId() const;
+	inline uint32_t getCount() const { return m_IndexCount; }
 
 private:
 	uint32_t m_RenderId {};
+	uint32_t m_IndexCount {};
 };
 

@@ -27,7 +27,8 @@ public:
     void bind() const;
     void unBind() const;
 
-    void setUniform(float red, float green, float blue, float opacity) const;
+    void setUniform(const std::string& name, float red, float green, float blue, float opacity) const;
+    void setTexture(const std::string& name, int slotLocation) const;
 
 private:
     uint32_t m_RenderId {};

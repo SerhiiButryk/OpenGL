@@ -18,6 +18,10 @@ add_executable(app
     ../engine/opengl/window/Window.cpp
     ../engine/opengl/external/GLFBridge.cpp
     ../engine/opengl/Shader.cpp
+    ../engine/opengl/external/GLEWBridge.cpp
+    ../engine/opengl/GLEngine.cpp
+    ../engine/opengl/Renderer.cpp
+    ../engine/opengl/Textures.cpp
 )
 
 # Define macros
@@ -34,6 +38,7 @@ include_directories(${PROJECT_DEPENDENCIES}/linux/GLFW/include)
 link_directories(${PROJECT_DEPENDENCIES}/linux/GLFW/lib)
 
 include_directories(${PROJECT_ROOT})
+include_directories(${PROJECT_DEPENDENCIES})
 
 # Link all dependencies:
 # 1) glfw

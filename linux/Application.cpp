@@ -12,19 +12,16 @@
 #include "opengl/external/GLFBridge.h"
 #include "common/Log.h"
 #include "opengl/Shader.h"
+#include <opengl/GLEngine.h>
+#include <opengl/external/GLEWBridge.h>
+#include "opengl/Renderer.h"
+#include "opengl/Textures.h"
 
 // TODO: Implement error handling
 
-void printGLInfo();
-
 int main()
 {
-    /* Initializing the GLFW library */
-
-    bool result = GLFBridge::init();
-
-    if (!result) {
-        GLFBridge::cleanup();
+    if (!GLEngine::initEngine()) {
         return 1;
     }
 
@@ -36,50 +33,16 @@ int main()
     int height = 800;
     const char* title = "Application";
 
-    result = window.create(title, width, height);
-
-    if (!result)
+    if (!window.create(title, width, height))
     {
-        GLFBridge::cleanup();
-        return 1;
-    }
-
-    /*
-        Get view buffer size information
-    */
-    int bufferWidth, bufferHeight;
-
-    glfwGetFramebufferSize((GLFWwindow*) window.getWindow(), &bufferWidth, &bufferHeight);
-
-    logInfo("View port information: ", bufferWidth, bufferHeight);
-
-    /* Set the window's OpenGL context to be the current on this thread */
-
-    glfwMakeContextCurrent((GLFWwindow*) window.getWindow());
-
-    /* Enable modern extension features  */
-
-    glewExperimental = GL_TRUE;
-
-    /* Initializing the GLEW library */
-
-    GLenum err = glewInit();
-    if (GLEW_OK != err)
-    {
-        /* Error: glewInit failed, something is seriously wrong. */
-        logError("Error: failed to init GLEW library");
+        logError("Failed to create window");
         window.destroy();
         GLFBridge::cleanup();
         return 1;
     }
 
-    /* Setup view ports in OpenGL */
-
-    glViewport(0, 0, bufferWidth, bufferHeight);
-
-    /* Log OpenGL debug info */ 
-
-    printGLInfo();
+    /* Log OpenGL debug info */
+    GLEWBridge::printInfo();
 
     /* 
         So what we need here is the next:
@@ -90,13 +53,18 @@ int main()
  
     */
 
-    const int size = 8;
+    const int size = 4 * 4;
     float positions[size] = {
-        -0.5f, -0.5f, // 0
-        0.0f, -0.5f, // 1
-        0.0f, 0.5f, // 2
-        -0.5f, 0.5f // 3
+        // positions    texture coordinates
+        -0.5f, -0.5f,    0.0f, 0.0f, // 0
+         0.5f, -0.5f,    1.0f, 0.0f, // 1
+        0.5f, 0.5f,      1.0f, 1.0f, // 2
+        -0.5f, 0.5f,     0.0f, 1.0f, // 3
     };
+
+    // Blending
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     VertexArray vertexArray;
     VertexBuffer vertexBuffer;
@@ -106,7 +74,8 @@ int main()
     */
 
     BufferLayout layout;
-    layout.add({2, GL_FLOAT, GL_FALSE,  sizeof(float) * 2});
+    layout.add({2, GL_FLOAT, GL_FALSE });
+    layout.add({2, GL_FLOAT, GL_FALSE });
 
     vertexArray.bind();
     
@@ -132,15 +101,21 @@ int main()
     IndexBuffer indexBuffer;
 
     indexBuffer.bind();
-    indexBuffer.fill(indices, indicesSize * sizeof(uint32_t));
+    indexBuffer.fill(indices, indicesSize);
 
     /* Create a shader program */
 
-    Shader shader("../engine/res/shader/Basic.shader");
+    // Shader shader("../engine/res/shader/Basic.shader");
+    Shader shader("../engine/res/shader/Basic_texture.shader");
 
     shader.bind();
     // Set a color in RGB format
-    shader.setUniform(0.2f, 0.3f, 0.8f, 1.0f);
+    shader.setUniform("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
+
+    Textures textures("../engine/res/textures/test.png");
+    textures.bind(0 /* Slot */);
+
+    shader.setTexture("u_Texture", 0 /* Slot */);
 
     /* Clear all states */
 
@@ -148,6 +123,8 @@ int main()
     shader.unBind();
     vertexBuffer.unbind();
     indexBuffer.unbind();
+
+    Renderer renderer;
 
     /* Loop until the user closes the window */
 
@@ -160,21 +137,11 @@ int main()
 
         // Clear screen to some initial starting color, 
         // so we can draw things again from the begging
+        renderer.clean(red, green, blue, 1.0f);
 
-        glClearColor(red, green, blue, 1.0f /* alpha */);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        /* Bind everything before sending a draw call */
-
-        shader.bind();
-        shader.setUniform(0.2f, 0.3f, 0.8f, 1.0f);
+        shader.setUniform("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
         
-        vertexArray.bind();
-        indexBuffer.bind();
-
-        /* Send a draw command */
-
-        glDrawElements(GL_TRIANGLES, indicesSize, GL_UNSIGNED_INT, nullptr);
+        renderer.draw(vertexArray, indexBuffer, shader);
 
         /* 
            Swap front and back buffers 
@@ -199,19 +166,4 @@ int main()
     logInfo("Program has finished");
 
     return 0;
-}
-
-void printGLInfo() 
-{
-    auto version = glGetString(GL_VERSION);
-    if (version != nullptr)
-        logInfo("GL version: ", version);
-
-    auto vendor = glGetString(GL_VENDOR);
-    if (vendor != nullptr)
-        logInfo("GL vendor: ", vendor);
-
-    auto render = glGetString(GL_RENDER);
-    if (render != nullptr)
-        logInfo("GPU name: ", render);
 }

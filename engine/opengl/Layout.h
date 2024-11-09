@@ -17,8 +17,6 @@ struct LayoutDefinition
 	int dataType;
 	/* Normalize */
 	unsigned int nomalize;
-	/* Byte size between vertex elements, if it's 2 floats then it's 8 bytes */
-	unsigned int stride;
 
 	/* Maps the type to size */
 	static int getSizeOfType(unsigned int type) {
@@ -45,10 +43,12 @@ public:
 
 	void add(const LayoutDefinition& element);
 
-	const std::vector<LayoutDefinition>& get() const;
+	inline const std::vector<LayoutDefinition>& get() const;
+	inline const uint32_t getStride() const { return m_Stride; }
 
 private:
 	std::vector<LayoutDefinition> elements;
+	uint32_t m_Stride {};
 
 };
 

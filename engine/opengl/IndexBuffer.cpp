@@ -18,9 +18,11 @@ void IndexBuffer::unbind() const
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER /* Buffer type */, 0);
 }
 
-void IndexBuffer::fill(uint32_t* arr, size_t size) const
+void IndexBuffer::fill(uint32_t* arr, size_t size)
 {
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size /* Buffer size in bytes */,
+	m_IndexCount = size;
+
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size * sizeof(uint32_t) /* Buffer size in bytes */,
 		arr /* Actually data */, GL_STATIC_DRAW /* A hint for GPU see docs for details */);
 }
 
