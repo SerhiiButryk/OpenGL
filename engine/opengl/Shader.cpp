@@ -12,7 +12,7 @@ Shader::Shader(const std::string& filePath)
 {
     auto shaderFile = parseShader(filePath);
     m_RenderId = createShader(shaderFile);
-    logInfo("Shader::Shader() created, id = ", m_RenderId);
+    logInfo("Shader::Shader() created, id = {}", m_RenderId);
 }
 
 Shader::~Shader()
@@ -35,7 +35,7 @@ int Shader::getUniformLocation(const std::string& name) const {
     int location = glGetUniformLocation(m_RenderId, name.c_str()); // Get the id of uniform variable
     if (location == -1) {
         // This can mean that uniform is not active
-        logError("Shader::setUniform() unable to get uniform location for ", name);
+        logError("Shader::setUniform() unable to get uniform location for {}", name);
     }
     return location;
 }
@@ -59,7 +59,7 @@ void Shader::setUniformMat(const std::string& name, const glm::mat4& mat4) const
 ShaderFile Shader::parseShader(const std::string& filePath) const
 {
     std::filesystem::path current_path = std::filesystem::current_path();
-    logInfo("Shader::parseShader() My working dir: ", current_path);
+    logInfo("Shader::parseShader() My working dir: '{}'", current_path.string());
 
     std::ifstream istream(filePath);
 
@@ -94,13 +94,13 @@ ShaderFile Shader::parseShader(const std::string& filePath) const
     if (shaderFile.vertexShader.empty()) {
         logError("Vertex shader is empty !");
     } else {
-        logInfo("Vertex shader: \n \"", shaderFile.vertexShader, "\"");
+        logInfo("Vertex shader: \n \"{}\"", shaderFile.vertexShader);
     }
 
     if (shaderFile.fragmentShader.empty()) {
         logError("Fragment shader is empty !");
     } else {
-        logInfo("Fragment shader: \n \"", shaderFile.fragmentShader, "\"");
+        logInfo("Fragment shader: \n \"{}\"", shaderFile.fragmentShader);
     }
 
     return shaderFile;
@@ -146,7 +146,7 @@ unsigned int Shader::compileShader(unsigned int type, const std::string& source)
 
         glGetShaderInfoLog(id, length, &length, message);
 
-        logError("Failed to compile: ", message);
+        logError("Failed to compile: {}", message);
 
         glDeleteShader(id);
 

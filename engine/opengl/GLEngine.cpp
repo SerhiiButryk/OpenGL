@@ -6,6 +6,10 @@
 #include <common/Log.h>
 
 bool GLEngine::initEngine() {
+
+    // Init logger lib
+    initLogger();
+
     /* Initializing the GLFW library */
     if (!GLFBridge::init()) {
         logError("Failed to init GLFW library");
@@ -39,15 +43,15 @@ void GLEngine::setBlendingMode() {
 void GLEngine::printInfo() {
     auto version = glGetString(GL_VERSION);
     if (version != nullptr)
-        logInfo("GL version: ", version);
+        logInfo("GL version: '{}'", std::string((char*)version));
 
     auto vendor = glGetString(GL_VENDOR);
     if (vendor != nullptr)
-        logInfo("GL vendor: ", vendor);
+        logInfo("GL vendor: '{}'", std::string((char*)version));
 
     auto render = glGetString(GL_RENDER);
     if (render != nullptr)
-        logInfo("GPU name: ", render);
+        logInfo("GPU name: '{}'", std::string((char*)version));
 }
 
 void GLAPIENTRY
@@ -58,10 +62,8 @@ MessageCallback(GLenum source,
                 GLsizei length,
                 const GLchar *message,
                 const void *userParam) {
-
-    logError((type == GL_DEBUG_TYPE_ERROR ? "GL ERROR" : ""),
-             " Severity: ", severity,
-             " OpenGL Message: ", message);
+    logError("{} Severity = {}, OpenGL Message: {}", (type == GL_DEBUG_TYPE_ERROR ? "GL ERROR" : ""),
+        severity, message);
 }
 
 void GLEngine::setDebugCallback() {
@@ -71,10 +73,10 @@ void GLEngine::setDebugCallback() {
     float version = std::stof(versionString);
 
     if (version >= 4.5f) {
-        logInfo("GLEngine::setDebugCallback() Can set a debug callback. Version = ", version);
+        logInfo("GLEngine::setDebugCallback() Can set a debug callback. Version = {}", version);
         glDebugMessageCallback(MessageCallback, 0);
     } else {
         // TODO: Implement error handling in this case
-        logInfo("GLEngine::setDebugCallback() !!! CANNOT set a debug callback !!! Version = ", version);
+        logInfo("GLEngine::setDebugCallback() !!! CANNOT set a debug callback !!! Version = {}", version);
     }
 }

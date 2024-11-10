@@ -1,93 +1,46 @@
 #pragma once
 
-#include <string>
-#include <iostream>
-#include <sstream>
-#include <chrono>
-#include <thread>
-#include <ctime>
-#include <iomanip>
-#include <time.h>
-#include <algorithm>
+#include "spdlog/spdlog.h"
 
 #define ENABLE_LOGGING
 
-static std::string getTimestamp()
-{
-    using namespace std::chrono;
+// LOG a pointer
+// logError("Create the visualizer viewer({:p}).", fmt::ptr(obj));
 
-    // Get current time
-    auto now = system_clock::now();
-
-    // Get number of milliseconds for the current time
-    // (a remainder after division into seconds)
-    auto ms = duration_cast<milliseconds>(now.time_since_epoch()) % 1000;
-
-    // Convert to std::time_t in order to convert to std::tm (broken time)
-    auto timer = system_clock::to_time_t(now);
-
-    // Convert to broken time
-    time_t t = time(NULL);
-    
-    std::tm bt;
-    #ifndef LINUX_PLATFORM
-        localtime_s(&bt, &t);
-    #else 
-        return asctime(localtime(&t));
-    #endif
-
-    std::ostringstream oss;
-
-    oss << std::put_time(&bt, "%H:%M:%S"); // HH:MM:SS
-    oss << '.' << std::setfill('0') << std::setw(3) << ms.count();
-
-    return oss.str();
-}
-
-static std::string trimString(std::string string)
-{
-    string.erase(std::find_if(string.rbegin(), string.rend(), [](unsigned char ch) {
-        return !std::isspace(ch);
-    }).base(), string.end());
-
-    return string;
-}
-
-static std::string getTidFormatted()
-{
-    std::thread::id tid = std::this_thread::get_id();
-
-    std::stringstream ss;
-    ss << tid;
-    std::string tidStr = ss.str();
-
-    return tidStr.substr(0, 5);
-}
-
-template < typename... Args >
-static auto logError(const Args&... args)
-{
+static void initLogger() {
 #ifdef ENABLE_LOGGING
-    std::string timestamp = getTimestamp();
-
-    std::cout << trimString(timestamp) << "  " << getTidFormatted() << "  ERROR:  ";
-
-    // lambda used as decorator to add a space
-    // expands to ( ( ( std::cout << v1 ) << v2 ) << ... )
-    (std::cout << ... << [&](const auto& ref) -> char { std::cout << ref; return ' '; }(args)) << '\n';
+    spdlog::set_level(spdlog::level::trace);
 #endif
 }
 
 template < typename... Args >
-static auto logInfo(const Args&... args)
+static auto logError(const std::string& message, Args&&... args)
 {
 #ifdef ENABLE_LOGGING
-    std::string timestamp = getTimestamp();
+    spdlog::error(message, std::forward<Args>(args)...);
+#endif
+}
 
-    std::cout << trimString(timestamp) << "  " << getTidFormatted() << "  INFO:  ";
+template < typename... Args >
+static auto logInfo(const std::string& message, Args&&... args)
+{
+#ifdef ENABLE_LOGGING
+    spdlog::info(message, std::forward<Args>(args)...);
+#endif
+}
 
-    // lambda used as decorator to add a space
-    // expands to ( ( ( std::cout << v1 ) << v2 ) << ... )
-    (std::cout << ... << [&](const auto& ref) -> char { std::cout << ref; return ' '; }(args)) << '\n';
+template < typename... Args >
+static auto logWarn(const std::string& message, Args&&... args)
+{
+#ifdef ENABLE_LOGGING
+    spdlog::warn(message, args...);
+#endif
+}
+
+template < typename... Args >
+static auto logDebug(const std::string& message, Args&&... args)
+{
+#ifdef ENABLE_LOGGING
+    spdlog::debug(message, std::forward<Args>(args)...);
 #endif
 }
