@@ -18,7 +18,6 @@ public:
 	void setWindow(void* window) { this->window = window; }
 
 	void setBufferSize(int width, int height) { this->bufferWidth = width; this->bufferHeight = height; }
-	void setupViewport() const;
 
 private:
 	void* window = nullptr;

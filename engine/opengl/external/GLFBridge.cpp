@@ -17,13 +17,17 @@ bool GLFBridge::init()
 
     /* Setup OpenGL profile and version */
 
-    // OpenGL version
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    // Set minimum OpenGL version
+    // TODO: Check what happens if we cannot use 4.5 version
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
     // No backwards compatibility
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     // Enable forward compatibility
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+
+    // Enable OpenGL debug context which may give more info about errors
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, 1);
 
 	return true;
 }

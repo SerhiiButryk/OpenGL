@@ -1,5 +1,6 @@
 #include "Window.h"
 
+#include <opengl/GLEngine.h>
 #include <opengl/external/GLEWBridge.h>
 
 #include "../external/GLFBridge.h"
@@ -15,17 +16,15 @@ Window::~Window()
 
 bool Window::create(const char* title, int width, int height)
 {
-	if (window != nullptr) 
-	{
+	if (window != nullptr) {
 		logError("Window::create() Window is not null, return");
 		return false;
 	}
 
-	const bool result = GLFBridge::createWindow(*this, title, width, height);
-
-	logInfo("Window::create() Window is created, result = ", result);
+	bool result = GLFBridge::createWindow(*this, title, width, height);
 
 	if (!result) {
+		logError("Window::create() Failed to create window");
 		return false;
 	}
 
@@ -33,10 +32,14 @@ bool Window::create(const char* title, int width, int height)
 
 	// TODO: Maybe find another place where to do this
 	// At this point we init GLEW
-	if (!GLEWBridge::init(true))
+	if (!GLEWBridge::init(true)) {
+		logError("Window::create() Failed to init GLEW lib");
 		return false;
+	}
 
-	setupViewport();
+	GLEngine::setViewPorts(bufferWidth, bufferHeight);
+
+	logInfo("Window::create() Window is created");
 
 	return true;
 }
@@ -53,9 +56,4 @@ void Window::destroy()
 	window = nullptr;
 
 	logInfo("Window::destroy() Window is destroyed");
-}
-
-void Window::setupViewport() const
-{
-	GLEWBridge::setViewPorts(bufferWidth, bufferHeight);
 }

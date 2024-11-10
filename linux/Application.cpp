@@ -2,8 +2,6 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include <string>
-
 #include "opengl/IndexBuffer.h"
 #include "opengl/VertexBuffer.h"
 #include "opengl/VertexArray.h"
@@ -13,11 +11,11 @@
 #include "common/Log.h"
 #include "opengl/Shader.h"
 #include <opengl/GLEngine.h>
-#include <opengl/external/GLEWBridge.h>
 #include "opengl/Renderer.h"
 #include "opengl/Textures.h"
 
-// TODO: Implement error handling
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
 int main()
 {
@@ -29,20 +27,23 @@ int main()
 
     Window window;
 
+    // 3 x 2 aspect ratio
     int width = 1200;
     int height = 800;
     const char* title = "Application";
 
-    if (!window.create(title, width, height))
-    {
-        logError("Failed to create window");
+    if (!window.create(title, width, height)) {
         window.destroy();
         GLFBridge::cleanup();
         return 1;
     }
 
-    /* Log OpenGL debug info */
-    GLEWBridge::printInfo();
+    // Log debug info
+    GLEngine::printInfo();
+    GLEngine::setDebugCallback();
+    // Blending
+    GLEngine::setBlending(true);
+    GLEngine::setBlendingMode();
 
     /* 
         So what we need here is the next:
@@ -61,10 +62,6 @@ int main()
         0.5f, 0.5f,      1.0f, 1.0f, // 2
         -0.5f, 0.5f,     0.0f, 1.0f, // 3
     };
-
-    // Blending
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     VertexArray vertexArray;
     VertexBuffer vertexBuffer;
@@ -103,19 +100,25 @@ int main()
     indexBuffer.bind();
     indexBuffer.fill(indices, indicesSize);
 
-    /* Create a shader program */
+    // 3 x 2 aspect ratio which is
+    // 1.5 * 2 = 3
+    // 1 * 2 = 2
+    glm::mat4 proj = glm::ortho(-1.5f, 1.5f, -1.0f, 1.0f, -1.0f, 1.0f);
+
+    /* Create a shader */
 
     // Shader shader("../engine/res/shader/Basic.shader");
     Shader shader("../engine/res/shader/Basic_texture.shader");
 
     shader.bind();
     // Set a color in RGB format
-    shader.setUniform("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
+    // shader.setUniform("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
+    shader.setUniformMat("u_MVP", proj);
 
     Textures textures("../engine/res/textures/test.png");
     textures.bind(0 /* Slot */);
 
-    shader.setTexture("u_Texture", 0 /* Slot */);
+    shader.setUniformTexture("u_Texture", 0 /* Slot */);
 
     /* Clear all states */
 
@@ -139,7 +142,7 @@ int main()
         // so we can draw things again from the begging
         renderer.clean(red, green, blue, 1.0f);
 
-        shader.setUniform("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
+        // shader.setUniform("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
         
         renderer.draw(vertexArray, indexBuffer, shader);
 

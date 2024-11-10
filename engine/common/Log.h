@@ -10,6 +10,8 @@
 #include <time.h>
 #include <algorithm>
 
+#define ENABLE_LOGGING
+
 static std::string getTimestamp()
 {
     using namespace std::chrono;
@@ -65,6 +67,7 @@ static std::string getTidFormatted()
 template < typename... Args >
 static auto logError(const Args&... args)
 {
+#ifdef ENABLE_LOGGING
     std::string timestamp = getTimestamp();
 
     std::cout << trimString(timestamp) << "  " << getTidFormatted() << "  ERROR:  ";
@@ -72,11 +75,13 @@ static auto logError(const Args&... args)
     // lambda used as decorator to add a space
     // expands to ( ( ( std::cout << v1 ) << v2 ) << ... )
     (std::cout << ... << [&](const auto& ref) -> char { std::cout << ref; return ' '; }(args)) << '\n';
+#endif
 }
 
 template < typename... Args >
 static auto logInfo(const Args&... args)
 {
+#ifdef ENABLE_LOGGING
     std::string timestamp = getTimestamp();
 
     std::cout << trimString(timestamp) << "  " << getTidFormatted() << "  INFO:  ";
@@ -84,4 +89,5 @@ static auto logInfo(const Args&... args)
     // lambda used as decorator to add a space
     // expands to ( ( ( std::cout << v1 ) << v2 ) << ... )
     (std::cout << ... << [&](const auto& ref) -> char { std::cout << ref; return ' '; }(args)) << '\n';
+#endif
 }

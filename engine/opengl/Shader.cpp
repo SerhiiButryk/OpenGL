@@ -31,21 +31,29 @@ void Shader::unBind() const
     glUseProgram(0);
 }
 
-void Shader::setUniform(const std::string& name, float red, float green, float blue, float opacity) const
-{
+int Shader::getUniformLocation(const std::string& name) const {
     int location = glGetUniformLocation(m_RenderId, name.c_str()); // Get the id of uniform variable
     if (location == -1) {
+        // This can mean that uniform is not active
         logError("Shader::setUniform() unable to get uniform location for ", name);
     }
+    return location;
+}
+
+void Shader::setUniform(const std::string& name, float red, float green, float blue, float opacity) const
+{
+    int location = getUniformLocation(name);
     glUniform4f(location, red, green, blue, opacity); // Set a color in RGB format
 }
 
-void Shader::setTexture(const std::string& name, int slotLocation) const {
-    int location = glGetUniformLocation(m_RenderId, name.c_str()); // Get the id of uniform variable
-    if (location == -1) {
-        logError("Shader::setTexture() unable to get uniform location for ", name);
-    }
+void Shader::setUniformTexture(const std::string& name, int slotLocation) const {
+    int location = getUniformLocation(name);
     glUniform1i(location, slotLocation);
+}
+
+void Shader::setUniformMat(const std::string& name, const glm::mat4& mat4) const {
+    int location = getUniformLocation(name);
+    glUniformMatrix4fv(location, 1, GL_FALSE, &mat4[0][0]);
 }
 
 ShaderFile Shader::parseShader(const std::string& filePath) const
