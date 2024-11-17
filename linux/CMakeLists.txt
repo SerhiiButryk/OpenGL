@@ -11,17 +11,28 @@ set (PROJECT_ROOT "${CMAKE_SOURCE_DIR}/../engine")
 # Add sources
 add_executable(app 
     Application.cpp
+# Core files
     ../engine/opengl/IndexBuffer.cpp
     ../engine/opengl/VertexArray.cpp
     ../engine/opengl/VertexBuffer.cpp
     ../engine/opengl/Layout.cpp
-    ../engine/opengl/window/Window.cpp
+    ../engine/window/Window.cpp
     ../engine/opengl/external/GLFBridge.cpp
     ../engine/opengl/Shader.cpp
     ../engine/opengl/external/GLEWBridge.cpp
     ../engine/opengl/GLEngine.cpp
     ../engine/opengl/Renderer.cpp
     ../engine/opengl/Textures.cpp
+#   ImGui files
+    ../dependencies/imgui/imgui.cpp
+    ../dependencies/imgui/imgui_draw.cpp
+    ../dependencies/imgui/imgui_tables.cpp
+    ../dependencies/imgui/imgui_widgets.cpp
+    ../dependencies/imgui/backends/imgui_impl_opengl3.cpp
+    ../dependencies/imgui/backends/imgui_impl_glfw.cpp
+    ../engine/Application.cpp
+    ../engine/common/Exception.cpp
+    ../engine/MainThread.cpp
 )
 
 # Define macros
@@ -39,6 +50,10 @@ link_directories(${PROJECT_DEPENDENCIES}/linux/GLFW/lib)
 
 include_directories(${PROJECT_ROOT})
 include_directories(${PROJECT_DEPENDENCIES})
+
+# ImGui
+include_directories(${PROJECT_DEPENDENCIES}/imgui)
+include_directories(${PROJECT_DEPENDENCIES}/imgui/backends)
 
 # Link all dependencies:
 # 1) glfw

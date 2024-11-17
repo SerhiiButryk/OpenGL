@@ -1,8 +1,10 @@
 #pragma once
 
-#include "spdlog/spdlog.h"
-
 #define ENABLE_LOGGING
+
+#ifdef ENABLE_LOGGING
+    #include "spdlog/spdlog.h"
+#endif
 
 // LOG a pointer
 // logError("Create the visualizer viewer({:p}).", fmt::ptr(obj));

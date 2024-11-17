@@ -2,7 +2,7 @@
 
 /*
  * A class which manages global engine configurations
- * and states or Graphic Library under the hood.
+ * and states of Graphic Library under the hood.
  *
  */
 class GLEngine {

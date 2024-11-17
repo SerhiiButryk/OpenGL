@@ -1,6 +1,6 @@
 #include "GLFBridge.h"
 
-#include "../window/Window.h"
+#include "../../window/Window.h"
 #include "../../common/Log.h"
 
 #include <GL/glew.h>
@@ -75,4 +75,7 @@ void GLFBridge::initWindowConfigs(Window& window) {
     glfwMakeContextCurrent((GLFWwindow*) window.getWindow());
 
     window.setBufferSize(bufferWidth, bufferHeight);
+
+    // Enable vsync
+    glfwSwapInterval(1);
 }

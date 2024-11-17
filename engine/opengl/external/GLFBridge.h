@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../window/Window.h"
+#include "../../window/Window.h"
 
 /*
 	This is a simple and handy wrapper around GLFW APIs.
