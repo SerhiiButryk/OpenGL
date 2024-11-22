@@ -4,6 +4,8 @@
 
 #include "../common/Log.h"
 
+namespace xengine {
+
 VertexArray::VertexArray()
 {
     /*
@@ -73,5 +75,7 @@ void VertexArray::add(const VertexBuffer& vb, const BufferLayout& l)
 
         offset += layout.count * LayoutDefinition::getSizeOfType(layout.dataType);
 	}
+
+}
 
 }

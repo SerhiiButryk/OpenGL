@@ -1,5 +1,7 @@
 #include "Renderer.h"
 
+namespace xengine {
+
 void Renderer::clean(float red, float green, float blue, float alpha) const {
 
     glClearColor(red, green, blue, alpha);
@@ -17,5 +19,7 @@ void Renderer::draw(const VertexArray& va, const IndexBuffer& ib, const Shader& 
     /* Send a draw command */
 
     glDrawElements(GL_TRIANGLES, ib.getCount(), GL_UNSIGNED_INT, nullptr);
+
+}
 
 }

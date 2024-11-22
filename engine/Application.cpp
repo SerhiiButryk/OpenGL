@@ -3,8 +3,12 @@
 #include <common/Log.h>
 #include <opengl/GLEngine.h>
 #include <opengl/external/GLEWBridge.h>
+#include <ui/Gui.h>
+
 #include "common/Exception.h"
 #include "opengl/Shader.h"
+
+namespace xengine {
 
 MainApplication::MainApplication(): m_parentWindow(new Window()) {
     logInfo("MainApplication::Application() created");
@@ -24,6 +28,7 @@ MainApplication::~MainApplication() {
 void MainApplication::onCreate() {
     if (m_clientApp != nullptr) {
         m_clientApp->onCreate();
+        m_clientUI = m_clientApp->createUI();
     }
     logInfo("MainApplication::onCreate");
 }
@@ -34,7 +39,13 @@ void MainApplication::onDestroy() {
 
     m_parentWindow->destroy();
 
+    // Release client app resources
     if (m_clientApp != nullptr) {
+
+        if (m_clientUI != nullptr) {
+            delete m_clientUI;
+        }
+
         m_clientApp->onDestroy();
     }
 
@@ -71,4 +82,11 @@ void MainApplication::onCreateWindow() const {
     // Blending
     GLEngine::setBlending(true);
     GLEngine::setBlendingMode();
+}
+
+void MainApplication::initConfigs(MainThread* mainThread) {
+    mainThread->addThreadObserver(new Gui(this));
+    logInfo("MainApplication::initConfigs() added UI component");
+}
+
 }

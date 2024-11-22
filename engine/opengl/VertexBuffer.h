@@ -10,6 +10,8 @@
 	contains data related to positions or other things on the screen.
 */
 
+namespace xengine {
+
 class VertexBuffer
 {
 public:
@@ -24,3 +26,5 @@ public:
 private:
 	uint32_t m_RenderId {};
 };
+
+}

@@ -9,6 +9,9 @@
 * A texture is a bitmap image that is applied to the surface
 * of a 3D or 2D object to give it color, detail, and realism.
 */
+
+namespace xengine {
+
 class Textures 
 {
 public:
@@ -25,3 +28,5 @@ private:
     // A buffer which will contain the pixel data of our texture
     unsigned char* m_LocalBuffer = nullptr;
 };
+
+}

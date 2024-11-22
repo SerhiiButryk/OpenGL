@@ -4,45 +4,39 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "MainThread.h"
 #include "window/Window.h"
+#include "Internal.h"
 
-class Lifecycle {
+namespace xengine {
+
+    /*
+     * A class which represents an instance of our application.
+     * An application manages only height level states or configurations, like a window.
+     */
+    class MainApplication : public InternalApplication {
     public:
+        MainApplication();
+        virtual ~MainApplication();
 
-    Lifecycle() = default;
-    virtual ~Lifecycle() = default;
+        void onCreateWindow() const;
 
-    virtual void onCreate() {}
+        void onCreate() override;
+        void onDestroy() override;
 
-    virtual void onDestroy() {}
-};
+        inline GLFWwindow* getWindow() const { return (GLFWwindow*) m_parentWindow->getWindow(); }
 
-class Application : public Lifecycle {
-public:
-    Application() = default;
-    virtual ~Application() = default;
+        inline void setClientApplication(Application* app) { m_clientApp = app; }
+        inline Application* getClientApplication() const { return m_clientApp; }
 
-    void onCreate() override {}
-    void onDestroy() override {}
-};
+        void initConfigs(MainThread* mainThread);
 
-/*
- * A class which represents an instance of our application.
- * An application manages only height level states or configurations, like a window.
- */
-class MainApplication : public Application {
-public:
-    MainApplication();
-    virtual ~MainApplication();
+        inline UI* getClientUI() const { return m_clientUI; }
 
-    void onCreateWindow() const;
-    void onCreate() override;
-    void onDestroy() override;
+    private:
+        Window* m_parentWindow = nullptr;
+        Application* m_clientApp = nullptr;
+        UI* m_clientUI = nullptr;
+    };
 
-    inline GLFWwindow* getWindow() const { return (GLFWwindow*) m_parentWindow->getWindow(); }
-    inline void setClientApplication(Application* app) { m_clientApp = app; }
-
-private:
-    Window* m_parentWindow = nullptr;
-    Application* m_clientApp = nullptr;
-};
+}

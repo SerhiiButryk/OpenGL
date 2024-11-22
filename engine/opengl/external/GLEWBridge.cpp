@@ -2,6 +2,8 @@
 
 #include <GL/glew.h>
 
+namespace xengine {
+
 bool GLEWBridge::IS_OPENGL_CAN_BE_USED = false;
 
 bool GLEWBridge::init(bool enableExtensions)
@@ -13,4 +15,6 @@ bool GLEWBridge::init(bool enableExtensions)
     IS_OPENGL_CAN_BE_USED = GLEW_OK == glewInit();
 
     return IS_OPENGL_CAN_BE_USED;
+}
+
 }

@@ -4,6 +4,8 @@
 
 #include <GL/glew.h>
 
+namespace xengine {
+
 /*
  * Represent a layout specification of vertex buffer.
  * Basically layout is some information about the data in vertex buffer
@@ -55,5 +57,7 @@ private:
 inline const std::vector<LayoutDefinition>& BufferLayout::get() const
 {
 	return elements;
+}
+
 }
 

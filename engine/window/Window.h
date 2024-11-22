@@ -4,6 +4,8 @@
 	A high level window class which manages a single window in our application
 */
 
+namespace xengine {
+
 class Window
 {
 public:
@@ -26,4 +28,6 @@ private:
 	void* window = nullptr;
 	int bufferWidth {}, bufferHeight {};
 };
+
+}
 

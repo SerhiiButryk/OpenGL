@@ -1,6 +1,10 @@
 #pragma once
 
-#include "Application.h"
+#include "Internal.h"
+
+#include <vector>
+
+namespace xengine {
 
 /**
 * Class which manages program execution on the main thread.
@@ -9,12 +13,17 @@ class MainThread : public Lifecycle
 {
 public:
     MainThread() = default;
-    ~MainThread() = default;
+    virtual ~MainThread() = default;
 
     void onCreate() override;
     void onDestroy() override;
 
-    void loop(MainApplication* app);
+    void addThreadObserver(MainThreadObserver* observer);
+    void removeThreadObserver(MainThreadObserver* observer);
+
+    void loop(InternalApplication* app);
 private:
-    bool m_ui_created = false;
+    std::vector<MainThreadObserver*> m_observers;
 };
+
+}

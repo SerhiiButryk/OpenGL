@@ -5,6 +5,8 @@
 #include "external/GLFBridge.h"
 #include <common/Log.h>
 
+namespace xengine {
+
 bool GLEngine::initEngine() {
 
     // Init logger lib
@@ -78,4 +80,6 @@ void GLEngine::setDebugCallback() {
         // TODO: Implement error handling in this case
         logInfo("GLEngine::setDebugCallback() !!! CANNOT set a debug callback !!! Version = {}", version);
     }
+}
+
 }

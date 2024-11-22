@@ -6,6 +6,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+namespace xengine {
+
 bool GLFBridge::init()
 {
     /* Initializes the GLFW library */
@@ -78,4 +80,6 @@ void GLFBridge::initWindowConfigs(Window& window) {
 
     // Enable vsync
     glfwSwapInterval(1);
+}
+
 }

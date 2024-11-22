@@ -2,6 +2,8 @@
 
 #include "../../window/Window.h"
 
+namespace xengine {
+
 /*
 	This is a simple and handy wrapper around GLFW APIs.
 	GLFW library manages creation of windows in our application.
@@ -27,3 +29,5 @@ public:
 	static void destroyWindow(const Window& window);
 	
 };
+
+}

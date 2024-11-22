@@ -1,9 +1,3 @@
-/**
-* This is a main header which defines all engine APIs
-*/
-
-#pragma once
-
 #include "common/Log.h"
 #include "Application.h"
 #include "MainThread.h"
@@ -16,10 +10,12 @@
 /**
  *  Should be implemented by client
  */
-Application* getClientApplication();
+xengine::Application* createApplication();
 
 int main()
 {
+    using namespace xengine;
+
     int retCode = 0;
 
     auto* app = new MainApplication();
@@ -27,10 +23,13 @@ int main()
 
     try {
 
-        auto* client = getClientApplication();
+        auto* client = createApplication();
         app->setClientApplication(client);
 
         mainThread->onCreate();
+
+        // Add UI component
+        app->initConfigs(mainThread);
 
         app->onCreate();
         app->onCreateWindow();

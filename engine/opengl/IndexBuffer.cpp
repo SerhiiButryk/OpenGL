@@ -3,6 +3,8 @@
 /* Glew provides OpenGL APIs */
 #include <GL/glew.h>
 
+namespace xengine {
+
 IndexBuffer::IndexBuffer()
 {
 	glGenBuffers(1 /* Create 1 buffer */, &m_RenderId /* Name of the array where generated buffer is stored */);
@@ -29,4 +31,6 @@ void IndexBuffer::fill(uint32_t* arr, size_t size)
 uint32_t IndexBuffer::getRenderId() const
 {
 	return m_RenderId;
+}
+
 }

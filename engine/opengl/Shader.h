@@ -5,6 +5,8 @@
 
 #include "glm/gtc/matrix_transform.hpp"
 
+namespace xengine {
+
 struct ShaderFile
 {
     std::string vertexShader;
@@ -42,3 +44,5 @@ private:
 
     int getUniformLocation(const std::string& name) const;
 };
+
+}

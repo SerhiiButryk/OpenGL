@@ -3,6 +3,8 @@
 #include <cstdint>
 #include <cstddef>
 
+namespace xengine {
+
 /*
 	This class is a representation of index buffer in OpenGL.
 	
@@ -28,4 +30,6 @@ private:
 	uint32_t m_RenderId {};
 	uint32_t m_IndexCount {};
 };
+
+}
 

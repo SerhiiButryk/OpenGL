@@ -7,6 +7,8 @@
     Docs: https://glew.sourceforge.net/
 */
 
+namespace xengine {
+
 class GLEWBridge
 {
 public:
@@ -15,3 +17,5 @@ public:
 private:
     static bool IS_OPENGL_CAN_BE_USED;
 };
+
+}

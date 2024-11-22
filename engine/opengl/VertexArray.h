@@ -3,6 +3,8 @@
 #include "VertexBuffer.h"
 #include "Layout.h"
 
+namespace xengine {
+
 /*
 	This class represents Vertex Array Object in OpenGL.
 	Basically VAO binds or holds together Vertex Buffer and its layout definition.
@@ -24,3 +26,4 @@ private:
 
 };
 
+}

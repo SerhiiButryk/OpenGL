@@ -6,7 +6,7 @@
     #include "spdlog/spdlog.h"
 #endif
 
-// LOG a pointer
+// A pointer
 // logError("Create the visualizer viewer({:p}).", fmt::ptr(obj));
 
 static void initLogger() {

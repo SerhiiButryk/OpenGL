@@ -3,6 +3,8 @@
 /* Glew provides OpenGL APIs */
 #include <GL/glew.h>
 
+namespace xengine {
+
 VertexBuffer::VertexBuffer()
 {
 	glGenBuffers(1 /* Generate 1 buffer */, &m_RenderId /* Name of the array where generated buffer is stored */);
@@ -28,4 +30,6 @@ void VertexBuffer::fill(float* arr, size_t size) const
         arr, /* Actually data */
         GL_STATIC_DRAW /* A hint for GPU see docs for details */
     );
+}
+
 }

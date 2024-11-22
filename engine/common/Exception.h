@@ -2,6 +2,8 @@
 
 #include <exception>
 
+namespace xengine {
+
 class ApplicationInitException : public std::exception {
 
 public:
@@ -17,3 +19,5 @@ public:
 };
 
 void throwApplicationInitException(int code);
+
+}

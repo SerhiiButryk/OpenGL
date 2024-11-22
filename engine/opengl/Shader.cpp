@@ -8,6 +8,8 @@
 /* Glew is included first because it loads and provides OpenGL APIs to use later */
 #include <GL/glew.h>
 
+namespace xengine {
+
 Shader::Shader(const std::string& filePath)
 {
     auto shaderFile = parseShader(filePath);
@@ -59,7 +61,8 @@ void Shader::setUniformMat(const std::string& name, const glm::mat4& mat4) const
 ShaderFile Shader::parseShader(const std::string& filePath) const
 {
     std::filesystem::path current_path = std::filesystem::current_path();
-    logInfo("Shader::parseShader() My working dir: '{}'", current_path.string());
+    logInfo("Shader::parseShader() Working dir: '{}'", current_path.string());
+    logInfo("Shader::parseShader() File path: '{}'", filePath);
 
     std::ifstream istream(filePath);
 
@@ -154,4 +157,6 @@ unsigned int Shader::compileShader(unsigned int type, const std::string& source)
     }
 
     return id;
+}
+
 }

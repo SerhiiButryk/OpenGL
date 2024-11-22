@@ -1,5 +1,7 @@
 #pragma once
 
+namespace xengine {
+
 /*
  * A class which manages global engine configurations
  * and states of Graphic Library under the hood.
@@ -18,3 +20,5 @@ public:
     static void setBlending(bool enable);
     static void setBlendingMode();
 };
+
+}

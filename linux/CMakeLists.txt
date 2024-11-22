@@ -8,9 +8,8 @@ set (CMAKE_CXX_STANDARD 17)
 set (PROJECT_DEPENDENCIES "${CMAKE_SOURCE_DIR}/../dependencies")
 set (PROJECT_ROOT "${CMAKE_SOURCE_DIR}/../engine")
 
-# Add sources
-add_executable(app 
-    Application.cpp
+# Create static lib
+add_library(core
 # Core files
     ../engine/opengl/IndexBuffer.cpp
     ../engine/opengl/VertexArray.cpp
@@ -33,6 +32,8 @@ add_executable(app
     ../engine/Application.cpp
     ../engine/common/Exception.cpp
     ../engine/MainThread.cpp
+    ../engine/ui/Gui.cpp
+    ../engine/EntryPoint.cpp
 )
 
 # Define macros
@@ -59,7 +60,7 @@ include_directories(${PROJECT_DEPENDENCIES}/imgui/backends)
 # 1) glfw
 # 2) opengl
 # 2) glew
-target_link_libraries(app 
+target_link_libraries(core
     GLEW
     ${OPENGL_LIBRARY} # Filled by Cmake
     glfw

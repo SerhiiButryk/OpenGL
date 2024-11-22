@@ -3,6 +3,8 @@
 #include "opengl/external/GLFBridge.h"
 #include "common/Log.h"
 
+namespace xengine {
+
 Window::Window()
 {
 }
@@ -44,4 +46,6 @@ void Window::destroy()
 	window = nullptr;
 
 	logInfo("Window::destroy() Window is destroyed");
+}
+
 }
