@@ -1,11 +1,13 @@
 #pragma once
 
-#include <Application.h>
+#include <MainApplication.h>
 
 namespace xengine {
 
     /**
     * A base class for user interface component
+    *
+    * TODO: Revisit this class
     */
     class Gui : public MainThreadObserver
     {

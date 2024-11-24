@@ -30,13 +30,15 @@ namespace xengine {
 
         ImGui::StyleColorsDark();
 
-        auto* app = dynamic_cast<MainApplication *>(m_mainApplication);
-        ImGui_ImplGlfw_InitForOpenGL(app->getWindow(), true);
+        ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*) m_mainApplication->getWindow(), true);
 
         const char* glsl_version = "#version 130";
         ImGui_ImplOpenGL3_Init(glsl_version);
     }
 
+    /**
+     * Render some test UI
+     */
     void Gui::onProcess() {
 
         // Start the Dear ImGui frame

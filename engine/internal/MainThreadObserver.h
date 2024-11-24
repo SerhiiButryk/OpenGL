@@ -1,27 +1,15 @@
 #pragma once
 
-#include "Interfaces.h"
+#include "internal/Lifecycle.h"
 
 namespace xengine {
-    /**
-    * Internal application class
-    */
-    class InternalApplication : public Lifecycle {
-    public:
-        InternalApplication() = default;
-        virtual ~InternalApplication() = default;
-
-        void onCreate() override {}
-        void onDestroy() override {}
-    };
-
     /**
      *  Main thread render observer class
      */
     class MainThreadObserver : public Lifecycle {
     public:
         MainThreadObserver() = default;
-        virtual ~MainThreadObserver() = default;
+        ~MainThreadObserver() override = default;
 
         virtual void onBeforeProcess() {}
         virtual void onProcess() {}

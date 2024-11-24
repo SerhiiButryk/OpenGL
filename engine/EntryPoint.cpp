@@ -1,5 +1,5 @@
 #include "common/Log.h"
-#include "Application.h"
+#include "MainApplication.h"
 #include "MainThread.h"
 #include "common/Exception.h"
 
@@ -24,7 +24,12 @@ int main()
     try {
 
         auto* client = createApplication();
+        client->setMainApplication(app);
+
         app->setClientApplication(client);
+
+        auto* clientUi = client->createUI();
+        app->setClientUI(clientUi);
 
         mainThread->onCreate();
 

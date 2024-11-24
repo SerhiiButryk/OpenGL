@@ -1,26 +1,18 @@
-﻿#include "public/XEngine.h"
-#include "Gui.h"
+﻿#include "basic_tests/TestMenuUI.h"
+#include "Application.h"
 
 namespace client {
     /**
-     *  Our application
+     *  Our application implementation
      */
-    class Application : public xengine::Application {
-    public:
-        Application() = default;
-        virtual ~Application() = default;
+    std::string Application::getResourcePath() { return "../../engine/res"; }
 
-        void onCreate() override {}
-        void onDestroy() override {}
+    xengine::UI* Application::createUI() { return new TestMenuUI(this); }
 
-        std::string getResourcePath() override { return "../../engine/res"; }
-
-        xengine::UI* createUI() { return new Gui(); }
-    };
 }
 
 /**
-*  Creates application
+*  Creates our application
 */
 xengine::Application* createApplication() {
     return new client::Application();

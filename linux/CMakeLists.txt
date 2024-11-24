@@ -29,11 +29,12 @@ add_library(core
     ../dependencies/imgui/imgui_widgets.cpp
     ../dependencies/imgui/backends/imgui_impl_opengl3.cpp
     ../dependencies/imgui/backends/imgui_impl_glfw.cpp
-    ../engine/Application.cpp
+    ../engine/MainApplication.cpp
     ../engine/common/Exception.cpp
     ../engine/MainThread.cpp
     ../engine/ui/Gui.cpp
     ../engine/EntryPoint.cpp
+    ../engine/ui/AppUI.cpp
 )
 
 # Define macros

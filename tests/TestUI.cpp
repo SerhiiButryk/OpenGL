@@ -1,24 +1,28 @@
-#include "Gui.h"
+#include "TestUI.h"
 
 #include <Application.h>
 #include <common/Log.h>
 #include <opengl/Renderer.h>
 #include <opengl/Textures.h>
 
-xengine::Renderer* renderer = nullptr;
-xengine::VertexArray* vertexArray = nullptr;
-xengine::VertexBuffer* vertexBuffer = nullptr;
-xengine::IndexBuffer* indexBuffer = nullptr;
-xengine::Shader* shader = nullptr;
-xengine::Textures* textures = nullptr;
+#include <imgui/imgui.h>
+#include <imgui/backends/imgui_impl_glfw.h>
+#include <imgui/backends/imgui_impl_opengl3.h>
+
+static xengine::Renderer* renderer = nullptr;
+static xengine::VertexArray* vertexArray = nullptr;
+static xengine::VertexBuffer* vertexBuffer = nullptr;
+static xengine::IndexBuffer* indexBuffer = nullptr;
+static xengine::Shader* shader = nullptr;
+static xengine::Textures* textures = nullptr;
 
 const std::string resPath = "../../engine/res";
 
 namespace client {
 
-    void Gui::onCreateUI() {
+    void TestUI::onCreate() {
 
-        logInfo("Gui::onCreateUI");
+        logInfo("TestUI::onCreateUI");
 
         using namespace xengine;
 
@@ -134,9 +138,21 @@ namespace client {
         shader->unBind();
         vertexBuffer->unbind();
         indexBuffer->unbind();
+
+        ImGui::CreateContext();
+
+        ImGuiIO& io = ImGui::GetIO();
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+
+        ImGui::StyleColorsDark();
+
+        ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*) m_app->getMainApplication()->getWindow(), true);
+
+        const char* glsl_version = "#version 130";
+        ImGui_ImplOpenGL3_Init(glsl_version);
     }
 
-    void Gui::onRenderUI() {
+    void TestUI::onRender() {
 
         // Nice grey color
         float red = 192 / 255.0;
@@ -150,11 +166,28 @@ namespace client {
         // shader.setUniform("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
 
         renderer->draw(*vertexArray, *indexBuffer, *shader);
+
+        // Start the Dear ImGui frame
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        {
+            ImGui::Begin("Test application");
+
+            ImGui::Button("Test button");
+
+            ImGui::End();
+        }
+
+        // Rendering
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     }
 
-    void Gui::onDestroyUI() {
+    void TestUI::onDestroy() {
 
-        logInfo("Gui::onDestroyUI");
+        logInfo("TestUI::onDestroyUI");
 
         delete renderer;
         delete vertexArray;
@@ -162,5 +195,11 @@ namespace client {
         delete indexBuffer;
         delete shader;
         delete textures;
+
+        // Clear ImGui
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplGlfw_Shutdown();
+        ImGui::DestroyContext();
     }
+
 }

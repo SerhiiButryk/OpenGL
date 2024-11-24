@@ -16,11 +16,17 @@ add_subdirectory(${PROJECT_ROOT}/linux ../build_engine)
 # Add sources
 add_executable(app
     Application.cpp
-    Gui.cpp
+    TestUI.cpp
+    basic_tests/TestMenuUI.cpp
 )
 
 include_directories(${PROJECT_ROOT}/dependencies)
 include_directories(${PROJECT_ROOT}/engine)
+include_directories(${PROJECT_ROOT}/tests)
+
+# ImGui
+include_directories(${PROJECT_ROOT}/dependencies/imgui)
+include_directories(${PROJECT_ROOT}/dependencies/imgui/backends)
 
 target_link_libraries(app
     # Link engine lib
