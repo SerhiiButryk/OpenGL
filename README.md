@@ -49,3 +49,6 @@ https://www.khronos.org/opengl/wiki/Getting_Started#Tutorials_and_How_To_Guides
 https://docs.gl/
 https://www.opengl.org/
 https://www.khronos.org/opengl/wiki/Getting_Started
+
+https://github.com/dbeyda/OpenGLRenderer
+https://github.com/htmlboss/OpenGL-Renderer
