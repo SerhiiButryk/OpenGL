@@ -39,6 +39,7 @@ add_library(core
 
 # Define macros
 add_compile_definitions(LINUX_PLATFORM)
+add_compile_definitions(ENABLE_LOGGING)
 
 # Ask Cmake to find OpenGL on the system
 find_package(OpenGL REQUIRED)

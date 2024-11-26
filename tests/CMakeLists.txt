@@ -16,8 +16,9 @@ add_subdirectory(${PROJECT_ROOT}/linux ../build_engine)
 # Add sources
 add_executable(app
     Application.cpp
-    TestUI.cpp
     basic_tests/TestMenuUI.cpp
+    basic_tests/base/TestUI.cpp
+    basic_tests/BackgroundColorTest.cpp
 )
 
 include_directories(${PROJECT_ROOT}/dependencies)

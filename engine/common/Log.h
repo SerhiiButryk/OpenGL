@@ -1,7 +1,5 @@
 #pragma once
 
-#define ENABLE_LOGGING
-
 #ifdef ENABLE_LOGGING
     #include "spdlog/spdlog.h"
 #endif

@@ -1,18 +1,24 @@
 #pragma once
 
-#include "public/XEngine.h"
 #include <Application.h>
+#include "public/XEngine.h"
 
 namespace test {
 
-    class TestUI : public xengine::UI {
+    class TestUI : public xengine::UI
+    {
     public:
+        TestUI() = default;
         explicit TestUI(Application* app) : m_app(app) {}
+
         ~TestUI() override = default;
 
         void onCreate() override;
         void onRender() override;
         void onDestroy() override;
+
+        // Should be called to create ImGui UI
+        virtual void onRenderUI();
 
     private:
         Application* m_app = nullptr;

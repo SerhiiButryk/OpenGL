@@ -2,7 +2,7 @@
 
 #include "public/XEngine.h"
 
-namespace client {
+namespace test {
     /**
      *  Our application
      */

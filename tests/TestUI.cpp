@@ -18,7 +18,7 @@ static xengine::Textures* textures = nullptr;
 
 const std::string resPath = "../../engine/res";
 
-namespace client {
+namespace test {
 
     void TestUI::onCreate() {
 

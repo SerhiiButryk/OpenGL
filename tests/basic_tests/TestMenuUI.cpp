@@ -1,72 +1,73 @@
 #include "TestMenuUI.h"
 
-#include <Application.h>
+#include <imgui.h>
 #include <common/Log.h>
 
-#include <imgui/imgui.h>
-#include <imgui/backends/imgui_impl_glfw.h>
-#include <imgui/backends/imgui_impl_opengl3.h>
-#include <opengl/Renderer.h>
+static bool testUIClosed = true;
 
-static xengine::Renderer* renderer = nullptr;
+namespace test {
 
-namespace client {
+    TestMenuUI::~TestMenuUI() {
+        for (auto&& elem : m_tests) {
+            delete elem.first;
+        }
+        m_tests.clear();
+        logInfo("TestMenuUI::~TestMenuUI");
+    }
 
     void TestMenuUI::onCreate() {
+        TestUI::onCreate();
         logInfo("TestMenuUI::onCreate");
+        // Call test to initialize any stuff
+        for (auto&& elem : m_tests) {
+            elem.first->onCreate();
+        }
+    }
 
-        renderer = new xengine::Renderer();
+    void TestMenuUI::onRenderUI() {
 
-        ImGui::CreateContext();
+        // Render Test UI
+        for (auto&& elem : m_tests) {
 
-        ImGuiIO& io = ImGui::GetIO();
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+            // Show current Test UI
+            if (m_currentTestUI != nullptr && !testUIClosed) {
+                if (ImGui::Button("<--")) {
+                    testUIClosed = true;
+                }
+                m_currentTestUI->onRenderUI();
+            }
 
-        ImGui::StyleColorsDark();
+            // Show Menu UI
+            if (testUIClosed) {
+                if (ImGui::Button(elem.second.c_str())) {
+                    m_currentTestUI = elem.first;
+                    testUIClosed = false;
+                }
+            }
 
-        ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*) m_app->getMainApplication()->getWindow(), true);
-
-        const char* glsl_version = "#version 130";
-        ImGui_ImplOpenGL3_Init(glsl_version);
+        }
     }
 
     void TestMenuUI::onRender() {
-
-        // Nice grey color
-        float red = 192 / 255.0;
-        float green = 194 / 255.0;
-        float blue = 201 / 255.0;
-
-        // Clear screen to some initial starting color,
-        // so we can draw things again from the begging
-        renderer->clean(red, green, blue, 1.0f);
-
-        // Start the Dear ImGui frame
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-
-        {
-            ImGui::Begin("Test application");
-
-            ImGui::Button("Test button");
-
-            ImGui::End();
+        // Give a chance to make changes for the test
+        for (auto&& elem : m_tests) {
+            elem.first->onRender();
         }
-
-        // Rendering
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        // Render all other UI stuff
+        TestUI::onRender();
     }
 
     void TestMenuUI::onDestroy() {
+        TestUI::onDestroy();
         logInfo("TestMenuUI::onDestroy");
-        // Clear ImGui
-        ImGui_ImplOpenGL3_Shutdown();
-        ImGui_ImplGlfw_Shutdown();
-        ImGui::DestroyContext();
+        // Call test to destroy any stuff
+        for (auto&& elem : m_tests) {
+            elem.first->onDestroy();
+        }
+    }
 
-        delete renderer;
+    void TestMenuUI::registerTest(TestUI* test, const std::string& label) {
+        m_tests.push_back(std::make_pair(test, label));
     }
 
 }
