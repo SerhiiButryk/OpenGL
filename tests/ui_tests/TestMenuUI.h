@@ -2,6 +2,7 @@
 
 #include <vector>
 
+#include "base/TestCase.h"
 #include "base/TestUI.h"
 
 namespace test {
@@ -16,13 +17,13 @@ namespace test {
         void onDestroy() override;
         void onRenderUI() override;
 
-        void registerTest(TestUI*, const std::string&);
+        void registerTest(TestCase*, const std::string&);
 
     private:
         // A test + button label collection
-        std::vector<std::pair<TestUI*, std::string>> m_tests;
+        std::vector<std::pair<TestCase*, std::string>> m_tests;
         // Current text UI
-        TestUI* m_currentTestUI = nullptr;
+        TestCase* m_currentTestUI = nullptr;
     };
 
 }

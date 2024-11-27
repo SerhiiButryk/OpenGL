@@ -46,8 +46,8 @@ int main()
         retCode = 1;
     }
 
-    // Release resources either if an error
-    // has happened or the program has been closed
+    // Release resources either if we got an error
+    // or the program has been closed
     mainThread->onDestroy();
     app->onDestroy();
 

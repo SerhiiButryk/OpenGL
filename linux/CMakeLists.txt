@@ -32,7 +32,6 @@ add_library(core
     ../engine/MainApplication.cpp
     ../engine/common/Exception.cpp
     ../engine/MainThread.cpp
-    ../engine/ui/Gui.cpp
     ../engine/EntryPoint.cpp
     ../engine/ui/AppUI.cpp
 )

@@ -20,7 +20,7 @@ namespace test {
         // Should be called to create ImGui UI
         virtual void onRenderUI();
 
-    private:
+    protected:
         Application* m_app = nullptr;
     };
 

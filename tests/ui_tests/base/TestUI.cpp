@@ -6,6 +6,7 @@
 #include <imgui/backends/imgui_impl_opengl3.h>
 
 static const char* title = "App menu";
+static const char* fps_label = "Application average %.3f ms/frame (%.1f FPS)";
 
 namespace test {
 
@@ -16,6 +17,8 @@ namespace test {
 
         ImGuiIO& io = ImGui::GetIO();
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+        io.Fonts->AddFontDefault();
+        io.FontGlobalScale = 1.3f;;
 
         ImGui::StyleColorsDark();
 
@@ -33,6 +36,8 @@ namespace test {
         ImGui::NewFrame();
 
         ImGui::Begin(title);
+
+        ImGui::Text(fps_label, 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
         // Should be called to create ImGui UI
         onRenderUI();

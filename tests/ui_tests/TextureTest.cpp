@@ -1,13 +1,8 @@
-#include "TestUI.h"
+#include "TextureTest.h"
 
-#include <Application.h>
-#include <common/Log.h>
 #include <opengl/Renderer.h>
-#include <opengl/Textures.h>
-
 #include <imgui/imgui.h>
-#include <imgui/backends/imgui_impl_glfw.h>
-#include <imgui/backends/imgui_impl_opengl3.h>
+#include <opengl/Textures.h>
 
 static xengine::Renderer* renderer = nullptr;
 static xengine::VertexArray* vertexArray = nullptr;
@@ -16,15 +11,11 @@ static xengine::IndexBuffer* indexBuffer = nullptr;
 static xengine::Shader* shader = nullptr;
 static xengine::Textures* textures = nullptr;
 
-const std::string resPath = "../../engine/res";
-
 namespace test {
 
-    void TestUI::onCreate() {
+    void TextureTest::onCreate(Application* app) {
 
-        logInfo("TestUI::onCreateUI");
-
-        using namespace xengine;
+         using namespace xengine;
 
         /*
          So what we need here is the next:
@@ -118,6 +109,7 @@ namespace test {
         glm::mat4 mvp = proj * view * model;
 
         /* Create a shader */
+        std::string resPath = app->getResourcePath();
         shader = new Shader(resPath + "/shader/Basic_texture.shader");
 
         shader->bind();
@@ -138,68 +130,22 @@ namespace test {
         shader->unBind();
         vertexBuffer->unbind();
         indexBuffer->unbind();
-
-        ImGui::CreateContext();
-
-        ImGuiIO& io = ImGui::GetIO();
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-
-        ImGui::StyleColorsDark();
-
-        ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*) m_app->getMainApplication()->getWindow(), true);
-
-        const char* glsl_version = "#version 130";
-        ImGui_ImplOpenGL3_Init(glsl_version);
     }
 
-    void TestUI::onRender() {
-
-        // Nice grey color
-        float red = 192 / 255.0;
-        float green = 194 / 255.0;
-        float blue = 201 / 255.0;
-
-        // Clear screen to some initial starting color,
-        // so we can draw things again from the begging
-        renderer->clean(red, green, blue, 1.0f);
-
-        // shader.setUniform("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
-
-        renderer->draw(*vertexArray, *indexBuffer, *shader);
-
-        // Start the Dear ImGui frame
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-
-        {
-            ImGui::Begin("Test application");
-
-            ImGui::Button("Test button");
-
-            ImGui::End();
-        }
-
-        // Rendering
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    }
-
-    void TestUI::onDestroy() {
-
-        logInfo("TestUI::onDestroyUI");
-
+    void TextureTest::onDestroy() {
         delete renderer;
         delete vertexArray;
         delete vertexBuffer;
         delete indexBuffer;
         delete shader;
         delete textures;
-
-        // Clear ImGui
-        ImGui_ImplOpenGL3_Shutdown();
-        ImGui_ImplGlfw_Shutdown();
-        ImGui::DestroyContext();
     }
 
+    void TextureTest::onBeforeRender() {
+    }
+
+    void TextureTest::onRender() {
+        // shader.setUniform("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
+        renderer->draw(*vertexArray, *indexBuffer, *shader);
+    }
 }

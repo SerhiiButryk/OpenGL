@@ -16,9 +16,10 @@ add_subdirectory(${PROJECT_ROOT}/linux ../build_engine)
 # Add sources
 add_executable(app
     Application.cpp
-    basic_tests/TestMenuUI.cpp
-    basic_tests/base/TestUI.cpp
-    basic_tests/BackgroundColorTest.cpp
+    ui_tests/TestMenuUI.cpp
+    ui_tests/base/TestUI.cpp
+    ui_tests/BackgroundColorTest.cpp
+    ui_tests/TextureTest.cpp
 )
 
 include_directories(${PROJECT_ROOT}/dependencies)
@@ -28,6 +29,10 @@ include_directories(${PROJECT_ROOT}/tests)
 # ImGui
 include_directories(${PROJECT_ROOT}/dependencies/imgui)
 include_directories(${PROJECT_ROOT}/dependencies/imgui/backends)
+
+# Define macros
+add_compile_definitions(LINUX_PLATFORM)
+add_compile_definitions(ENABLE_LOGGING)
 
 target_link_libraries(app
     # Link engine lib

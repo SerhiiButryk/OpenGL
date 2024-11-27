@@ -20,38 +20,44 @@ namespace test {
         logInfo("TestMenuUI::onCreate");
         // Call test to initialize any stuff
         for (auto&& elem : m_tests) {
-            elem.first->onCreate();
+            elem.first->onCreate(m_app);
         }
     }
 
+    // Repeatedly called by the MainThread
     void TestMenuUI::onRenderUI() {
 
-        // Render Test UI
-        for (auto&& elem : m_tests) {
-
-            // Show current Test UI
-            if (m_currentTestUI != nullptr && !testUIClosed) {
-                if (ImGui::Button("<--")) {
-                    testUIClosed = true;
-                }
-                m_currentTestUI->onRenderUI();
+        // Display Test UI
+        if (m_currentTestUI != nullptr && !testUIClosed) {
+            // If back button is clicked then stop rendering
+            if (ImGui::Button("<--")) {
+                testUIClosed = true;
+                return;
             }
+            // Render Test UI
+            m_currentTestUI->onRender();
+            return;
+        }
 
-            // Show Menu UI
-            if (testUIClosed) {
+        // Display Menu UI
+        if (testUIClosed) {
+            for (auto&& elem : m_tests) {
+                // Add button for every test
                 if (ImGui::Button(elem.second.c_str())) {
+                    // Select test if button is clicked
                     m_currentTestUI = elem.first;
                     testUIClosed = false;
+                    return;
                 }
             }
-
         }
+
     }
 
     void TestMenuUI::onRender() {
-        // Give a chance to make changes for the test
+        // Give a chance to first call a test render
         for (auto&& elem : m_tests) {
-            elem.first->onRender();
+            elem.first->onBeforeRender();
         }
         // Render all other UI stuff
         TestUI::onRender();
@@ -66,7 +72,7 @@ namespace test {
         }
     }
 
-    void TestMenuUI::registerTest(TestUI* test, const std::string& label) {
+    void TestMenuUI::registerTest(TestCase* test, const std::string& label) {
         m_tests.push_back(std::make_pair(test, label));
     }
 

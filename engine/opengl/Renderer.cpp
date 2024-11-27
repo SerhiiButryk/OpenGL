@@ -2,24 +2,24 @@
 
 namespace xengine {
 
-void Renderer::clean(float red, float green, float blue, float alpha) const {
+    void Renderer::clean(float red, float green, float blue, float alpha) const {
 
-    glClearColor(red, green, blue, alpha);
-    glClear(GL_COLOR_BUFFER_BIT);
-}
+        glClearColor(red, green, blue, alpha);
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
 
-void Renderer::draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const {
+    void Renderer::draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const {
 
-    /* Bind everything before making a draw call */
+        /* Bind everything before making a draw call */
 
-    shader.bind();
-    va.bind();
-    ib.bind();
+        shader.bind();
+        va.bind();
+        ib.bind();
 
-    /* Send a draw command */
+        /* Send a draw command */
 
-    glDrawElements(GL_TRIANGLES, ib.getCount(), GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_TRIANGLES, ib.getCount(), GL_UNSIGNED_INT, nullptr);
 
-}
+    }
 
 }

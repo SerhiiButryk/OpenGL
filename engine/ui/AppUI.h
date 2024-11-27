@@ -5,6 +5,9 @@
 
 namespace xengine {
 
+    /**
+    * Engine UI component
+    */
     class AppUI : public MainThreadObserver
     {
     public:
