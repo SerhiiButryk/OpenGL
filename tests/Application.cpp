@@ -10,14 +10,13 @@ namespace test {
     /**
      *  Our application implementation
      */
-    std::string Application::getResourcePath() { return "../../engine/res"; }
+    std::string Application::getResourcePath() { return "../engine/res"; }
 
     xengine::UI* Application::createUI() {
         // Prepare test UI
         auto* test = new TestMenuUI(this);
         test->registerTest(new BackgroundColorTest(), background_color_btn_label);
         test->registerTest(new TextureTest(), texture_btn_label);
-
         return test;
     }
 

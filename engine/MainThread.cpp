@@ -45,7 +45,6 @@ namespace xengine {
 
         auto* mainApp = dynamic_cast<MainApplication*>(app);
 
-        // Create our UI
         for (auto&& ob : m_observers) {
             ob->onBeforeProcess();
         }
@@ -55,7 +54,6 @@ namespace xengine {
         while (!glfwWindowShouldClose((GLFWwindow*) mainApp->getWindow()))
         {
 
-            // Render our UI
             for (auto&& ob : m_observers) {
                 ob->onProcess();
             }
@@ -75,7 +73,6 @@ namespace xengine {
             glfwPollEvents();
         }
 
-        // Destroy our UI
         for (auto&& ob : m_observers) {
             ob->onProcessEnd();
         }

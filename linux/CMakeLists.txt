@@ -8,7 +8,16 @@ set (CMAKE_CXX_STANDARD 17)
 set (PROJECT_DEPENDENCIES "${CMAKE_SOURCE_DIR}/../dependencies")
 set (PROJECT_ROOT "${CMAKE_SOURCE_DIR}/../engine")
 
+if (UNIX)
+    # Enable warnings
+    set (CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic")
+    message("Enabled warning for Unix target")
+endif ()
+
+##############################################################################
 # Create static lib
+##############################################################################
+
 add_library(core
 # Core files
     ../engine/opengl/IndexBuffer.cpp
@@ -34,11 +43,18 @@ add_library(core
     ../engine/MainThread.cpp
     ../engine/EntryPoint.cpp
     ../engine/ui/AppUI.cpp
+    ../engine/ui/Widgets.cpp
 )
 
 # Define macros
-add_compile_definitions(LINUX_PLATFORM)
-add_compile_definitions(ENABLE_LOGGING)
+if (UNIX)
+    add_compile_definitions(LINUX_PLATFORM)
+endif ()
+
+if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    add_compile_definitions(ENABLE_LOGGING)
+    message("Enabled debug build configs")
+endif ()
 
 # Ask Cmake to find OpenGL on the system
 find_package(OpenGL REQUIRED)
@@ -57,7 +73,10 @@ include_directories(${PROJECT_DEPENDENCIES})
 include_directories(${PROJECT_DEPENDENCIES}/imgui)
 include_directories(${PROJECT_DEPENDENCIES}/imgui/backends)
 
-# Link all dependencies:
+##############################################################################
+# Link all dependencies
+##############################################################################
+
 # 1) glfw
 # 2) opengl
 # 2) glew
@@ -66,3 +85,33 @@ target_link_libraries(core
     ${OPENGL_LIBRARY} # Filled by Cmake
     glfw
 )
+
+##############################################################################
+# Build test app
+##############################################################################
+
+set (BUILD_TEST_APP "TRUE")
+
+if (${BUILD_TEST_APP} STREQUAL "TRUE")
+    message("Building test app")
+
+    # Build final test app
+    add_executable(app
+        ../tests/Application.cpp
+        ../tests/ui_tests/TestMenuUI.cpp
+        ../tests/ui_tests/base/TestUI.cpp
+        ../tests/ui_tests/BackgroundColorTest.cpp
+        ../tests/ui_tests/TextureTest.cpp
+    )
+
+    include_directories(../tests/ui_tests)
+    include_directories(../tests)
+
+    target_link_libraries(app
+        # Link engine lib
+        core
+    )
+
+else ()
+    message("Skipped test app building")
+endif ()

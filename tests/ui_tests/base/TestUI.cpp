@@ -39,6 +39,8 @@ namespace test {
 
         ImGui::Text(fps_label, 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
+        ImGui::Spacing();
+
         // Should be called to create ImGui UI
         onRenderUI();
 

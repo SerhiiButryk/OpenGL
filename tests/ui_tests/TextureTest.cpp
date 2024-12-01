@@ -1,8 +1,10 @@
 #include "TextureTest.h"
 
+#include <common/Log.h>
 #include <opengl/Renderer.h>
 #include <imgui/imgui.h>
 #include <opengl/Textures.h>
+#include <ui/Widgets.h>
 
 static xengine::Renderer* renderer = nullptr;
 static xengine::VertexArray* vertexArray = nullptr;
@@ -99,11 +101,11 @@ namespace test {
 
         // View matrix
         // Moving object to the right
-        glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(100.0f, 0.0f, 0.0f));
+        glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
         // Model matrix
         // Moving object right and up for 200 pixels
-        glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(200.0f, 200.0f, 0.0f));
+        glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
         // MVP matrix
         glm::mat4 mvp = proj * view * model;
@@ -144,8 +146,53 @@ namespace test {
     void TextureTest::onBeforeRender() {
     }
 
+    static float x_Shift = 0.0f;
+    static float y_Shift = 0.0f;
+
+    void onClick(const char* text) {
+        logInfo("onClick() button with '{}' name is clicked", text);
+        float base = 10;
+        if (strcasecmp(text, "Left") == 0) {
+            x_Shift -= base;
+        } else if (strcasecmp(text, "Right") == 0) {
+            x_Shift += base;
+        } else if (strcasecmp(text, "Up") == 0) {
+            y_Shift += base;
+        } else if (strcasecmp(text, "Down") == 0) {
+            y_Shift -= base;
+        }
+        logInfo("onClick() {} {}", x_Shift, y_Shift);
+    }
+
     void TextureTest::onRender() {
+
+        using namespace xengine;
+
+        // Projection matrix
+        // Converting to a pixel space = 1200 x 800
+        glm::mat4 proj = glm::ortho(0.0f, 1200.0f, 0.0f, 800.0f, -1.0f, 1.0f);
+
+        // View matrix
+        // Moving object to the right
+        glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+
+        // Model matrix
+        // Moving object right and up for 200 pixels
+        glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f + x_Shift, 0.0f + y_Shift, 0.0f));
+
+        // MVP matrix
+        glm::mat4 mvp = proj * view * model;
+
+        shader->setUniformMat("u_MVP", mvp);
+
         // shader.setUniform("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
         renderer->draw(*vertexArray, *indexBuffer, *shader);
+
+        ImGui::Spacing();
+
+        addButton("Left", &onClick, false);
+        addButton("Right", &onClick);
+        addButton("Up", &onClick);
+        addButton("Down", &onClick);
     }
 }

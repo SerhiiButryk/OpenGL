@@ -10,7 +10,7 @@
 /**
  *  Should be implemented by client
  */
-xengine::Application* createApplication();
+extern xengine::Application* createApplication();
 
 int main()
 {
@@ -33,7 +33,7 @@ int main()
 
         mainThread->onCreate();
 
-        // Add UI component
+        // Will add UI component
         app->initConfigs(mainThread);
 
         app->onCreate();

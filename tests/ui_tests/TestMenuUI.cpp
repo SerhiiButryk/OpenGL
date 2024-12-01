@@ -29,6 +29,7 @@ namespace test {
 
         // Display Test UI
         if (m_currentTestUI != nullptr && !testUIClosed) {
+            ImGui::Spacing();
             // If back button is clicked then stop rendering
             if (ImGui::Button("<--")) {
                 testUIClosed = true;

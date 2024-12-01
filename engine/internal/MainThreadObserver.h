@@ -4,7 +4,7 @@
 
 namespace xengine {
     /**
-     *  Main thread render observer class
+     *  Main thread observer class
      */
     class MainThreadObserver : public Lifecycle {
     public:

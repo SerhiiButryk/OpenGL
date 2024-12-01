@@ -5,25 +5,28 @@
 
 namespace xengine {
 
-/*
-	This class represents Vertex Array Object in OpenGL.
-	Basically VAO binds or holds together Vertex Buffer and its layout definition.
-*/
+	/*
+		This class represents Vertex Array Object in OpenGL.
+		Basically VAO binds or holds together Vertex Buffer Object and its layout description.
 
-class VertexArray
-{
-public:
-	VertexArray();
-	~VertexArray();
+		VAO is responsible for holding state and information which describes the data.
+		In a nutshell it answers the question of what is the data.
+	*/
 
-	void bind() const;
-	void unbind() const;
+	class VertexArray
+	{
+	public:
+		VertexArray();
+		~VertexArray();
 
-	void add(const VertexBuffer& vb, const BufferLayout& l);
+		void bind() const;
+		void unbind() const;
 
-private:
-	uint32_t m_RenderId {};
+		void add(const VertexBuffer& vb, const BufferLayout& l);
 
-};
+	private:
+		uint32_t m_RenderId {};
+
+	};
 
 }

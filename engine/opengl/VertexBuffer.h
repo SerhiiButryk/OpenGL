@@ -4,27 +4,27 @@
 #include <cstddef>
 
 /*
-	This class is a representation of vertex buffer in OpenGL.
+	This class is a representation of vertex buffer object in OpenGL.
 	
-	A vertex buffer is just a buffer with raw bytes which
-	contains data related to positions or other things on the screen.
+	A vertex buffer object is just a raw buffer with raw bytes that
+	contains all data related to the vertices.
 */
 
 namespace xengine {
 
-class VertexBuffer
-{
-public:
-	
-	VertexBuffer();
+	class VertexBuffer
+	{
+	public:
 
-	void bind() const;
-	void unbind() const;
+		VertexBuffer();
 
-	void fill(float* arr, size_t size /* Buffer size in bytes */) const;
+		void bind() const;
+		void unbind() const;
 
-private:
-	uint32_t m_RenderId {};
-};
+		void fill(float* arr, size_t size /* Buffer size in bytes */) const;
+
+	private:
+		uint32_t m_RenderId {};
+	};
 
 }
