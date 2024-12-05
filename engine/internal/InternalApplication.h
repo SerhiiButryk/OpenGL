@@ -10,7 +10,9 @@ namespace xengine {
     class InternalApplication : public Lifecycle {
     public:
         InternalApplication() : m_parentWindow(new Window()) {}
-        ~InternalApplication() override = default;
+        ~InternalApplication() override {
+            delete m_parentWindow;
+        };
 
         void onCreate() override {}
         void onDestroy() override {}

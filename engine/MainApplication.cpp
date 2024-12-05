@@ -16,8 +16,6 @@ namespace xengine {
 
     MainApplication::~MainApplication() {
 
-        delete m_parentWindow;
-
         if (m_clientApp != nullptr) {
             delete m_clientApp;
         }

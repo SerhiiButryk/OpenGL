@@ -8,6 +8,11 @@ set (CMAKE_CXX_STANDARD 17)
 set (PROJECT_DEPENDENCIES "${CMAKE_SOURCE_DIR}/../dependencies")
 set (PROJECT_ROOT "${CMAKE_SOURCE_DIR}/../engine")
 
+# Building unit tests
+set (BUILD_UNIT_TESTS "TRUE")
+# Building test app
+set (BUILD_TEST_APP "TRUE")
+
 if (UNIX)
     # Enable warnings
     set (CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic")
@@ -53,6 +58,11 @@ endif ()
 
 if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     add_compile_definitions(ENABLE_LOGGING)
+
+    if (${BUILD_UNIT_TESTS} STREQUAL "TRUE")
+        add_compile_definitions(UNIT_TESTS)
+    endif ()
+
     message("Enabled debug build configs")
 endif ()
 
@@ -90,13 +100,11 @@ target_link_libraries(core
 # Build test app
 ##############################################################################
 
-set (BUILD_TEST_APP "TRUE")
-
 if (${BUILD_TEST_APP} STREQUAL "TRUE")
     message("Building test app")
 
     # Build final test app
-    add_executable(app
+    add_executable(TestApp
         ../tests/Application.cpp
         ../tests/ui_tests/TestMenuUI.cpp
         ../tests/ui_tests/base/TestUI.cpp
@@ -107,11 +115,41 @@ if (${BUILD_TEST_APP} STREQUAL "TRUE")
     include_directories(../tests/ui_tests)
     include_directories(../tests)
 
-    target_link_libraries(app
+    target_link_libraries(TestApp
         # Link engine lib
         core
     )
 
 else ()
-    message("Skipped test app building")
+    message("No test app")
+endif ()
+
+##############################################################################
+# Unit tests
+##############################################################################
+
+if (${BUILD_UNIT_TESTS} STREQUAL "TRUE")
+    message("Building unit tests")
+
+    # enable testing functionality
+    enable_testing()
+
+    add_executable(UniTests
+        ../tests/unit_tests/base/TestLauncher.cpp
+        ../tests/unit_tests/base/Registry.cpp
+        ../tests/unit_tests/MemoryLeakTest.cpp
+        ../tests/unit_tests/base/Assert.cpp
+        ../tests/unit_tests/base/MemoryTracker.cpp
+    )
+
+    target_link_libraries(UniTests
+            # Link engine lib
+            core
+    )
+
+    # Add Unit Tests (Displayed test name + test args)
+    add_test(NAME MemoryLeakTest COMMAND UniTests MemoryLeakTest)
+
+else ()
+    message("No unit tests")
 endif ()

@@ -25,6 +25,10 @@ namespace xengine {
 
         void loop(InternalApplication* app);
 
+#ifdef UNIT_TESTS
+        void* getObserverForTest() { return m_observers[0]; }
+#endif
+
     private:
         std::vector<MainThreadObserver*> m_observers;
     };

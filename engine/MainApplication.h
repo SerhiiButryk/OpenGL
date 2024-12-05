@@ -31,6 +31,10 @@ namespace xengine {
         inline UI* getClientUI() const { return m_clientUI; }
         inline void setClientUI(UI* clientUI) {  m_clientUI = clientUI; }
 
+#ifdef UNIT_TESTS
+        void* getParentWindowForTest() const { return m_parentWindow; }
+#endif
+
     private:
         Application* m_clientApp = nullptr;
         UI* m_clientUI = nullptr;
