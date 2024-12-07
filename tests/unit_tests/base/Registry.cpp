@@ -1,11 +1,12 @@
 #include "Registry.h"
 
 #include <common/Log.h>
+#include "Assert.h"
 
 namespace test {
 
-    void Registry::add(Test* test, const std::string& name) {
-        m_tests.insert(std::pair(name, test));
+    void Registry::add(Test* test) {
+        m_tests.insert(std::pair(test->name(), test));
     }
 
     void Registry::remove(const std::string& name) {
@@ -18,9 +19,12 @@ namespace test {
             elem->second->setMemoryTracker(&memoryTracker);
             return elem->second->run();
         }
-        logError("Registry::runTest() test wasn't found");
-        // Failure
+        ASSERT(false, "Registry::runTest() test wasn't found");
         return 1;
     }
 
+    Registry& Registry::instance() {
+        static Registry registry;
+        return registry;
+    }
 }

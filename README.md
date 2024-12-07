@@ -2,7 +2,20 @@
 
 This is a project with basic payground for OpenGL APIs.
 
-# Project dependencies
+# Platforms
+
+1) Windows (Visual Studio 2022 build system). Check out 'window' project folder
+2) Linux (CMake build system). Check out 'linux' project folder
+
+# Repository structure
+
+- dependencies/ - project dependencies
+- engine/ - common OpenGL code
+- windows/ - windows platform files and code
+- linux/ - linux platform files and code
+- tests/ - ui test & unit tests & test application
+
+# Some dependencies
 
 1) GLFW
 
@@ -17,19 +30,7 @@ It is responsible for locating & loading correct OpenGL library or functions.
 
 Ref: https://glew.sourceforge.net/
 
-# Platforms
-
-1) Windows (Visual Studio 2022). Check out 'window' project folder
-2) Linux (with CMake). Check out 'linux' project folder
-
-# Repository structure
-
-dependencies/ - project dependencies
-engine/ - common OpenGL code
-window/ - windows platform files and code
-window/ - linux platform files and code
-
-# Some notes
+# Some other notes
 
 1) OpenGL Initialization
 
@@ -40,15 +41,13 @@ This is a platform dependent process. It has 2 steps:
 
 	The 2 step is handled by Glew library and the 1 step is managed by GLFW library.
 
-# Get started
-
-https://www.khronos.org/opengl/wiki/Getting_Started#Tutorials_and_How_To_Guides
-
 # OpenGL docs & refs
 
-https://docs.gl/
-https://www.opengl.org/
-https://www.khronos.org/opengl/wiki/Getting_Started
+- https://www.khronos.org/opengl/wiki/Getting_Started#Tutorials_and_How_To_Guides
+- https://docs.gl/
 
-https://github.com/dbeyda/OpenGLRenderer
-https://github.com/htmlboss/OpenGL-Renderer
+- https://www.opengl.org/
+- https://www.khronos.org/opengl/wiki/Getting_Started
+
+- https://github.com/dbeyda/OpenGLRenderer
+- https://github.com/htmlboss/OpenGL-Renderer

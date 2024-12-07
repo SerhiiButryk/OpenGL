@@ -13,7 +13,7 @@ namespace xengine {
     {
     public:
         /* Initializes the GLEW library */
-        static bool init(bool enableExtensions);
+        static bool init();
     private:
         static bool IS_OPENGL_CAN_BE_USED;
         static bool IS_INITIALIZED;
