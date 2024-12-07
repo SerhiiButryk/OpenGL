@@ -2,19 +2,12 @@
 
 #include <MainApplication.h>
 #include <common/Log.h>
-#include <opengl/GLEngine.h>
 #include <opengl/external/GLFBridge.h>
-#include "common/Exception.h"
 
 namespace xengine {
 
     void MainThread::onCreate() {
         logInfo("MainThread::onCreate");
-
-        // Initialize
-        if (!GLEngine::initEngine()) {
-            throwApplicationInitException(ApplicationInitException::WINDOW_CREATION_ERROR);
-        }
 
         // Initialize components
         for (auto&& ob : m_observers) {

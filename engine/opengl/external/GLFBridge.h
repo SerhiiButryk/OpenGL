@@ -11,23 +11,23 @@ namespace xengine {
 	Docs: https://www.glfw.org/docs/latest/
 */
 
-class GLFBridge 
-{
-public:
+	class GLFBridge
+	{
+	public:
 
-	/* Initializes the GLFW library */
-	static bool init();
-	
-	/* Cleans up the GLFW library resources */
-	static void cleanup();
+		/* Initializes the GLFW library */
+		static bool init();
 
-	/* Creates the window */
-	static bool createWindow(Window& window, const char* title, int width, int height);
-	static void initWindowConfigs(Window& window);
+		/* Cleans up the GLFW library resources */
+		static void cleanup();
 
-	/* Destroys window */
-	static void destroyWindow(const Window& window);
-	
-};
+		/* Creates the window */
+		static bool createWindow(Window& window, const char* title, int width, int height);
+		static void initWindowConfigs(Window& window);
+
+		/* Destroys window */
+		static void destroyWindow(const Window& window);
+
+	};
 
 }

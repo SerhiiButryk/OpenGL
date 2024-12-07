@@ -61,7 +61,7 @@ namespace xengine {
             throwApplicationInitException(ApplicationInitException::WINDOW_CREATION_ERROR);
         }
 
-        // At this point we init GLEW
+        // At this point we should make sure that GLEW is initialized
         if (!GLEWBridge::init(true)) {
             logError("MainApplication::onCreateWindow Failed to init GLEW lib");
             throwApplicationInitException(ApplicationInitException::LIB_INIT_ERROR);

@@ -2,23 +2,27 @@
 
 namespace xengine {
 
-/*
- * A class which manages global engine configurations
- * and states of Graphic Library under the hood.
- *
- */
-class GLEngine {
-public:
-    /* Init library and components */
-    static bool initEngine();
+    /*
+     * A class which manages global engine configurations
+     * and states of Graphic Library under the hood.
+     *
+     */
+    class GLEngine {
+    public:
+        /* Init library and components */
+        static bool initEngine();
 
-    static void setViewPorts(int bufferWidth, int bufferHeight);
-    // Log GL information
-    static void printInfo();
-    static void setDebugCallback();
+        static void setViewPorts(int bufferWidth, int bufferHeight);
+        // Log GL information
+        static void printInfo();
+        static void setDebugCallback();
 
-    static void setBlending(bool enable);
-    static void setBlendingMode();
-};
+        static void setBlending(bool enable);
+        static void setBlendingMode();
+
+    private:
+        static bool IS_INITIALIZED;
+        static bool CAN_BE_USED;
+    };
 
 }

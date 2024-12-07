@@ -7,7 +7,14 @@
 
 namespace xengine {
 
+    bool GLEngine::IS_INITIALIZED = false;
+    bool GLEngine::CAN_BE_USED = false;
+
 bool GLEngine::initEngine() {
+
+    if (IS_INITIALIZED) {
+        return CAN_BE_USED;
+    }
 
     // Init logger lib
     initLogger();
@@ -15,8 +22,12 @@ bool GLEngine::initEngine() {
     /* Initializing the GLFW library */
     if (!GLFBridge::init()) {
         logError("Failed to init GLFW library");
+        CAN_BE_USED = false;
         return false;
     }
+
+    IS_INITIALIZED = true;
+    CAN_BE_USED = true;
 
     return true;
 }

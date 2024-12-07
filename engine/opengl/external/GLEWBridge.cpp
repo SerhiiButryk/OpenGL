@@ -4,17 +4,23 @@
 
 namespace xengine {
 
-bool GLEWBridge::IS_OPENGL_CAN_BE_USED = false;
+    bool GLEWBridge::IS_OPENGL_CAN_BE_USED = false;
+    bool GLEWBridge::IS_INITIALIZED = false;
 
-bool GLEWBridge::init(bool enableExtensions)
-{
-    /* Enable modern extension features  */
-    if (enableExtensions)
-        glewExperimental = GL_TRUE;
+    bool GLEWBridge::init(bool enableExtensions)
+    {
+        if (IS_INITIALIZED)
+            return IS_OPENGL_CAN_BE_USED;
 
-    IS_OPENGL_CAN_BE_USED = GLEW_OK == glewInit();
+        /* Enable modern extension features  */
+        if (enableExtensions)
+            glewExperimental = GL_TRUE;
 
-    return IS_OPENGL_CAN_BE_USED;
-}
+        IS_OPENGL_CAN_BE_USED = GLEW_OK == glewInit();
+
+        IS_INITIALIZED = true;
+
+        return IS_OPENGL_CAN_BE_USED;
+    }
 
 }

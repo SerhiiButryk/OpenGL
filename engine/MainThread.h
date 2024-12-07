@@ -27,6 +27,7 @@ namespace xengine {
 
 #ifdef UNIT_TESTS
         void* getObserverForTest() { return m_observers[0]; }
+        bool checkEmptyListForTest() { return m_observers.empty(); }
 #endif
 
     private:

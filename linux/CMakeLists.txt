@@ -138,7 +138,6 @@ if (${BUILD_UNIT_TESTS} STREQUAL "TRUE")
         ../tests/unit_tests/base/TestLauncher.cpp
         ../tests/unit_tests/base/Registry.cpp
         ../tests/unit_tests/MemoryLeakTest.cpp
-        ../tests/unit_tests/base/Assert.cpp
         ../tests/unit_tests/base/MemoryTracker.cpp
     )
 

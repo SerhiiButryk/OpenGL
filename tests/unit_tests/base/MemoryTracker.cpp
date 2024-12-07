@@ -16,7 +16,10 @@ namespace test {
     }
 
     void MemoryTracker::clear() {
+        bool old = track;
+        track = false;
         deallocations.clear();
+        track = old;
     }
 
     void MemoryTracker::setTrack(bool val) {

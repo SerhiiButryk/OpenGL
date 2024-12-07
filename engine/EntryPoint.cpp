@@ -1,3 +1,5 @@
+#include <opengl/GLEngine.h>
+
 #include "common/Log.h"
 #include "MainApplication.h"
 #include "MainThread.h"
@@ -22,6 +24,11 @@ int main()
     auto* mainThread = new MainThread();
 
     try {
+
+        // Initialize
+        if (!GLEngine::initEngine()) {
+            throwApplicationInitException(ApplicationInitException::WINDOW_CREATION_ERROR);
+        }
 
         auto* client = createApplication();
         client->setMainApplication(app);

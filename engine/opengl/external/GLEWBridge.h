@@ -9,13 +9,14 @@
 
 namespace xengine {
 
-class GLEWBridge
-{
-public:
-    /* Initializes the GLEW library */
-    static bool init(bool enableExtensions);
-private:
-    static bool IS_OPENGL_CAN_BE_USED;
-};
+    class GLEWBridge
+    {
+    public:
+        /* Initializes the GLEW library */
+        static bool init(bool enableExtensions);
+    private:
+        static bool IS_OPENGL_CAN_BE_USED;
+        static bool IS_INITIALIZED;
+    };
 
 }

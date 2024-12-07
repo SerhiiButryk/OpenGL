@@ -2,6 +2,7 @@
 
 #include <MainApplication.h>
 #include <common/Log.h>
+#include <opengl/GLEngine.h>
 #include <unit_tests/base/Assert.h>
 
 namespace test {
@@ -11,10 +12,15 @@ namespace test {
 
         using namespace xengine;
 
-        m_memoryTracker->setTrack(true);
-
         {
+            m_memoryTracker->setTrack(false);
+
             auto* mainApp = new MainApplication();
+
+            // Preconditions
+            ASSERT_TRUE(mainApp->getClientApplication() == 0);
+            ASSERT_TRUE(mainApp->getClientUI() == 0);
+
             mainApp->setClientApplication(new Application());
             mainApp->setClientUI(new UI());
 
@@ -22,53 +28,67 @@ namespace test {
             void* p2 = mainApp->getClientUI();
             void* p3 = mainApp->getParentWindowForTest();
 
+            m_memoryTracker->setTrack(true);
+
             delete mainApp;
 
             bool res = m_memoryTracker->checkIfDeallocated(p1);
-            Assert(res, "MemoryLeakTest::run possible leak with client application object");
+            ASSERT(res, "MemoryLeakTest::run possible leak with client application object");
 
             res = m_memoryTracker->checkIfDeallocated(p2);
-            Assert(res, "MemoryLeakTest::run possible leak with client UI object");
+            ASSERT(res, "MemoryLeakTest::run possible leak with client UI object");
 
             res = m_memoryTracker->checkIfDeallocated(p3);
-            Assert(res, "MemoryLeakTest::run possible leak with window object");
+            ASSERT(res, "MemoryLeakTest::run possible leak with window object");
         }
 
         m_memoryTracker->clear();
 
         {
+            m_memoryTracker->setTrack(false);
+
             auto* mainThread = new MainThread();
+
+            // Preconditions
+            ASSERT_TRUE(mainThread->checkEmptyListForTest());
 
             mainThread->addThreadObserver(new MainThreadObserver());
 
             void* p = mainThread->getObserverForTest();
 
+            m_memoryTracker->setTrack(true);
+
             mainThread->onDestroy();
             delete mainThread;
 
             bool res = m_memoryTracker->checkIfDeallocated(p);
-            Assert(res, "MemoryLeakTest::run possible leak with observer object");
+            ASSERT(res, "MemoryLeakTest::run possible leak with observer object");
         }
 
         m_memoryTracker->clear();
 
         {
-            // TODO: Fix
-            // auto* window = new Window();
-            //
-            // window->create("Test", 100, 100);
-            // window->destroy();
-            //
-            // void* p = window->getWindow();
-            //
-            // delete window;
-            //
-            // bool res = m_memoryTracker->checkIfDeallocated(p);
-            // Assert(res, "MemoryLeakTest::run possible leak with observer object");
+            m_memoryTracker->setTrack(false);
+
+            auto* window = new Window();
+
+            // Preconditions
+            ASSERT(GLEngine::initEngine(), "MemoryLeakTest::run failed to init engine");
+            ASSERT(window->getWindow() == 0, "MemoryLeakTest::run window is not null");
+
+            window->create("Test", 100, 100);
+
+            ASSERT(window->getWindow() != 0, "MemoryLeakTest::run window is not created");
+
+            window->destroy();
+
+            ASSERT(window->getWindow() == 0, "MemoryLeakTest::run window is not destroyed");
+
+            delete window;
         }
 
-        m_memoryTracker->setTrack(false);
         m_memoryTracker->clear();
+        m_memoryTracker->setTrack(false);
 
         return 0;
     }
