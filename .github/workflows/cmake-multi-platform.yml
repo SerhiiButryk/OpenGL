@@ -52,14 +52,10 @@ jobs:
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
 
-    - name: Check
-    # https://stackoverflow.com/questions/31170869/cmake-could-not-find-opengl-in-ubuntu
+    - name: Install OpenGL
       run: |
         sudo apt update
         sudo apt install libgl1-mesa-dev
-        ls -l /usr/lib/x86_64-linux-gnu/
-        ls -l /usr/include/GL
-    #     sudo apt-get install libegl1-mesa-dev
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
