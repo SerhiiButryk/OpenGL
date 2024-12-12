@@ -70,7 +70,6 @@ endif ()
 find_package(OpenGL REQUIRED)
 
 # Include dirs & libs
-include_directories(${OPENGL_INCLUDE_DIRS})
 
 include_directories(${PROJECT_DEPENDENCIES}/linux/GLEW/include)
 link_directories(${PROJECT_DEPENDENCIES}/linux/GLEW/lib)
