@@ -72,10 +72,10 @@ find_package(OpenGL REQUIRED)
 # Include dirs & libs
 
 include_directories(${PROJECT_DEPENDENCIES}/linux/GLEW/include)
-link_directories(${PROJECT_DEPENDENCIES}/linux/GLEW/lib)
+link_directories(core PUBLIC ${PROJECT_DEPENDENCIES}/linux/GLEW/lib)
 
 include_directories(${PROJECT_DEPENDENCIES}/linux/GLFW/include)
-link_directories(${PROJECT_DEPENDENCIES}/linux/GLFW/lib)
+link_directories(core PUBLIC ${PROJECT_DEPENDENCIES}/linux/GLFW/lib)
 
 include_directories(${PROJECT_ROOT})
 include_directories(${PROJECT_DEPENDENCIES})
