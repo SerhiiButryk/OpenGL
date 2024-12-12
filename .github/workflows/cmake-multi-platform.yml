@@ -56,8 +56,7 @@ jobs:
       run: |
         sudo apt update
         sudo apt install libgl1-mesa-dev
-        find /usr -name 'glu.h'
-        ls /usr/include/
+        sudo apt install libglu1-mesa-dev
         ls /usr/include/GL 
 
     - name: Configure CMake
