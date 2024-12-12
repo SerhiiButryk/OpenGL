@@ -55,7 +55,8 @@ jobs:
     - name: Check
     # https://stackoverflow.com/questions/31170869/cmake-could-not-find-opengl-in-ubuntu
       run: |
-        ls /usr/lib/x86_64-linux-gnu/
+        ls -l /usr/lib/x86_64-linux-gnu/
+        ls -l /usr/include/GL
     #     sudo apt-get install libegl1-mesa-dev
 
     - name: Configure CMake
