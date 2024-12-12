@@ -69,10 +69,9 @@ endif ()
 # Ask Cmake to find OpenGL on the system
 find_package(OpenGL REQUIRED)
 
-message("PROJECT_DEPENDENCIES = ${PROJECT_DEPENDENCIES}")
-message("Include_DEPENDENCIES = ${PROJECT_DEPENDENCIES}/linux/GLEW/include")
-
 # Include dirs & libs
+include_directories(${OPENGL_INCLUDE_DIRS})
+
 include_directories(${PROJECT_DEPENDENCIES}/linux/GLEW/include)
 link_directories(${PROJECT_DEPENDENCIES}/linux/GLEW/lib)
 
