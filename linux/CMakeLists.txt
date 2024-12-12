@@ -72,12 +72,12 @@ find_package(OpenGL REQUIRED)
 # Include dirs & libs
 
 include_directories(${PROJECT_DEPENDENCIES}/linux/GLEW/include)
-link_directories(core PUBLIC ${PROJECT_DEPENDENCIES}/linux/GLEW/lib)
+link_directories(${PROJECT_DEPENDENCIES}/linux/GLEW/libs)
 
 include_directories(${PROJECT_DEPENDENCIES}/linux/GLFW/include)
-# link_directories(core PUBLIC ${PROJECT_DEPENDENCIES}/linux/GLFW/lib)
+link_directories(${PROJECT_DEPENDENCIES}/linux/GLFW/libs)
 
-target_link_libraries(core "glfw" "${PROJECT_DEPENDENCIES}/linux/GLFW/lib")
+# target_link_libraries(core "glfw" "${PROJECT_DEPENDENCIES}/linux/GLFW/lib")
 
 include_directories(${PROJECT_ROOT})
 include_directories(${PROJECT_DEPENDENCIES})
@@ -126,9 +126,9 @@ if (${BUILD_TEST_APP} STREQUAL "TRUE")
         core
     )
 
-    message("PaTH = ${PROJECT_DEPENDENCIES}/linux/GLFW/lib")
+    message("PaTH = ${PROJECT_DEPENDENCIES}/linux/GLFW/libs")
 
-    target_link_libraries(TestApp "glfw" "${PROJECT_DEPENDENCIES}/linux/GLFW/lib")
+    # target_link_libraries(TestApp "glfw" "${PROJECT_DEPENDENCIES}/linux/GLFW/libs")
 
 else ()
     message("No test app")
