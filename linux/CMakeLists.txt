@@ -67,7 +67,7 @@ if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
 endif ()
 
 # Ask Cmake to find OpenGL on the system
-find_package(OpenGL REQUIRED)
+find_package(OpenGL REQUIRED COMPONENTS OpenGL EGL)
 
 # Include dirs & libs
 include_directories(${PROJECT_DEPENDENCIES}/linux/GLEW/include)
