@@ -75,7 +75,9 @@ include_directories(${PROJECT_DEPENDENCIES}/linux/GLEW/include)
 link_directories(core PUBLIC ${PROJECT_DEPENDENCIES}/linux/GLEW/lib)
 
 include_directories(${PROJECT_DEPENDENCIES}/linux/GLFW/include)
-link_directories(core PUBLIC ${PROJECT_DEPENDENCIES}/linux/GLFW/lib)
+# link_directories(core PUBLIC ${PROJECT_DEPENDENCIES}/linux/GLFW/lib)
+
+target_link_libraries(core "glfw" "${PROJECT_DEPENDENCIES}/linux/GLFW/lib")
 
 include_directories(${PROJECT_ROOT})
 include_directories(${PROJECT_DEPENDENCIES})
@@ -123,6 +125,10 @@ if (${BUILD_TEST_APP} STREQUAL "TRUE")
         # Link engine lib
         core
     )
+
+    message("PaTH = ${PROJECT_DEPENDENCIES}/linux/GLFW/lib")
+
+    target_link_libraries(TestApp "glfw" "${PROJECT_DEPENDENCIES}/linux/GLFW/lib")
 
 else ()
     message("No test app")
