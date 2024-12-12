@@ -77,8 +77,6 @@ link_directories(core PUBLIC ${PROJECT_DEPENDENCIES}/linux/GLEW/lib)
 include_directories(${PROJECT_DEPENDENCIES}/linux/GLFW/include)
 link_directories(core PUBLIC ${PROJECT_DEPENDENCIES}/linux/GLFW/libs)
 
-# target_link_libraries(core "glfw" "${PROJECT_DEPENDENCIES}/linux/GLFW/lib")
-
 include_directories(${PROJECT_ROOT})
 include_directories(${PROJECT_DEPENDENCIES})
 
@@ -117,12 +115,6 @@ if (${BUILD_TEST_APP} STREQUAL "TRUE")
 
     include_directories(../tests/ui_tests)
     include_directories(../tests)
-
-    # include_directories(${PROJECT_DEPENDENCIES}/linux/GLFW/include)
-    # link_directories(${PROJECT_DEPENDENCIES}/linux/GLFW/libs)
-
-    # include_directories(${PROJECT_DEPENDENCIES}/linux/GLEW/include)
-    # link_directories(${PROJECT_DEPENDENCIES}/linux/GLEW/lib)
 
     target_link_libraries(TestApp
         # Link engine lib
