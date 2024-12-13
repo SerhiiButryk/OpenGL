@@ -146,6 +146,13 @@ if (${BUILD_UNIT_TESTS} STREQUAL "TRUE")
             core
     )
 
+    if (${GITHUB_ACTIONS})
+        add_compile_definitions(GITHUB_ACTIONS)
+        message("Added GITHUB_ACTIONS define")
+    else ()
+        message("No GITHUB_ACTIONS define")
+    endif ()
+
     # Add Unit Tests (Displayed test name + test args)
     add_test(NAME MemoryLeakTest COMMAND UniTests MemoryLeakTest)
     add_test(NAME InitTests COMMAND UniTests InitTests)
