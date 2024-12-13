@@ -18,9 +18,6 @@ namespace xengine {
     {
         glfwSetErrorCallback(GLFWErrorCallback);
 
-        glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_NULL);
-        glfwInitHint(GLFW_WAYLAND_LIBDECOR /*GLFW_WAYLAND_LIBDECOR*/, GLFW_WAYLAND_DISABLE_LIBDECOR /*GLFW_WAYLAND_DISABLE_LIBDECOR*/);
-
         /* Initializes the GLFW library */
 
         if (!glfwInit()) {

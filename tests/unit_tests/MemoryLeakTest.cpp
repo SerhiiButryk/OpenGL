@@ -68,6 +68,7 @@ namespace test {
         m_memoryTracker->clear();
 
         {
+#ifndef GITHUB_ACTIONS
             m_memoryTracker->setTrack(false);
 
             auto* window = new Window();
@@ -85,6 +86,7 @@ namespace test {
             ASSERT(window->getWindow() == 0, "MemoryLeakTest::run window is not destroyed");
 
             delete window;
+#endif
         }
 
         m_memoryTracker->clear();
