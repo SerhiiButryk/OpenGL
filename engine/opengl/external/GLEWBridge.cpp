@@ -1,5 +1,6 @@
 #include "GLEWBridge.h"
 
+#include <common/Log.h>
 #include <GL/glew.h>
 
 namespace xengine {
@@ -17,7 +18,13 @@ namespace xengine {
         if (enableExtensions)
             glewExperimental = GL_TRUE;
 
-        IS_OPENGL_CAN_BE_USED = GLEW_OK == glewInit();
+        unsigned int result = glewInit();
+        IS_OPENGL_CAN_BE_USED = GLEW_OK == result;
+
+        if (GLEW_OK != result)
+        {
+            logError("GLEW Error: {}", reinterpret_cast<const char *>(glewGetErrorString(result)));
+        }
 
         IS_INITIALIZED = true;
 

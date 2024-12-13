@@ -23,9 +23,6 @@ namespace xengine {
             ob->onDestroy();
         }
 
-        // Clean up our engine
-        GLFBridge::cleanup();
-
         // Remove observers
         for (auto&& ob : m_observers) {
             delete ob;

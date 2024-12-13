@@ -1,4 +1,5 @@
 #include <opengl/GLEngine.h>
+#include <opengl/external/GLFBridge.h>
 
 #include "common/Log.h"
 #include "MainApplication.h"
@@ -60,6 +61,9 @@ int main()
 
     delete app;
     delete mainThread;
+
+    // Clean up our engine
+    GLFBridge::cleanup();
 
     logInfo("Finished with code {}", retCode);
 

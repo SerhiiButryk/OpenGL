@@ -70,10 +70,7 @@ endif ()
 find_package(OpenGL REQUIRED)
 
 # Include dirs & libs
-
 include_directories(${PROJECT_DEPENDENCIES}/linux/GLEW/include)
-link_directories(core PUBLIC ${PROJECT_DEPENDENCIES}/linux/GLEW/lib)
-
 include_directories(${PROJECT_DEPENDENCIES}/linux/GLFW/include)
 
 include_directories(${PROJECT_ROOT})
@@ -90,11 +87,9 @@ include_directories(${PROJECT_DEPENDENCIES}/imgui/backends)
 # 1) glfw
 # 2) opengl
 # 2) glew
-target_link_libraries(core
-    GLEW
-    ${OPENGL_LIBRARY} # Filled by Cmake
-    glfw
-)
+target_link_libraries(core ${OPENGL_LIBRARY})
+target_link_libraries(core ${PROJECT_DEPENDENCIES}/linux/GLFW/libs/libglfw.so.3)
+target_link_libraries(core ${PROJECT_DEPENDENCIES}/linux/GLEW/lib/libGLEW.so)
 
 ##############################################################################
 # Build test app
