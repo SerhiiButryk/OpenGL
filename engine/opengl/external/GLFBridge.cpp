@@ -8,8 +8,16 @@
 
 namespace xengine {
 
+    /* GLFW error callback */
+    static void GLFWErrorCallback(int error, const char* description)
+    {
+        logError("GLFW Error ({0}): {1}", error, description);
+    }
+
     bool GLFBridge::init()
     {
+        glfwSetErrorCallback(GLFWErrorCallback);
+
         /* Initializes the GLFW library */
 
         if (!glfwInit()) {
