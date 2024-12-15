@@ -26,6 +26,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    
+    - name: Setup headless display
+      uses: pyvista/setup-headless-display-action@v3
+      with:
+        mesa3d-release: latest
 
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
@@ -48,7 +53,6 @@ jobs:
         -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-        -DGITHUB_ACTIONS=ON
         -S ${{ github.workspace }}/linux
 
     - name: Build
