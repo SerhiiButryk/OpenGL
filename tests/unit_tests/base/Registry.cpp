@@ -19,7 +19,7 @@ namespace test {
             elem->second->setMemoryTracker(&memoryTracker);
             return elem->second->run();
         }
-        ASSERT(false, "Registry::runTest() test wasn't found");
+        ASSERT_LOG(false, "Registry::runTest() test wasn't found");
         return 1;
     }
 

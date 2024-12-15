@@ -7,12 +7,15 @@
 
 namespace test {
 
+    /**
+     * This test make sures that engine can be initialized
+     */
     int InitTests::run() const {
-        logInfo("InitTests::run");
+        logInfo("InitTests::run Started");
 
         using namespace xengine;
 
-        ASSERT(GLEngine::initEngine(), "InitTests::run Cannot init engine something is very wrong");
+        ASSERT_LOG(GLEngine::initEngine(), "InitTests::run Cannot init engine something is very wrong");
 
         return 0;
     }

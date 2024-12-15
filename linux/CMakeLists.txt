@@ -139,6 +139,7 @@ if (${BUILD_UNIT_TESTS} STREQUAL "TRUE")
         ../tests/unit_tests/MemoryLeakTest.cpp
         ../tests/unit_tests/base/MemoryTracker.cpp
         ../tests/unit_tests/InitTests.cpp
+        ../tests/unit_tests/ShaderTests.cpp
     )
 
     target_link_libraries(UniTests
@@ -156,6 +157,7 @@ if (${BUILD_UNIT_TESTS} STREQUAL "TRUE")
     # Add Unit Tests (Displayed test name + test args)
     add_test(NAME MemoryLeakTest COMMAND UniTests MemoryLeakTest)
     add_test(NAME InitTests COMMAND UniTests InitTests)
+    add_test(NAME ShaderTests COMMAND UniTests ShaderTests)
 
 else ()
     message("No unit tests")
