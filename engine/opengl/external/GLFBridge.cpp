@@ -78,7 +78,7 @@ namespace xengine {
 
         glfwGetFramebufferSize((GLFWwindow*) window.getWindow(), &bufferWidth, &bufferHeight);
 
-        logInfo("GLFBridge::initWindowConfigs() View port information: ", bufferWidth, bufferHeight);
+        logInfo("GLFBridge::initWindowConfigs() View port information: '{}' '{}'", bufferWidth, bufferHeight);
 
         /* Set the window's OpenGL context to be the current on this thread */
 

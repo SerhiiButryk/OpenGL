@@ -12,9 +12,7 @@ namespace test {
 
         using namespace xengine;
 
-#ifndef GITHUB_ACTIONS
         ASSERT(GLEngine::initEngine(), "InitTests::run Cannot init engine something is very wrong");
-#endif
 
         return 0;
     }

@@ -71,3 +71,5 @@ jobs:
       with:
         name: Application_Artifact
         path: /home/runner/work/OpenGL/OpenGL/build/Testing/Temporary/LastTest.log
+        overwrite: true
+        if-no-files-found: error
