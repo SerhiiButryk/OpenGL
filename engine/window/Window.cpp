@@ -16,20 +16,20 @@ namespace xengine {
 	bool Window::create(const char* title, int width, int height)
 	{
 		if (window != nullptr) {
-			logError("Window::create() Window is not null, return");
+			LOG_ERROR("Window::create() Window is not null, return");
 			return false;
 		}
 
 		bool result = GLFBridge::createWindow(*this, title, width, height);
 
 		if (!result) {
-			logError("Window::create() Failed to create window");
+			LOG_ERROR("Window::create() Failed to create window");
 			return false;
 		}
 
 		GLFBridge::initWindowConfigs(*this);
 
-		logInfo("Window::create() Window is created");
+		LOG_INFO("Window::create() Window is created");
 
 		return true;
 	}
@@ -38,14 +38,14 @@ namespace xengine {
 	{
 		if (window == nullptr)
 		{
-			logError("Window::destroy() Window is null, return");
+			LOG_ERROR("Window::destroy() Window is null, return");
 			return;
 		}
 
 		GLFBridge::destroyWindow(*this);
 		window = nullptr;
 
-		logInfo("Window::destroy() Window is destroyed");
+		LOG_INFO("Window::destroy() Window is destroyed");
 	}
 
 }

@@ -5,7 +5,7 @@
 
 #define ASSERT_LOG(condition, message) \
     if (!(condition)) { \
-        logError(message); \
+        LOG_ERROR(message); \
         assert(false); \
     } \
 
@@ -13,6 +13,3 @@
     if (!(condition)) { \
     assert(false); \
     } \
-
-namespace test {
-}

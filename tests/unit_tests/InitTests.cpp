@@ -11,7 +11,7 @@ namespace test {
      * This test make sures that engine can be initialized
      */
     int InitTests::run() const {
-        logInfo("InitTests::run Started");
+        LOG_INFO("InitTests::run Started");
 
         using namespace xengine;
 

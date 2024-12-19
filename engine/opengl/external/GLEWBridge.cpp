@@ -20,7 +20,7 @@ namespace xengine {
 
         if (GLEW_OK != result)
         {
-            logError("GLEW Error: {}", reinterpret_cast<const char *>(glewGetErrorString(result)));
+            LOG_ERROR("GLEW Error: {}", reinterpret_cast<const char *>(glewGetErrorString(result)));
         }
 
         IS_INITIALIZED = true;

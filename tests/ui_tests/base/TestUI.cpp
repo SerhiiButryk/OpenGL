@@ -11,7 +11,7 @@ static const char* fps_label = "Application average %.3f ms/frame (%.1f FPS)";
 namespace test {
 
     void TestUI::onCreate() {
-        logInfo("TestUI::onCreate");
+        LOG_INFO("TestUI::onCreate");
 
         ImGui::CreateContext();
 
@@ -52,7 +52,7 @@ namespace test {
     }
 
     void TestUI::onDestroy() {
-        logInfo("TestUI::onDestroy");
+        LOG_INFO("TestUI::onDestroy");
         // Clear ImGui
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();

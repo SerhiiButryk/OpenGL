@@ -14,7 +14,7 @@ namespace test {
      */
     int ShaderTests::run() const {
 
-        logInfo("ShaderTests::run Started");
+        LOG_INFO("ShaderTests::run Started");
 
         using namespace xengine;
 

@@ -27,7 +27,7 @@ void operator delete(void *ptr) noexcept {
 
 int main(int argc, char *argv[]) {
     if (argc < 2) {
-        logError("Not enough arguments");
+        LOG_ERROR("Not enough arguments");
         return 1;
     }
 

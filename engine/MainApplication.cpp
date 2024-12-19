@@ -11,7 +11,7 @@
 namespace xengine {
 
     MainApplication::MainApplication() {
-        logInfo("MainApplication::MainApplication() created");
+        LOG_INFO("MainApplication::MainApplication() created");
     }
 
     MainApplication::~MainApplication() {
@@ -24,14 +24,14 @@ namespace xengine {
             delete m_clientUI;
         }
 
-        logInfo("MainApplication::~MainApplication() destroyed");
+        LOG_INFO("MainApplication::~MainApplication() destroyed");
     }
 
     void MainApplication::onCreate() {
         if (m_clientApp != nullptr) {
             m_clientApp->onCreate();
         }
-        logInfo("MainApplication::onCreate");
+        LOG_INFO("MainApplication::onCreate");
     }
 
     void MainApplication::onDestroy() {
@@ -43,12 +43,12 @@ namespace xengine {
             m_clientApp->onDestroy();
         }
 
-        logInfo("MainApplication::onDestroy");
+        LOG_INFO("MainApplication::onDestroy");
     }
 
     void MainApplication::onCreateWindow() const {
 
-        logInfo("MainApplication::onCreateWindow()");
+        LOG_INFO("MainApplication::onCreateWindow()");
 
         /* Create a window and its OpenGL context */
 
@@ -63,7 +63,7 @@ namespace xengine {
 
         // At this point we should make sure that GLEW is initialized
         if (!GLEWBridge::init()) {
-            logError("MainApplication::onCreateWindow Failed to init GLEW lib");
+            LOG_ERROR("MainApplication::onCreateWindow Failed to init GLEW lib");
             throwApplicationInitException(ApplicationInitException::LIB_INIT_ERROR);
         }
 
@@ -80,7 +80,7 @@ namespace xengine {
 
     void MainApplication::initConfigs(MainThread* mainThread) {
         mainThread->addThreadObserver(new ApplicationUI(m_clientUI));
-        logInfo("MainApplication::initConfigs() added UI component");
+        LOG_INFO("MainApplication::initConfigs() added UI component");
     }
 
 }

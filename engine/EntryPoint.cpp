@@ -50,7 +50,7 @@ int main()
         mainThread->loop(app);
 
     } catch (const ApplicationInitException& e) {
-        logError("Received an error: {} {}", e.code, e.what());
+        LOG_ERROR("Received an error: {} {}", e.code, e.what());
         retCode = 1;
     }
 
@@ -65,7 +65,7 @@ int main()
     // Clean up our engine
     GLFBridge::cleanup();
 
-    logInfo("Finished with code {}", retCode);
+    LOG_INFO("Finished with code {}", retCode);
 
     return retCode;
 }

@@ -49,6 +49,7 @@ add_library(core
     ../engine/EntryPoint.cpp
     ../engine/ui/AppUI.cpp
     ../engine/ui/Widgets.cpp
+    ../engine/common/Log.cpp
 )
 
 # Define macros
@@ -145,8 +146,8 @@ if (${BUILD_UNIT_TESTS} STREQUAL "TRUE")
     )
 
     target_link_libraries(UniTests
-            # Link engine lib
-            core
+        # Link engine lib
+        core
     )
 
     if (${GITHUB_ACTIONS})

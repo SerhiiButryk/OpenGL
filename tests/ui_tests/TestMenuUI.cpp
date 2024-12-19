@@ -12,12 +12,12 @@ namespace test {
             delete elem.first;
         }
         m_tests.clear();
-        logInfo("TestMenuUI::~TestMenuUI");
+        LOG_INFO("TestMenuUI::~TestMenuUI");
     }
 
     void TestMenuUI::onCreate() {
         TestUI::onCreate();
-        logInfo("TestMenuUI::onCreate");
+        LOG_INFO("TestMenuUI::onCreate");
         // Call test to initialize any stuff
         for (auto&& elem : m_tests) {
             elem.first->onCreate(m_app);
@@ -66,7 +66,7 @@ namespace test {
 
     void TestMenuUI::onDestroy() {
         TestUI::onDestroy();
-        logInfo("TestMenuUI::onDestroy");
+        LOG_INFO("TestMenuUI::onDestroy");
         // Call test to destroy any stuff
         for (auto&& elem : m_tests) {
             elem.first->onDestroy();

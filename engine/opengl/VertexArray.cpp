@@ -62,7 +62,7 @@ namespace xengine {
 
 	        auto stride = l.getStride();
 
-	        logInfo("VertexArray::add() index = '{}', count = '{}' data type = '{}'"
+	        LOG_INFO("VertexArray::add() index = '{}', count = '{}' data type = '{}'"
                 ", normalize = '{}', stride = '{}', offset = '{}'", i, layout.count,
                 layout.dataType, layout.nomalize, stride, offset);
 

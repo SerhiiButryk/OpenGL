@@ -14,13 +14,13 @@ namespace xengine {
     {
         auto shaderFile = parseShader(filePath);
         m_RenderId = createShader(shaderFile);
-        logInfo("Shader::Shader() created, id = {}", m_RenderId);
+        LOG_INFO("Shader::Shader() created, id = {}", m_RenderId);
     }
 
     Shader::~Shader()
     {
         glDeleteProgram(m_RenderId);
-        logInfo("Shader::~Shader() Destroyed");
+        LOG_INFO("Shader::~Shader() Destroyed");
     }
 
     void Shader::bind() const
@@ -41,25 +41,25 @@ namespace xengine {
 
         if (m_UniformLocationCache.find(name) != m_UniformLocationCache.end()) {
             int location = m_UniformLocationCache[name];
-            logDebug("Shader::setUniform() from the cache '{}'", location);
+            LOG_DEBUG("Shader::setUniform() from the cache '{}'", location);
 #ifdef UNIT_TESTS
             fromCache = true;
 #endif
             return location;
         }
 
-        logDebug("Shader::setUniform() variable '{}' is not in the cache", name);
+        LOG_DEBUG("Shader::setUniform() variable '{}' is not in the cache", name);
 
         int location = glGetUniformLocation(m_RenderId, name.c_str()); // Get the id of uniform variable
         if (location == -1) {
             // This can mean that uniform is not active or not found
-            logError("Shader::setUniform() unable to get uniform location for {}", name);
+            LOG_ERROR("Shader::setUniform() unable to get uniform location for {}", name);
         }
 
         // Cache the location
         m_UniformLocationCache[name] = location;
 
-        logDebug("Shader::setUniform() location = {}", location);
+        LOG_DEBUG("Shader::setUniform() location = {}", location);
         return location;
     }
 
@@ -82,8 +82,8 @@ namespace xengine {
     ShaderFile Shader::parseShader(const std::string& filePath) const
     {
         std::filesystem::path current_path = std::filesystem::current_path();
-        logInfo("Shader::parseShader() Working dir: '{}'", current_path.string());
-        logInfo("Shader::parseShader() File path: '{}'", filePath);
+        LOG_INFO("Shader::parseShader() Working dir: '{}'", current_path.string());
+        LOG_INFO("Shader::parseShader() File path: '{}'", filePath);
 
         std::ifstream istream(filePath);
 
@@ -120,21 +120,21 @@ namespace xengine {
 #endif
 
         if (shaderFile.vertexShader.empty()) {
-            logError("Vertex shader is empty !");
+            LOG_ERROR("Vertex shader is empty !");
 #ifdef UNIT_TESTS
             parsedOkay = false;
 #endif
         } else {
-            logDebug("Vertex shader: \n \"{}\"", shaderFile.vertexShader);
+            LOG_DEBUG("Vertex shader: \n \"{}\"", shaderFile.vertexShader);
         }
 
         if (shaderFile.fragmentShader.empty()) {
-            logError("Fragment shader is empty !");
+            LOG_ERROR("Fragment shader is empty !");
 #ifdef UNIT_TESTS
             parsedOkay = false;
 #endif
         } else {
-            logDebug("Fragment shader: \n \"{}\"", shaderFile.fragmentShader);
+            LOG_DEBUG("Fragment shader: \n \"{}\"", shaderFile.fragmentShader);
         }
 
         return shaderFile;
@@ -180,7 +180,7 @@ namespace xengine {
 
             glGetShaderInfoLog(id, length, &length, message);
 
-            logError("Failed to compile: {}", message);
+            LOG_ERROR("Failed to compile: {}", message);
 
             glDeleteShader(id);
 

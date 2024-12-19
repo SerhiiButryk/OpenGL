@@ -7,7 +7,7 @@
 namespace xengine {
 
     void MainThread::onCreate() {
-        logInfo("MainThread::onCreate");
+        LOG_INFO("MainThread::onCreate");
 
         // Initialize components
         for (auto&& ob : m_observers) {
@@ -16,7 +16,7 @@ namespace xengine {
     }
 
     void MainThread::onDestroy() {
-        logInfo("MainThread::onDestroy");
+        LOG_INFO("MainThread::onDestroy");
 
         // Clean up
         for (auto&& ob : m_observers) {
@@ -77,7 +77,7 @@ namespace xengine {
         for (const auto it = m_observers.begin(); it != m_observers.end();)
         {
             if (*it == observer) {
-                logInfo("MainThread::removeThreadObserver removing {:p}", fmt::ptr(*it));
+                LOG_INFO("MainThread::removeThreadObserver removing {:p}", fmt::ptr(*it));
                 m_observers.erase(it);
             }
         }

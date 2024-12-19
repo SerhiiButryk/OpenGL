@@ -11,7 +11,7 @@
 namespace xengine {
 
 Textures::Textures(const std::string& filePath): m_FilePath(filePath) {
-    logInfo("Textures::Textures() File path: '{}'", filePath);
+    LOG_INFO("Textures::Textures() File path: '{}'", filePath);
     // Load our image
     stbi_set_flip_vertically_on_load(1);
     m_LocalBuffer = stbi_load(filePath.c_str(), &m_Width,

@@ -13,12 +13,9 @@ namespace xengine {
             return CAN_BE_USED;
         }
 
-        // Init logger lib
-        initLogger();
-
         /* Initializing the GLFW library */
         if (!GLFBridge::init()) {
-            logError("Failed to init GLFW library");
+            LOG_ERROR("Failed to init GLFW library");
             CAN_BE_USED = false;
             return false;
         }
@@ -37,30 +34,30 @@ namespace xengine {
     void GLEngine::setBlending(bool enable) {
         if (enable) {
             glEnable(GL_BLEND);
-            logInfo("GLEngine::setBlending() Blending enabled");
+            LOG_INFO("GLEngine::setBlending() Blending enabled");
         } else {
             glDisable(GL_BLEND);
-            logInfo("GLEngine::setBlending() Blending disabled");
+            LOG_INFO("GLEngine::setBlending() Blending disabled");
         }
     }
 
     void GLEngine::setBlendingMode() {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        logInfo("GLEngine::setBlending() Blending mode is set");
+        LOG_INFO("GLEngine::setBlending() Blending mode is set");
     }
 
     void GLEngine::printInfo() {
         auto version = glGetString(GL_VERSION);
         if (version != nullptr)
-            logInfo("GL version: '{}'", std::string((char*)version));
+            LOG_INFO("GL version: '{}'", std::string((char*)version));
 
         auto vendor = glGetString(GL_VENDOR);
         if (vendor != nullptr)
-            logInfo("GL vendor: '{}'", std::string((char*)version));
+            LOG_INFO("GL vendor: '{}'", std::string((char*)version));
 
         auto render = glGetString(GL_RENDER);
         if (render != nullptr)
-            logInfo("GPU name: '{}'", std::string((char*)version));
+            LOG_INFO("GPU name: '{}'", std::string((char*)version));
     }
 
     void GLAPIENTRY
@@ -73,9 +70,9 @@ namespace xengine {
                     const void *userParam)
     {
         if (type == GL_DEBUG_TYPE_ERROR) {
-            logError("OpenGL ERROR: {}", message);
+            LOG_ERROR("OpenGL ERROR: {}", message);
         } else {
-            logWarn("OpenGL MESSAGE: {}", message);
+            LOG_WARN("OpenGL MESSAGE: {}", message);
         }
     }
 
@@ -86,11 +83,11 @@ namespace xengine {
         float version = std::stof(versionString);
 
         if (version >= 4.5f) {
-            logInfo("GLEngine::setDebugCallback() Can set a debug callback. Version = {}", version);
+            LOG_INFO("GLEngine::setDebugCallback() Can set a debug callback. Version = {}", version);
             glDebugMessageCallback(MessageCallback, 0);
         } else {
             // TODO: Implement error handling in this case
-            logInfo("GLEngine::setDebugCallback() !!! CANNOT set a debug callback !!! Version = {}", version);
+            LOG_INFO("GLEngine::setDebugCallback() !!! CANNOT set a debug callback !!! Version = {}", version);
         }
     }
 

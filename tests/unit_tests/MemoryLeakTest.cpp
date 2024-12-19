@@ -14,7 +14,7 @@ namespace test {
      * Window
      */
     int MemoryLeakTest::run() const {
-        logInfo("MemoryLeakTest::run Started");
+        LOG_INFO("MemoryLeakTest::run Started");
 
         using namespace xengine;
 

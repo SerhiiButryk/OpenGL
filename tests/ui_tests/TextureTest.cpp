@@ -124,7 +124,7 @@ namespace test {
     static float y_Shift = 0.0f;
 
     void onClick(const char* text) {
-        logInfo("onClick() button with '{}' name is clicked", text);
+        LOG_INFO("onClick() button with '{}' name is clicked", text);
         float base = 10;
         if (strcasecmp(text, "Left") == 0) {
             x_Shift -= base;
@@ -135,7 +135,7 @@ namespace test {
         } else if (strcasecmp(text, "Down") == 0) {
             y_Shift -= base;
         }
-        logInfo("onClick() {} {}", x_Shift, y_Shift);
+        LOG_INFO("onClick() {} {}", x_Shift, y_Shift);
     }
 
     void TextureTest::onRender() {

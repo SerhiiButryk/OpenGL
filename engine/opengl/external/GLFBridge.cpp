@@ -11,7 +11,7 @@ namespace xengine {
     /* GLFW error callback */
     static void GLFWErrorCallback(int error, const char* description)
     {
-        logError("GLFW Error ({0}): {1}", error, description);
+        LOG_ERROR("GLFW Error ({0}): {1}", error, description);
     }
 
     bool GLFBridge::init()
@@ -21,7 +21,7 @@ namespace xengine {
         /* Initializes the GLFW library */
 
         if (!glfwInit()) {
-            logError("GLFBridge::init() failed to init GLFW library");
+            LOG_ERROR("GLFBridge::init() failed to init GLFW library");
             return false;
         }
 
@@ -44,13 +44,13 @@ namespace xengine {
 
     void GLFBridge::cleanup()
     {
-        logInfo("GLFBridge::cleanup()");
+        LOG_INFO("GLFBridge::cleanup()");
         glfwTerminate();
     }
 
     bool GLFBridge::createWindow(Window& window, const char* title, int width, int height)
     {
-        logInfo("GLFBridge::createWindow()");
+        LOG_INFO("GLFBridge::createWindow()");
 
         GLFWwindow* w = glfwCreateWindow(width, height, title, NULL, NULL);
         if (!w)
@@ -65,7 +65,7 @@ namespace xengine {
 
     void GLFBridge::destroyWindow(const Window& window)
     {
-        logInfo("GLFBridge::destroyWindow()");
+        LOG_INFO("GLFBridge::destroyWindow()");
 
         glfwDestroyWindow(static_cast<GLFWwindow *>(window.getWindow()));
     }
@@ -78,7 +78,7 @@ namespace xengine {
 
         glfwGetFramebufferSize((GLFWwindow*) window.getWindow(), &bufferWidth, &bufferHeight);
 
-        logInfo("GLFBridge::initWindowConfigs() View port information: '{}' '{}'", bufferWidth, bufferHeight);
+        LOG_INFO("GLFBridge::initWindowConfigs() View port information: '{}' '{}'", bufferWidth, bufferHeight);
 
         /* Set the window's OpenGL context to be the current on this thread */
 
