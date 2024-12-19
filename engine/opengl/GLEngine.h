@@ -21,8 +21,8 @@ namespace xengine {
         static void setBlendingMode();
 
     private:
-        static bool IS_INITIALIZED;
-        static bool CAN_BE_USED;
+        static inline bool IS_INITIALIZED = false;
+        static inline bool CAN_BE_USED = false;
     };
 
 }

@@ -5,9 +5,6 @@
 
 namespace xengine {
 
-    bool GLEWBridge::IS_OPENGL_CAN_BE_USED = false;
-    bool GLEWBridge::IS_INITIALIZED = false;
-
     bool GLEWBridge::init()
     {
         if (IS_INITIALIZED)

@@ -15,7 +15,7 @@ namespace xengine {
         virtual void onProcess() {}
         virtual void onProcessEnd() {}
 
-        virtual void onCreate() {}
-        virtual void onDestroy() {}
+        void onCreate() override {}
+        void onDestroy() override {}
     };
 }

@@ -4,8 +4,10 @@
 #include "Lifecycle.h"
 
 namespace xengine {
+
     /**
-    * Internal application class
+    * Our Internal application class which we use inside engine.
+    * We control it and do not expose it to the client code.
     */
     class InternalApplication : public Lifecycle {
     public:

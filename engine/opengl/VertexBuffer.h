@@ -21,7 +21,9 @@ namespace xengine {
 		void bind() const;
 		void unbind() const;
 
-		void fill(float* arr, size_t size /* Buffer size in bytes */) const;
+		void fill(float* arr, size_t size /* Buffer size in bytes */, bool isDynamic = false) const;
+		// Update a buffer dynamically
+		void update(float* arr, size_t size /* Buffer size in bytes */) const;
 
 	private:
 		uint32_t m_RenderId {};

@@ -41,7 +41,7 @@ namespace xengine {
 
         if (m_UniformLocationCache.find(name) != m_UniformLocationCache.end()) {
             int location = m_UniformLocationCache[name];
-            logDebug("Shader::setUniform() from the cache {}", location);
+            logDebug("Shader::setUniform() from the cache '{}'", location);
 #ifdef UNIT_TESTS
             fromCache = true;
 #endif

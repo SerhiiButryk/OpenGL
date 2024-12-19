@@ -71,7 +71,7 @@ namespace xengine {
                 layout.dataType /* Type of the data buffer that we selected */,
                 layout.nomalize /* Whether to normalize */,
                 stride /* Byte size between vertex elements, if it's 2 floats then it's 8 bytes */,
-                reinterpret_cast<const void *>(offset /* The offset of data in vertex buffer */));
+                reinterpret_cast<const void *>(offset /* The offset of the next data in vertex buffer */));
 
             offset += layout.count * LayoutDefinition::getSizeOfType(layout.dataType);
 	    }

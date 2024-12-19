@@ -5,31 +5,31 @@
 
 namespace xengine {
 
-/*
-	This class is a representation of index buffer in OpenGL.
-	
-	An index buffer is a buffer which holds indices of data from a vertex buffer.
-	An index buffer allows to reuse data without duplication.
-*/
+	/*
+		This class is a representation of index buffer in OpenGL.
 
-class IndexBuffer
-{
-public:
-	
-	IndexBuffer();
+		An index buffer is a buffer which holds indices of data from a vertex buffer.
+		An index buffer allows to reuse data without duplication.
+	*/
 
-	void bind() const;
-	void unbind() const;
+	class IndexBuffer
+	{
+	public:
 
-	void fill(uint32_t* arr, size_t size /* Buffer size in bytes */);
+		IndexBuffer();
 
-	inline uint32_t getRenderId() const;
-	inline uint32_t getCount() const { return m_IndexCount; }
+		void bind() const;
+		void unbind() const;
 
-private:
-	uint32_t m_RenderId {};
-	uint32_t m_IndexCount {};
-};
+		void fill(uint32_t* arr, size_t size /* Buffer size in bytes */);
+
+		inline uint32_t getRenderId() const;
+		inline uint32_t getCount() const { return m_IndexCount; }
+
+	private:
+		uint32_t m_RenderId {};
+		uint32_t m_IndexCount {};
+	};
 
 }
 

@@ -17,40 +17,17 @@ namespace test {
 
     void TextureTest::onCreate(Application* app) {
 
-         using namespace xengine;
-
-        /*
-         So what we need here is the next:
-
-         1) We need to create a data and give it to GL.
-         2) We need to describe this data. In other words, what to draw and how to draw.
-         3) We need to issue a draw call.
-       */
+        using namespace xengine;
 
         const int size = 4 * 4;
-        // float positions[size] = {
-        //     // positions    texture coordinates
-        //     -0.5f, -0.5f,    0.0f, 0.0f, // 0
-        //      0.5f, -0.5f,    1.0f, 0.0f, // 1
-        //     0.5f, 0.5f,      1.0f, 1.0f, // 2
-        //     -0.5f, 0.5f,     0.0f, 1.0f, // 3
-        // };
 
         float positions[size] = {
-            // positions    texture coordinates
-            0.0f, 0.0f, 0.0f, 0.0f, // 0
-            100.0f, 0.0f, 1.0f, 0.0f, // 1
-            100.f, 100.0f, 1.0f, 1.0f, // 2
-            0.0f, 100.0f, 0.0f, 1.0f, // 3
+            // all positions    texture coordinates
+            0.0f, 0.0f,         0.0f,  0.0f, // 0
+            100.0f, 0.0f,       1.0f,  0.0f, // 1
+            100.f, 100.0f,      1.0f,  1.0f, // 2
+            0.0f, 100.0f,       0.0f,  1.0f, // 3
         };
-
-        // float positions[size] = {
-        //     // positions    texture coordinates
-        //     100.0f, 100.0f,    0.0f, 0.0f, // 0
-        //      200.0f, 100.0f,    1.0f, 0.0f, // 1
-        //     200.f, 200.0f,      1.0f, 1.0f, // 2
-        //     100.0f, 200.0f,     0.0f, 1.0f, // 3
-        // };
 
         vertexArray = new VertexArray();
         vertexBuffer = new VertexBuffer();
@@ -96,15 +73,12 @@ namespace test {
         // glm::mat4 proj = glm::ortho(-1.5f, 1.5f, -1.0f, 1.0f, -1.0f, 1.0f);
 
         // Projection matrix
-        // Converting to a pixel space = 1200 x 800
         glm::mat4 proj = glm::ortho(0.0f, 1200.0f, 0.0f, 800.0f, -1.0f, 1.0f);
 
         // View matrix
-        // Moving object to the right
         glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
         // Model matrix
-        // Moving object right and up for 200 pixels
         glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
         // MVP matrix

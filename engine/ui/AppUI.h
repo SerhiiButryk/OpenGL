@@ -6,14 +6,17 @@
 namespace xengine {
 
     /**
-    * Main UI component
+    * Application UI component.
+    *
+    * This is a part which manages and knows about our client UI.
     */
-    class AppUI : public MainThreadObserver
+    class ApplicationUI : public MainThreadObserver
     {
     public:
-        explicit AppUI(UI* ui);
-        ~AppUI() override = default;
+        explicit ApplicationUI(UI* ui);
+        ~ApplicationUI() override = default;
 
+        // Get called by Main thread
         void onBeforeProcess() override;
         void onProcess() override;
         void onProcessEnd() override;

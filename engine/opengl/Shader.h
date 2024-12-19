@@ -26,7 +26,7 @@ namespace xengine {
     class Shader
     {
     public:
-        Shader(const std::string& filePath);
+        explicit Shader(const std::string& filePath);
         ~Shader();
 
         void bind() const;

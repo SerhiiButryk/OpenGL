@@ -12,21 +12,21 @@
 
 namespace xengine {
 
-class Textures 
-{
-public:
-    Textures(const std::string& filePath);
-    ~Textures();
+    class Textures
+    {
+    public:
+        explicit Textures(const std::string& filePath);
+        ~Textures();
 
-    void bind(uint32_t slot) const;
-    void unbind() const;
+        void bind(uint32_t slot) const;
+        void unbind() const;
 
-private:
-    uint32_t m_RendererID {};
-    std::string m_FilePath;
-    int m_Width {}, m_Height {}, m_BytesPerPixel {};
-    // A buffer which will contain the pixel data of our texture
-    unsigned char* m_LocalBuffer = nullptr;
-};
+    private:
+        uint32_t m_RendererID {};
+        std::string m_FilePath;
+        int m_Width {}, m_Height {}, m_BytesPerPixel {};
+        // A buffer which will contain the pixel data of our texture
+        unsigned char* m_LocalBuffer = nullptr;
+    };
 
 }

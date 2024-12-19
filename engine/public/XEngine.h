@@ -1,5 +1,5 @@
 /**
-* This file which has all engine APIs. Should be included by the client code.
+* This file has all public engine APIs. Should be included by the client code.
 */
 #pragma once
 

@@ -3,7 +3,7 @@
 namespace xengine {
 
     /**
-     * Client UI component interface
+     * Client application UI component interface
     */
     class UI {
     public:

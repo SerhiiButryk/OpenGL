@@ -100,11 +100,13 @@ if (${BUILD_TEST_APP} STREQUAL "TRUE")
 
     # Build final test app
     add_executable(TestApp
-        ../tests/Application.cpp
+        ../tests/ui_tests/Application.cpp
         ../tests/ui_tests/TestMenuUI.cpp
         ../tests/ui_tests/base/TestUI.cpp
         ../tests/ui_tests/BackgroundColorTest.cpp
         ../tests/ui_tests/TextureTest.cpp
+        ../tests/ui_tests/BatchingTest.cpp
+        ../tests/ui_tests/DynamicBatching.cpp
     )
 
     include_directories(../tests/ui_tests)

@@ -41,7 +41,7 @@ int main()
 
         mainThread->onCreate();
 
-        // Will add UI component
+        // Will add UI to the application
         app->initConfigs(mainThread);
 
         app->onCreate();

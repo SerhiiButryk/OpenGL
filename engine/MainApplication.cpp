@@ -79,7 +79,7 @@ namespace xengine {
     }
 
     void MainApplication::initConfigs(MainThread* mainThread) {
-        mainThread->addThreadObserver(new AppUI(m_clientUI));
+        mainThread->addThreadObserver(new ApplicationUI(m_clientUI));
         logInfo("MainApplication::initConfigs() added UI component");
     }
 
