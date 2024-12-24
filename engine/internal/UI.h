@@ -11,7 +11,7 @@ namespace xengine {
         virtual ~UI() = default;
 
         virtual void onCreate() {}
-        virtual void onRender() {}
+        virtual void onDraw() {}
         virtual void onDestroy() {}
     };
 

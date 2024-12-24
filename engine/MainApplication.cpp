@@ -6,11 +6,10 @@
 #include <ui/AppUI.h>
 
 #include "common/Exception.h"
-#include "opengl/Shader.h"
 
 namespace xengine {
 
-    MainApplication::MainApplication() {
+    MainApplication::MainApplication() : m_appUI(new ApplicationUI()) {
         LOG_INFO("MainApplication::MainApplication() created");
     }
 
@@ -20,9 +19,7 @@ namespace xengine {
             delete m_clientApp;
         }
 
-        if (m_clientUI != nullptr) {
-            delete m_clientUI;
-        }
+        delete m_appUI;
 
         LOG_INFO("MainApplication::~MainApplication() destroyed");
     }
@@ -31,6 +28,11 @@ namespace xengine {
         if (m_clientApp != nullptr) {
             m_clientApp->onCreate();
         }
+
+        onCreateWindow();
+
+        m_parentWindow->setEventListener(this);
+
         LOG_INFO("MainApplication::onCreate");
     }
 
@@ -78,9 +80,20 @@ namespace xengine {
         GLEngine::setBlendingMode();
     }
 
-    void MainApplication::initConfigs(MainThread* mainThread) {
-        mainThread->addThreadObserver(new ApplicationUI(m_clientUI));
-        LOG_INFO("MainApplication::initConfigs() added UI component");
+    void MainApplication::attachThread(MainThread* mainThread) {
+        m_main_thread = mainThread;
+        mainThread->addThreadObserver(m_parentWindow);
+        mainThread->addThreadObserver(m_appUI);
+        mainThread->addThreadObserver(this);
+        LOG_INFO("MainApplication::attachThread()");
     }
 
+    bool MainApplication::onEvent(const Event &event) {
+
+        if (event.type == EVENT_WINDOW_CLOSE)
+            m_main_thread->quit();
+
+        // handled
+        return true;
+    }
 }

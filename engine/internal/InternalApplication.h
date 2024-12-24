@@ -1,7 +1,6 @@
 #pragma once
 
 #include <window/Window.h>
-#include "Lifecycle.h"
 
 namespace xengine {
 
@@ -9,7 +8,7 @@ namespace xengine {
     * Our Internal application class which we use inside engine.
     * We control it and do not expose it to the client code.
     */
-    class InternalApplication : public Lifecycle {
+    class InternalApplication : public MainThreadObserver {
     public:
         InternalApplication() : m_parentWindow(new Window()) {}
         ~InternalApplication() override {

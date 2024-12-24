@@ -50,6 +50,7 @@ add_library(core
     ../engine/ui/AppUI.cpp
     ../engine/ui/Widgets.cpp
     ../engine/common/Log.cpp
+        ../engine/window/events/EventListener.h
 )
 
 # Define macros

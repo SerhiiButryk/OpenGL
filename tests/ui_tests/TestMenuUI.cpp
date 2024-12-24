@@ -55,13 +55,13 @@ namespace test {
 
     }
 
-    void TestMenuUI::onRender() {
+    void TestMenuUI::onDraw() {
         // Give a chance to first call a test render
         for (auto&& elem : m_tests) {
             elem.first->onBeforeRender();
         }
         // Render all other UI stuff
-        TestUI::onRender();
+        TestUI::onDraw();
     }
 
     void TestMenuUI::onDestroy() {

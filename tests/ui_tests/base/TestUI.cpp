@@ -28,7 +28,7 @@ namespace test {
         ImGui_ImplOpenGL3_Init(glsl_version);
     }
 
-    void TestUI::onRender() {
+    void TestUI::onDraw() {
 
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();

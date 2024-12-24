@@ -13,7 +13,7 @@ namespace test {
         ~TestMenuUI() override;
 
         void onCreate() override;
-        void onRender() override;
+        void onDraw() override;
         void onDestroy() override;
         void onRenderUI() override;
 

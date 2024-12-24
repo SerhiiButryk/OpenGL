@@ -13,13 +13,15 @@ namespace xengine {
     class ApplicationUI : public MainThreadObserver
     {
     public:
-        explicit ApplicationUI(UI* ui);
-        ~ApplicationUI() override = default;
+        explicit ApplicationUI();
+        ~ApplicationUI() override;
 
         // Get called by Main thread
-        void onBeforeProcess() override;
-        void onProcess() override;
-        void onProcessEnd() override;
+        void onStart() override;
+        void onProcess(void* app) override;
+        void onEnd() override;
+
+        void setClientUI(UI* ui) { m_clientUI = ui; }
 
     private:
         UI* m_clientUI = nullptr;

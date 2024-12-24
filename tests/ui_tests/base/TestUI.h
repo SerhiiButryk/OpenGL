@@ -14,7 +14,7 @@ namespace test {
         ~TestUI() override = default;
 
         void onCreate() override;
-        void onRender() override;
+        void onDraw() override;
         void onDestroy() override;
 
         // Should be called to create ImGui UI

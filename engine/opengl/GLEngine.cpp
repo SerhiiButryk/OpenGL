@@ -4,6 +4,7 @@
 
 #include "external/GLFBridge.h"
 #include <common/Log.h>
+#include <common/Diagnostic.h>
 
 namespace xengine {
 
@@ -48,16 +49,23 @@ namespace xengine {
 
     void GLEngine::printInfo() {
         auto version = glGetString(GL_VERSION);
-        if (version != nullptr)
-            LOG_INFO("GL version: '{}'", std::string((char*)version));
-
         auto vendor = glGetString(GL_VENDOR);
-        if (vendor != nullptr)
-            LOG_INFO("GL vendor: '{}'", std::string((char*)version));
-
         auto render = glGetString(GL_RENDER);
+
+        const char* versionStr = "";
+        const char* vendorStr = "";
+        const char* renderStr = "";
+
+        if (version != nullptr)
+            versionStr = (char*)version;
+
+        if (vendor != nullptr)
+            vendorStr = (char*)vendor;
+
         if (render != nullptr)
-            LOG_INFO("GPU name: '{}'", std::string((char*)version));
+            renderStr = (char*)render;
+
+        LOG_INFO("OPENGL: '{}' '{}' '{}'", versionStr, vendorStr, renderStr);
     }
 
     void GLAPIENTRY
@@ -88,6 +96,7 @@ namespace xengine {
         } else {
             // TODO: Implement error handling in this case
             LOG_INFO("GLEngine::setDebugCallback() !!! CANNOT set a debug callback !!! Version = {}", version);
+            ASSERT(false);
         }
     }
 

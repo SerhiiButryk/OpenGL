@@ -25,6 +25,8 @@ namespace xengine {
 
         void loop(InternalApplication* app);
 
+        void quit() { m_stop = true; }
+
 #ifdef UNIT_TESTS
         void* getObserverForTest() { return m_observers[0]; }
         bool checkEmptyListForTest() { return m_observers.empty(); }
@@ -32,6 +34,7 @@ namespace xengine {
 
     private:
         std::vector<MainThreadObserver*> m_observers;
+        bool m_stop = false;
     };
 
 }

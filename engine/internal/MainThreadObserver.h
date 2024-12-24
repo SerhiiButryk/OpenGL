@@ -1,6 +1,6 @@
 #pragma once
 
-#include "internal/Lifecycle.h"
+#include "Lifecycle.h"
 
 namespace xengine {
     /**
@@ -11,9 +11,9 @@ namespace xengine {
         MainThreadObserver() = default;
         ~MainThreadObserver() override = default;
 
-        virtual void onBeforeProcess() {}
-        virtual void onProcess() {}
-        virtual void onProcessEnd() {}
+        virtual void onStart() {}
+        virtual void onProcess(void* app) {}
+        virtual void onEnd() {}
 
         void onCreate() override {}
         void onDestroy() override {}

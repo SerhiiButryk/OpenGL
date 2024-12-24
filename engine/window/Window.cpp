@@ -1,7 +1,12 @@
 #include "Window.h"
 
+/* Glew is included first because it loads and provides OpenGL APIs */
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
 #include "opengl/external/GLFBridge.h"
 #include "common/Log.h"
+#include <MainApplication.h>
 
 namespace xengine {
 
@@ -27,8 +32,6 @@ namespace xengine {
 			return false;
 		}
 
-		GLFBridge::initWindowConfigs(*this);
-
 		LOG_INFO("Window::create() Window is created");
 
 		return true;
@@ -48,4 +51,37 @@ namespace xengine {
 		LOG_INFO("Window::destroy() Window is destroyed");
 	}
 
+	void Window::onProcess(void* app) {
+
+		auto* mainApp = static_cast<MainApplication*>(app);
+
+		/*
+			 Swap front and back buffers
+			 Back buffer is a buffer which user cannot see.
+			 Front buffer is a buffer which user sees and which the window is using.
+			 We draw to the back buffer, and then we swap the buffer to reflect
+			 things on the screen.
+		  */
+
+		glfwSwapBuffers((GLFWwindow*) mainApp->getWindow());
+
+		/* Get user or process events */
+
+		glfwPollEvents();
+	}
+
+	bool Window::onEvent(const Event &event) {
+		return false;
+	}
+
+	void Window::dispatch(const Event &event) {
+
+		bool handled = onEvent(event);
+
+		if (handled)
+			return;
+
+		if (m_eventListener != nullptr)
+			m_eventListener->onEvent(event);
+	}
 }

@@ -2,18 +2,24 @@
 
 namespace xengine {
 
-    ApplicationUI::ApplicationUI(UI* ui) : m_clientUI(ui) {
+    ApplicationUI::ApplicationUI() {
     }
 
-    void ApplicationUI::onBeforeProcess() {
+    ApplicationUI::~ApplicationUI() {
+        if (m_clientUI != nullptr) {
+            delete m_clientUI;
+        }
+    }
+
+    void ApplicationUI::onStart() {
         m_clientUI->onCreate();
     }
 
-    void ApplicationUI::onProcess() {
-        m_clientUI->onRender();
+    void ApplicationUI::onProcess(void* app) {
+        m_clientUI->onDraw();
     }
 
-    void ApplicationUI::onProcessEnd() {
+    void ApplicationUI::onEnd() {
         m_clientUI->onDestroy();
     }
 

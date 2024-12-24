@@ -39,13 +39,10 @@ int main()
         auto* clientUi = client->createUI();
         app->setClientUI(clientUi);
 
-        mainThread->onCreate();
-
         // Will add UI to the application
-        app->initConfigs(mainThread);
+        app->attachThread(mainThread);
 
-        app->onCreate();
-        app->onCreateWindow();
+        mainThread->onCreate();
 
         mainThread->loop(app);
 
@@ -57,7 +54,6 @@ int main()
     // Release resources either if we got an error
     // or the program has been closed
     mainThread->onDestroy();
-    app->onDestroy();
 
     delete app;
     delete mainThread;
