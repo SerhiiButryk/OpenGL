@@ -64,9 +64,11 @@ namespace xengine {
             return false;
         }
 
+#ifndef UNIT_TESTS
         // Show window in the center
         glfwSetWindowPos(w, monitorX + (videoMode->width - width) / 2, monitorY + (videoMode->height - height) / 2);
         glfwShowWindow(w);
+#endif
 
         window.setWindow(w);
 

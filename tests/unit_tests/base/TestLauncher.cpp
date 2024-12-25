@@ -1,8 +1,8 @@
 #include <common/Log.h>
 
-#include <unit_tests/InitTests.h>
-#include <unit_tests/MemoryLeakTest.h>
-#include <unit_tests/ShaderTests.h>
+#include <InitTests.h>
+#include <BasicTest.h>
+#include <ShaderTests.h>
 
 #include "MemoryTracker.h"
 #include "Registry.h"
@@ -34,11 +34,11 @@ int main(int argc, char *argv[]) {
     using namespace test;
 
     // Our tests
-    MemoryLeakTest memory_leak_test;
+    BasicTest basic_test;
     InitTests init_tests;
     ShaderTests shader_tests;
 
-    Registry::instance().add(&memory_leak_test);
+    Registry::instance().add(&basic_test);
     Registry::instance().add(&init_tests);
     Registry::instance().add(&shader_tests);
 

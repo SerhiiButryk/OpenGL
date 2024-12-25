@@ -4,11 +4,11 @@
 
 namespace test {
 
-    class MemoryLeakTest : public Test
+    class BasicTest : public Test
     {
     public:
         int run() const override;
-        const char* name() const override { return "MemoryLeakTest"; }
+        const char* name() const override { return "BasicTest"; }
     };
 
 }

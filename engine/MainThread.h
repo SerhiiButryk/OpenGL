@@ -20,6 +20,8 @@ namespace xengine {
         void onCreate() override;
         void onDestroy() override;
 
+        // Objects are not deleted by this class
+        // Memory is managed by a caller
         void addThreadObserver(MainThreadObserver* observer);
         void removeThreadObserver(MainThreadObserver* observer);
 
@@ -28,7 +30,6 @@ namespace xengine {
         void quit() { m_stop = true; }
 
 #ifdef UNIT_TESTS
-        void* getObserverForTest() { return m_observers[0]; }
         bool checkEmptyListForTest() { return m_observers.empty(); }
 #endif
 

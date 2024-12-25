@@ -23,6 +23,10 @@ namespace xengine {
 
         void setClientUI(UI* ui) { m_clientUI = ui; }
 
+#ifdef UNIT_TESTS
+        UI* getClientUI() const { return m_clientUI; }
+#endif
+
     private:
         UI* m_clientUI = nullptr;
     };

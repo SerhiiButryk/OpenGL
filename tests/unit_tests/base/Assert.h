@@ -7,9 +7,9 @@
     if (!(condition)) { \
         LOG_ERROR(message); \
         assert(false); \
-    } \
+    }
 
 #define ASSERT(condition) \
     if (!(condition)) { \
     assert(false); \
-    } \
+    }

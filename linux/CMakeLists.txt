@@ -5,13 +5,17 @@ project(OpenGLProject)
 
 # Set Cpp version
 set (CMAKE_CXX_STANDARD 17)
-set (PROJECT_DEPENDENCIES "${CMAKE_SOURCE_DIR}/../dependencies")
-set (PROJECT_ROOT "${CMAKE_SOURCE_DIR}/../engine")
 
-# Building unit tests
-set (BUILD_UNIT_TESTS "TRUE")
-# Building test app
-set (BUILD_TEST_APP "TRUE")
+# Set other properties
+if (PROJECT_ROOT)
+    message("PROJECT_ROOT found")
+else ()
+    set (PROJECT_ROOT "${CMAKE_SOURCE_DIR}/..")
+endif ()
+
+message("PROJECT_ROOT = ${PROJECT_ROOT}")
+
+set (PROJECT_DEPENDENCIES "${PROJECT_ROOT}/dependencies")
 
 if (UNIX)
     # Enable warnings
@@ -24,33 +28,32 @@ endif ()
 ##############################################################################
 
 add_library(core
-# Core files
-    ../engine/opengl/IndexBuffer.cpp
-    ../engine/opengl/VertexArray.cpp
-    ../engine/opengl/VertexBuffer.cpp
-    ../engine/opengl/Layout.cpp
-    ../engine/window/Window.cpp
-    ../engine/opengl/external/GLFBridge.cpp
-    ../engine/opengl/Shader.cpp
-    ../engine/opengl/external/GLEWBridge.cpp
-    ../engine/opengl/GLEngine.cpp
-    ../engine/opengl/Renderer.cpp
-    ../engine/opengl/Textures.cpp
-#   ImGui files
-    ../dependencies/imgui/imgui.cpp
-    ../dependencies/imgui/imgui_draw.cpp
-    ../dependencies/imgui/imgui_tables.cpp
-    ../dependencies/imgui/imgui_widgets.cpp
-    ../dependencies/imgui/backends/imgui_impl_opengl3.cpp
-    ../dependencies/imgui/backends/imgui_impl_glfw.cpp
-    ../engine/MainApplication.cpp
-    ../engine/common/Exception.cpp
-    ../engine/MainThread.cpp
-    ../engine/EntryPoint.cpp
-    ../engine/ui/AppUI.cpp
-    ../engine/ui/Widgets.cpp
-    ../engine/common/Log.cpp
-        ../engine/window/events/EventListener.h
+    # Core files
+    ${PROJECT_ROOT}/engine/opengl/IndexBuffer.cpp
+    ${PROJECT_ROOT}/engine/opengl/VertexArray.cpp
+    ${PROJECT_ROOT}/engine/opengl/VertexBuffer.cpp
+    ${PROJECT_ROOT}/engine/opengl/Layout.cpp
+    ${PROJECT_ROOT}/engine/window/Window.cpp
+    ${PROJECT_ROOT}/engine/opengl/external/GLFBridge.cpp
+    ${PROJECT_ROOT}/engine/opengl/Shader.cpp
+    ${PROJECT_ROOT}/engine/opengl/external/GLEWBridge.cpp
+    ${PROJECT_ROOT}/engine/opengl/GLEngine.cpp
+    ${PROJECT_ROOT}/engine/opengl/Renderer.cpp
+    ${PROJECT_ROOT}/engine/opengl/Textures.cpp
+    # ImGui files
+    ${PROJECT_ROOT}/dependencies/imgui/imgui.cpp
+    ${PROJECT_ROOT}/dependencies/imgui/imgui_draw.cpp
+    ${PROJECT_ROOT}/dependencies/imgui/imgui_tables.cpp
+    ${PROJECT_ROOT}/dependencies/imgui/imgui_widgets.cpp
+    ${PROJECT_ROOT}/dependencies/imgui/backends/imgui_impl_opengl3.cpp
+    ${PROJECT_ROOT}/dependencies/imgui/backends/imgui_impl_glfw.cpp
+    ${PROJECT_ROOT}/engine/MainApplication.cpp
+    ${PROJECT_ROOT}/engine/common/Exception.cpp
+    ${PROJECT_ROOT}/engine/MainThread.cpp
+    ${PROJECT_ROOT}/engine/EntryPoint.cpp
+    ${PROJECT_ROOT}/engine/ui/AppUI.cpp
+    ${PROJECT_ROOT}/engine/ui/Widgets.cpp
+    ${PROJECT_ROOT}/engine/common/Log.cpp
 )
 
 # Define macros
@@ -60,12 +63,14 @@ endif ()
 
 if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     add_compile_definitions(ENABLE_LOGGING)
-
-    if (${BUILD_UNIT_TESTS} STREQUAL "TRUE")
-        add_compile_definitions(UNIT_TESTS)
-    endif ()
-
     message("Enabled debug build configs")
+endif ()
+
+if (ENABLE_UNIT_TESTS)
+    add_compile_definitions(UNIT_TESTS)
+    message("Enabled unit tests build configs")
+else ()
+    set (BUILD_TEST_APP "TRUE")
 endif ()
 
 # Ask Cmake to find OpenGL on the system
@@ -75,10 +80,10 @@ find_package(OpenGL REQUIRED)
 include_directories(${PROJECT_DEPENDENCIES}/linux/GLEW/include)
 include_directories(${PROJECT_DEPENDENCIES}/linux/GLFW/include)
 
-include_directories(${PROJECT_ROOT})
+include_directories(${PROJECT_ROOT}/engine)
 include_directories(${PROJECT_DEPENDENCIES})
 
-# ImGui
+# ImGui includes
 include_directories(${PROJECT_DEPENDENCIES}/imgui)
 include_directories(${PROJECT_DEPENDENCIES}/imgui/backends)
 
@@ -94,11 +99,11 @@ target_link_libraries(core ${PROJECT_DEPENDENCIES}/linux/GLFW/libs/libglfw.so.3)
 target_link_libraries(core ${PROJECT_DEPENDENCIES}/linux/GLEW/lib/libGLEW.so)
 
 ##############################################################################
-# Build test app
+# Test app
 ##############################################################################
 
-if (${BUILD_TEST_APP} STREQUAL "TRUE")
-    message("Building test app")
+if (BUILD_TEST_APP)
+    message("Test app build")
 
     # Build final test app
     add_executable(TestApp
@@ -114,55 +119,11 @@ if (${BUILD_TEST_APP} STREQUAL "TRUE")
     include_directories(../tests/ui_tests)
     include_directories(../tests)
 
-    # Need to link GLFW otherwise will get initialize errors
-    include_directories(${PROJECT_DEPENDENCIES}/linux/GLFW/include)
-    link_directories(${PROJECT_DEPENDENCIES}/linux/GLFW/libs)
-
     target_link_libraries(TestApp
         # Link engine lib
         core
     )
 
 else ()
-    message("No test app")
-endif ()
-
-##############################################################################
-# Unit tests
-##############################################################################
-
-if (${BUILD_UNIT_TESTS} STREQUAL "TRUE")
-    message("Building unit tests")
-
-    # enable testing functionality
-    enable_testing()
-
-    add_executable(UniTests
-        ../tests/unit_tests/base/TestLauncher.cpp
-        ../tests/unit_tests/base/Registry.cpp
-        ../tests/unit_tests/MemoryLeakTest.cpp
-        ../tests/unit_tests/base/MemoryTracker.cpp
-        ../tests/unit_tests/InitTests.cpp
-        ../tests/unit_tests/ShaderTests.cpp
-    )
-
-    target_link_libraries(UniTests
-        # Link engine lib
-        core
-    )
-
-    if (${GITHUB_ACTIONS})
-        add_compile_definitions(GITHUB_ACTIONS)
-        message("Added GITHUB_ACTIONS define")
-    else ()
-        message("No GITHUB_ACTIONS define")
-    endif ()
-
-    # Add Unit Tests (Displayed test name + test args)
-    add_test(NAME MemoryLeakTest COMMAND UniTests MemoryLeakTest)
-    add_test(NAME InitTests COMMAND UniTests InitTests)
-    add_test(NAME ShaderTests COMMAND UniTests ShaderTests)
-
-else ()
-    message("No unit tests")
+    message("No test app build")
 endif ()
