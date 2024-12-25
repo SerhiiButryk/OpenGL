@@ -27,7 +27,7 @@ namespace test {
         ASSERT_LOG(GLEWBridge::init(), "ShaderTests::run GLEW is not initialized");
 
         // 2. Load basic shader
-        std::string resPath = "../../../engine/res";
+        std::string resPath = "../engine/res";
         const auto shader = std::make_unique<Shader>(resPath + "/shader/Basic.shader");
 
         // 3. Check results
