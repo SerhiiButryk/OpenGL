@@ -4,7 +4,7 @@
 #include <opengl/Renderer.h>
 #include <imgui/imgui.h>
 #include <opengl/Textures.h>
-#include <ui/Widgets.h>
+#include <opengl/shapes/Rectangle.h>
 
 static xengine::Renderer *renderer = nullptr;
 static xengine::VertexArray *vertexArray = nullptr;
@@ -18,13 +18,6 @@ namespace test {
     void DynamicBatching::onCreate(Application *app) {
 
         using namespace xengine;
-
-        struct Vertex {
-            float positions[2];
-            float color[4];
-            float textureCoord[2];
-            float textureId[1];
-        };
 
         vertexArray = new VertexArray();
         vertexBuffer = new VertexBuffer();
@@ -107,29 +100,29 @@ namespace test {
 
     void DynamicBatching::onRender() {
 
-        float positions[] = {
-            // first square
-            0.0f, 0.0f, /* position */ 0.0f, 0.0f, 1.0f, 1.0f, /* color */ 0.0f, 0.0f, /* texture */ 0.0f,
-            /* texture id */ // 0
-            100.0f, 0.0f, /* position */ 0.0f, 0.0f, 1.0f, 1.0f, /* color */ 1.0f, 0.0f, /* texture */ 0.0f,
-            /* texture id */ // 1
-            100.f, 100.0f, /* position */ 0.0f, 0.0f, 1.0f, 1.0f, /* color */ 1.0f, 1.0f, /* texture */ 0.0f,
-            /* texture id */ // 2
-            0.0f, 100.0f, /* position */ 0.0f, 0.0f, 1.0f, 1.0f, /* color */ 0.0f, 1.0f, /* texture */ 0.0f,
-            /* texture id */ // 3
+        using namespace xengine;
 
-            // second square
-            200.0f, 0.0f, /* position */ 0.0f, 1.0f, 0.0f, 1.0f, /* color */ 0.0f, 0.0f, /* texture */ 0.0f,
-            /* texture id */ // 4
-            300.0f, 0.0f, /* position */ 0.0f, 1.0f, 0.0f, 1.0f, /* color */ 1.0f, 0.0f, /* texture */ 0.0f,
-            /* texture id */ // 5
-            300.f, 100.0f, /* position */ 0.0f, 1.0f, 0.0f, 1.0f, /* color */ 1.0f, 1.0f, /* texture */ 0.0f,
-            /* texture id */ // 6
-            200.0f, 100.0f, /* position */ 0.0f, 1.0f, 0.0f, 1.0f, /* color */ 0.0f, 1.0f, /* texture */
-            0.0f /* texture id */ // 7
-        };
+        Rectangle rect_1({0.0f, 0.0f}, 100.0f, 100.0f);
+        Rectangle rect_2({200.0f, 0.0f}, 100.0f, 100.0f);
 
-        vertexBuffer->update(positions, sizeof(positions));
+        // Apply changes
+        // rect_1.setColor({1.0f, 0.0f, 0.0f, 1.0f });
+        // rect_1.setTextureIndex(-1.0f);
+        // rect_1.update();
+
+        // rect_2.setColor({0.0f, 1.0f, 0.0f, 1.0f });
+        // rect_2.setTextureIndex(-1.0f);
+        // rect_2.update();
+
+        Rectangle::VertexData arr1 = rect_1.getBuffer();
+        Rectangle::VertexData arr2 = rect_2.getBuffer();
+
+        std::array<Vertex, 8> arr3 = {};
+
+        std::copy(arr1.begin(), arr1.end(), arr3.begin());
+        std::copy(arr2.begin(), arr2.end(), arr3.begin() + 4);
+
+        vertexBuffer->update((float*) arr3.data(), 8 * sizeof(Vertex));
 
         renderer->draw(*vertexArray, *indexBuffer, *shader);
     }

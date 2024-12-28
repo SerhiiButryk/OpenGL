@@ -33,5 +33,9 @@ uniform sampler2D u_Texture;
 
 void main()
 {
-    color = texture(u_Texture, v_Texture);
+    if (v_TexIndex < 0) {
+        color = v_Color;
+    } else {
+        color = texture(u_Texture, v_Texture);
+    }
 }

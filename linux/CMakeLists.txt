@@ -54,6 +54,7 @@ add_library(core
     ${PROJECT_ROOT}/engine/ui/AppUI.cpp
     ${PROJECT_ROOT}/engine/ui/Widgets.cpp
     ${PROJECT_ROOT}/engine/common/Log.cpp
+    ${PROJECT_ROOT}/engine/opengl/shapes/Rectangle.cpp
 )
 
 # Define macros
