@@ -69,7 +69,7 @@ namespace xengine {
         glUniform4f(location, red, green, blue, opacity); // Set a color in RGB format
     }
 
-    void Shader::setUniformTexture(const std::string& name, int slotLocation) const {
+    void Shader::setTexture(const std::string& name, int slotLocation) const {
         int location = getUniformLocation(name);
         glUniform1i(location, slotLocation);
     }

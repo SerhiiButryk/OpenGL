@@ -7,6 +7,9 @@
 #include "opengl/external/GLFBridge.h"
 #include "common/Log.h"
 #include <MainApplication.h>
+#include <common/Diagnostic.h>
+#include <opengl/GLEngine.h>
+#include <opengl/external/GLEWBridge.h>
 
 namespace xengine {
 
@@ -16,21 +19,39 @@ namespace xengine {
 
 	Window::~Window()
 	{
+		// Should be null at this point
+		ASSERT(window == nullptr);
 	}
 
-	bool Window::create(const char* title, int width, int height)
+	bool Window::create(WindowConfigs configs)
 	{
 		if (window != nullptr) {
 			LOG_ERROR("Window::create() Window is not null, return");
 			return false;
 		}
 
-		bool result = GLFBridge::createWindow(*this, title, width, height);
+		bool result = GLFBridge::createWindow(*this, configs.title, configs.width, configs.height);
 
 		if (!result) {
 			LOG_ERROR("Window::create() Failed to create window");
 			return false;
 		}
+
+		// At this point we should make sure that GLEW is initialized
+		if (!GLEWBridge::init()) {
+			LOG_ERROR("Window::create() Failed to init GLEW lib");
+			return false;
+		}
+
+		GLEngine::setViewPorts(bufferWidth, bufferHeight);
+
+		// Log debug info
+		GLEngine::printInfo();
+		GLEngine::setDebugCallback();
+
+		// Blending
+		GLEngine::setBlending(true);
+		GLEngine::setBlendingMode();
 
 		LOG_INFO("Window::create() Window is created");
 

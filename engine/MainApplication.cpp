@@ -1,8 +1,6 @@
 #include "MainApplication.h"
 
 #include <common/Log.h>
-#include <opengl/GLEngine.h>
-#include <opengl/external/GLEWBridge.h>
 #include <ui/AppUI.h>
 
 #include "common/Exception.h"
@@ -54,30 +52,11 @@ namespace xengine {
 
         /* Create a window and its OpenGL context */
 
-        // 3 x 2 aspect ratio
-        int width = 1200;
-        int height = 800;
-        const char* title = "Application";
+        WindowConfigs windowConfigs = m_clientApp->onCreateWindow();
 
-        if (!m_parentWindow->create(title, width, height)) {
+        if (!m_parentWindow->create(windowConfigs)) {
             throwApplicationInitException(ApplicationInitException::WINDOW_CREATION_ERROR);
         }
-
-        // At this point we should make sure that GLEW is initialized
-        if (!GLEWBridge::init()) {
-            LOG_ERROR("MainApplication::onCreateWindow Failed to init GLEW lib");
-            throwApplicationInitException(ApplicationInitException::LIB_INIT_ERROR);
-        }
-
-        GLEngine::setViewPorts(m_parentWindow->getBufferWidth(), m_parentWindow->getBufferHeight());
-
-        // Log debug info
-        GLEngine::printInfo();
-        GLEngine::setDebugCallback();
-
-        // Blending
-        GLEngine::setBlending(true);
-        GLEngine::setBlendingMode();
     }
 
     void MainApplication::attachThread(MainThread* mainThread) {

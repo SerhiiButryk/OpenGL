@@ -16,6 +16,15 @@ namespace test {
 
         std::string getResourcePath() override;
 
-        xengine::UI* createUI() override;
+        xengine::UI* onCreateUI() override;
+        xengine::WindowConfigs onCreateWindow() override;
+
+        int getWidth() const { return width; }
+        int getHeight() const { return height; }
+
+    private:
+        int width = 1280;
+        int height = 720;
+        const char* title = "Test app";
     };
 }

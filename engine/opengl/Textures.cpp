@@ -10,7 +10,7 @@
 
 namespace xengine {
 
-Textures::Textures(const std::string& filePath): m_FilePath(filePath) {
+Texture::Texture(const std::string& filePath): m_FilePath(filePath) {
     LOG_INFO("Textures::Textures() File path: '{}'", filePath);
     // Load our image
     stbi_set_flip_vertically_on_load(1);
@@ -39,18 +39,18 @@ Textures::Textures(const std::string& filePath): m_FilePath(filePath) {
     }
 }
 
-Textures::~Textures() {
+Texture::~Texture() {
     // Delete the texture from GPU
     glDeleteTextures(1, &m_RendererID);
 }
 
-void Textures::bind(uint32_t slot) const {
+void Texture::bind(uint32_t slot) const {
     // Bind to a specific slot
     glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(GL_TEXTURE_2D, m_RendererID);
 }
 
-void Textures::unbind() const {
+void Texture::unbind() const {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 

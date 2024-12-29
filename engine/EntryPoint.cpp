@@ -36,7 +36,7 @@ int main()
 
         app->setClientApplication(client);
 
-        auto* clientUi = client->createUI();
+        auto* clientUi = client->onCreateUI();
         app->setClientUI(clientUi);
 
         // Will add UI to the application

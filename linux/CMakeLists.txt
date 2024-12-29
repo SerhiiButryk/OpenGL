@@ -115,6 +115,7 @@ if (BUILD_TEST_APP)
         ../tests/ui_tests/TextureTest.cpp
         ../tests/ui_tests/BatchingTest.cpp
         ../tests/ui_tests/DynamicBatching.cpp
+        ../tests/ui_tests/ShapesTest.cpp
     )
 
     include_directories(../tests/ui_tests)

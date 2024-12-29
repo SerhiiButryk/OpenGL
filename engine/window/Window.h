@@ -4,6 +4,8 @@
 #include <window/events/Event.h>
 #include <window/events/EventListener.h>
 
+#include "WindowConfigs.h"
+
 /*
 	A high level window class which manages a single window in our application
 */
@@ -17,7 +19,7 @@ namespace xengine {
 		Window();
 		~Window() override;
 
-		bool create(const char* title, int width, int height);
+		bool create(WindowConfigs configs);
 		void destroy();
 
 		void* getWindow() const { return window; }

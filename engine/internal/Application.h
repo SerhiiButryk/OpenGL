@@ -3,6 +3,7 @@
 #include "internal/Lifecycle.h"
 #include "internal/InternalApplication.h"
 #include "internal/UI.h"
+#include "window/WindowConfigs.h"
 
 #include <string>
 
@@ -16,14 +17,36 @@ namespace xengine {
         Application() = default;
         ~Application() override = default;
 
+        /**
+         * Callback to allocate resources
+         */
         void onCreate() override {}
+
+        /**
+         * Callback to free resources
+         */
         void onDestroy() override {}
 
+        /**
+         * Override to set application UI
+         * @return new application UI
+         */
+        virtual UI* onCreateUI() { return nullptr; }
+
+        /**
+         * Override to set window configurations
+         * @return new window configurations
+         */
+        virtual WindowConfigs onCreateWindow() { return { 0, 0, "" }; }
+
+        /**
+         * Override to set resource path
+         * @return  resource path
+         */
         virtual std::string getResourcePath() { return ""; }
-        virtual UI* createUI() { return nullptr; }
 
         void setMainApplication(InternalApplication* app) { m_mainApplication = app; }
-        InternalApplication* getMainApplication() const { return m_mainApplication; }
+        auto* getMainApplication() const { return m_mainApplication; }
 
     protected:
         InternalApplication* m_mainApplication = nullptr;

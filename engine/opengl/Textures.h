@@ -12,11 +12,11 @@
 
 namespace xengine {
 
-    class Textures
+    class Texture
     {
     public:
-        explicit Textures(const std::string& filePath);
-        ~Textures();
+        explicit Texture(const std::string& filePath);
+        ~Texture();
 
         void bind(uint32_t slot) const;
         void unbind() const;

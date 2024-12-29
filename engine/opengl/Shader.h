@@ -33,7 +33,7 @@ namespace xengine {
         void unBind() const;
 
         void setUniform(const std::string& name, float red, float green, float blue, float opacity) const;
-        void setUniformTexture(const std::string& name, int slotLocation) const;
+        void setTexture(const std::string& name, int slotLocation) const;
         void setUniformMat(const std::string& name, const glm::mat4& mat4) const;
 
 #ifdef UNIT_TESTS

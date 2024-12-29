@@ -11,7 +11,7 @@ static xengine::VertexArray *vertexArray = nullptr;
 static xengine::VertexBuffer *vertexBuffer = nullptr;
 static xengine::IndexBuffer *indexBuffer = nullptr;
 static xengine::Shader *shader = nullptr;
-static xengine::Textures *textures = nullptr;
+static xengine::Texture *textures = nullptr;
 
 namespace test {
 
@@ -71,10 +71,10 @@ namespace test {
 
         shader->setUniformMat("u_MVP", mvp);
 
-        textures = new Textures(resPath + "/textures/test.png");
+        textures = new Texture(resPath + "/textures/test.png");
         textures->bind(0 /* Slot */);
 
-        shader->setUniformTexture("u_Texture", 0 /* Slot */);
+        shader->setTexture("u_Texture", 0 /* Slot */);
 
         renderer = new Renderer();
 
