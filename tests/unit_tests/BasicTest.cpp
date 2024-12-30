@@ -136,7 +136,8 @@ namespace test {
             ASSERT_LOG(GLEngine::initEngine(), "BasicTest::run failed to init engine");
             ASSERT_LOG(window.getWindow() == 0, "BasicTest::run window is not null");
 
-            window.create("Test", 100, 100);
+            WindowConfigs windowConfigs = {100, 100, "Test"};
+            window.create(windowConfigs);
 
             ASSERT_LOG(window.getWindow() != 0, "BasicTest::run window is not created");
 

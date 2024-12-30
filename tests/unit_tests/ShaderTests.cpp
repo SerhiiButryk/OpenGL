@@ -22,12 +22,14 @@ namespace test {
 
         // 1. Create window for test
         const auto window = std::make_unique<Window>();
-        window->create("Test", 100, 100);
+
+        WindowConfigs windowConfigs = {100, 100, "Test"};
+        window->create(windowConfigs);
 
         ASSERT_LOG(GLEWBridge::init(), "ShaderTests::run GLEW is not initialized");
 
         // 2. Load basic shader
-        std::string resPath = "../engine/res";
+        std::string resPath = "../../../engine/res";
         const auto shader = std::make_unique<Shader>(resPath + "/shader/Basic.shader");
 
         // 3. Check results
