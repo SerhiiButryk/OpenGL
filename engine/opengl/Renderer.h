@@ -4,29 +4,43 @@
 #include "Shader.h"
 #include "Textures.h"
 #include "VertexArray.h"
-#include "shapes/Shape.h"
 
 namespace xengine {
+
     class Renderer;
 
     class RenderCommand {
     public:
-        void begin();
-        void prepareShader(const std::string& filePath, int w, int h);
-        void prepareTexture(const std::string& filePath);
+
+        struct CommandConfigs {
+            int width, height; // window size in pixels
+            uint32_t vertexCount;
+            float* newBuffer = nullptr;
+        };
+
+        void begin(Renderer* renderer);
+
+        void prepareShader(const std::string& filePath);
+        void prepareTexture(const std::string& filePath, const std::string& textureName);
+        void prepareMVPMatrix(const std::string& name);
+
         void end();
+
         void clear();
 
-        void execute(float* buffer);
+        // void execute(float* buffer);
 
-    private:
-        Renderer* renderer;
+        void setConfigs(CommandConfigs configs);
 
-        Shader* shader;
-        VertexArray* vertexArray;
-        VertexBuffer* vertexBuffer;
-        IndexBuffer* indexBuffer;
-        Texture* texture;
+        Renderer* renderer = nullptr;
+
+        Shader* shader = nullptr;
+        VertexArray* vertexArray = nullptr;
+        VertexBuffer* vertexBuffer = nullptr;
+        IndexBuffer* indexBuffer = nullptr;
+        Texture* texture = nullptr;
+
+        CommandConfigs configs = {};
     };
 
     class Renderer
@@ -42,5 +56,7 @@ namespace xengine {
 
         BufferLayout getLayoutSpecificationForVertex();
         void prepareIndexBuffer(IndexBuffer* ib) const;
+
+        void execute(const RenderCommand &command);
     };
 }

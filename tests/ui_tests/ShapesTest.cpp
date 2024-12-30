@@ -7,17 +7,25 @@
 xengine::Rectangle rect({0.0f, 0.0f}, 100.0f, 100.0f);
 
 xengine::RenderCommand renderCommand;
+xengine::Renderer renderer;
 
 namespace test {
 
     void ShapesTest::onCreate(Application *app) {
 
-        renderCommand.begin();
+        /**
+         *  Create a render command
+         */
+
+        renderCommand.setConfigs({app->getWidth(), app->getHeight(), 4});
+
+        renderCommand.begin(&renderer);
 
         std::string resPath = app->getResourcePath();
-        renderCommand.prepareShader(resPath + "/shader/Basic_2.shader", app->getWidth(), app->getHeight());
 
-        renderCommand.prepareTexture(resPath + "/textures/test.png");
+        renderCommand.prepareShader(resPath + "/shader/Basic_2.shader");
+        renderCommand.prepareMVPMatrix("u_MVP");
+        renderCommand.prepareTexture(resPath + "/textures/test.png", "u_Texture");
 
         renderCommand.end();
     }
@@ -33,11 +41,17 @@ namespace test {
 
         using namespace xengine;
 
+        /**
+         *  Set data and execute command
+         */
+
         Rectangle::VertexData buffer = rect.getBuffer();
 
         std::array<Vertex, 4> newBuffer = {};
         std::copy(buffer.begin(), buffer.end(), newBuffer.begin());
 
-        renderCommand.execute((float*) newBuffer.data());
+        renderCommand.configs.newBuffer = (float*) newBuffer.data();
+
+        renderer.execute(renderCommand);
     }
 }

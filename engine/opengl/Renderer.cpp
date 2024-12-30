@@ -1,10 +1,11 @@
 #include "Renderer.h"
+#include "shapes/Shape.h"
 
 namespace xengine {
 
-    void RenderCommand::begin() {
+    void RenderCommand::begin(Renderer* renderer) {
 
-        renderer = new Renderer();
+        this->renderer = renderer;
 
         vertexArray = new VertexArray();
         vertexBuffer = new VertexBuffer();
@@ -12,12 +13,10 @@ namespace xengine {
         vertexArray->bind();
         vertexBuffer->bind();
 
-        static constexpr int VERTEX_COUNT = 4;
-
-        vertexBuffer->fill(nullptr, SHAPE_BUFFER_SIZE(VERTEX_COUNT), true);
+        vertexBuffer->fill(nullptr, SHAPE_BUFFER_SIZE(configs.vertexCount), true);
 
         /*
-         Bind vertex buffer and layout into array buffer
+            Bind vertex buffer and layout into array buffer
         */
 
         BufferLayout layout = renderer->getLayoutSpecificationForVertex();
@@ -28,28 +27,26 @@ namespace xengine {
 
     }
 
-    void RenderCommand::prepareShader(const std::string &filePath, int w, int h) {
-
+    void RenderCommand::prepareShader(const std::string &filePath) {
         shader = new Shader(filePath);
-
-        renderer->setMVPMatrix("u_MVP", shader, w, h);
     }
 
-    void RenderCommand::prepareTexture(const std::string &filePath) {
-
+    void RenderCommand::prepareTexture(const std::string &filePath, const std::string& textureName) {
         texture = new Texture(filePath);
         texture->bind(0 /* Slot */);
 
-        shader->setTexture("u_Texture", 0 /* Slot */);
+        shader->setTexture(textureName, 0 /* Slot */);
+    }
+
+    void RenderCommand::prepareMVPMatrix(const std::string &name) {
+        renderer->setMVPMatrix(name, shader, configs.width, configs.height);
     }
 
     void RenderCommand::end() {
-
         renderer->clearStates(vertexArray, shader, vertexBuffer, indexBuffer);
     }
 
     void RenderCommand::clear() {
-        delete renderer;
         delete vertexArray;
         delete vertexBuffer;
         delete indexBuffer;
@@ -57,13 +54,17 @@ namespace xengine {
         delete texture;
     }
 
-    void RenderCommand::execute(float* buffer) {
+    // void RenderCommand::execute(float* buffer) {
+    //
+    //     static constexpr int VERTEX_COUNT = 4;
+    //
+    //     vertexBuffer->update(buffer, SHAPE_BUFFER_SIZE(VERTEX_COUNT));
+    //
+    //     renderer->draw(*vertexArray, *indexBuffer, *shader);
+    // }
 
-        static constexpr int VERTEX_COUNT = 4;
-
-        vertexBuffer->update(buffer, SHAPE_BUFFER_SIZE(VERTEX_COUNT));
-
-        renderer->draw(*vertexArray, *indexBuffer, *shader);
+    void RenderCommand::setConfigs(CommandConfigs configs) {
+        this->configs = configs;
     }
 
     void Renderer::clean(float red, float green, float blue, float alpha) const {
@@ -152,5 +153,12 @@ namespace xengine {
         ib->bind();
         ib->fill(indices, indicesSize);
 
+    }
+
+    void Renderer::execute(const RenderCommand &command) {
+
+        command.vertexBuffer->update(command.configs.newBuffer, SHAPE_BUFFER_SIZE(command.configs.vertexCount));
+
+        draw(*command.vertexArray, *command.indexBuffer, *command.shader);
     }
 }
