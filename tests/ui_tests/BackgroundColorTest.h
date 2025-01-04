@@ -12,7 +12,6 @@ namespace test {
 
         void onCreate(Application* app) override;
         void onDestroy() override;
-        void onBeforeRender() override;
         void onRender() override;
     };
 

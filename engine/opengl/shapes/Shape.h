@@ -1,35 +1,33 @@
 #pragma once
 
+#include <glm/vec4.hpp>
+#include <glm/vec3.hpp>
+#include <glm/vec2.hpp>
+#include <opengl/Layout.h>
+
 namespace xengine {
 
-    struct Point {
-        float x;
-        float y;
-    };
+    #define VERTEX_ELEMENT_COUNT(x) sizeof (decltype(x)) / sizeof (decltype(x)::value_type)
+    // Size in bytes for N vertices
+    #define VERTEX_TOTAL_SIZE(VERTEX_COUNT) (sizeof(Vertex) * VERTEX_COUNT)
 
     // Update the layout if you add/modify this vertex
     struct Vertex {
-        float positions[2];
-        float color[4];
-        float textureCoord[2];
-        float textureId[1];
-    };
 
-// Number of floats we have for an element
-#define VERTEX_ELEMENT_SIZE_FLOAT(ELEM) (sizeof(ELEM) / 4)
-// Size in bytes for N vertices
-#define SHAPE_BUFFER_SIZE(VERTEX_COUNT) (sizeof(Vertex) * VERTEX_COUNT)
+        glm::vec3 position;
+        glm::vec4 color;
+        glm::vec2 texCoord;
+        float texIndex;
 
-    struct Color {
-        float r;
-        float g;
-        float b;
-        float alpha;
-    };
-
-    struct TextureCoord {
-        float coord_1;
-        float coord_2;
+        static BufferLayout getLayout() {
+            BufferLayout layout;
+            // Order is very important here. Should reflect the vertex data structure
+            layout.add({VERTEX_ELEMENT_COUNT(position), GL_FLOAT, GL_FALSE });
+            layout.add({VERTEX_ELEMENT_COUNT(color), GL_FLOAT, GL_FALSE });
+            layout.add({VERTEX_ELEMENT_COUNT(texCoord), GL_FLOAT, GL_FALSE });
+            layout.add({1, GL_FLOAT, GL_FALSE });
+            return layout;
+        }
     };
 
 }

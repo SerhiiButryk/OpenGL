@@ -3,92 +3,85 @@
 
 namespace xengine {
 
-    void RenderCommand::begin(Renderer* renderer) {
+    void Renderer::begin(RenderCommand* command) {
 
-        this->renderer = renderer;
+        m_command = command;
 
-        vertexArray = new VertexArray();
-        vertexBuffer = new VertexBuffer();
+        m_command->vertexArray = new VertexArray();
+        m_command->vertexBuffer = new VertexBuffer();
 
-        vertexArray->bind();
-        vertexBuffer->bind();
+        m_command->vertexArray->bind();
+        m_command->vertexBuffer->bind();
 
-        vertexBuffer->fill(nullptr, SHAPE_BUFFER_SIZE(configs.vertexCount), true);
+        m_command->vertexBuffer->fill(nullptr, VERTEX_TOTAL_SIZE(m_command->configs.vertexCount), true);
 
         /*
             Bind vertex buffer and layout into array buffer
         */
 
-        BufferLayout layout = renderer->getLayoutSpecificationForVertex();
-        vertexArray->add(*vertexBuffer, layout);
+        BufferLayout layout = Vertex::getLayout();
+        m_command->vertexArray->add(*m_command->vertexBuffer, layout);
 
-        indexBuffer = new IndexBuffer();
-        renderer->prepareIndexBuffer(indexBuffer);
+        m_command->indexBuffer = new IndexBuffer();
+
+        prepareIndexBuffer(m_command->indexBuffer, m_command->configs.indexBufferMaxSize);
 
     }
 
-    void RenderCommand::prepareShader(const std::string &filePath) {
-        shader = new Shader(filePath);
+    void Renderer::prepareShader(const std::string &filePath) {
+        m_command->shader = new Shader(filePath);
     }
 
-    void RenderCommand::prepareTexture(const std::string &filePath, const std::string& textureName) {
-        texture = new Texture(filePath);
-        texture->bind(0 /* Slot */);
+    void Renderer::prepareTexture(const std::string &filePath, const std::string& textureName) {
+        m_command->texture = new Texture(filePath);
+        m_command->texture->bind(0 /* Slot */);
 
-        shader->setTexture(textureName, 0 /* Slot */);
+        m_command->shader->setTexture(textureName, 0 /* Slot */);
     }
 
-    void RenderCommand::prepareMVPMatrix(const std::string &name) {
-        renderer->setMVPMatrix(name, shader, configs.width, configs.height);
+    void Renderer::prepareMVPMatrix(const std::string &name) {
+        setMVPMatrix(name, m_command->shader, m_command->configs.width, m_command->configs.height);
     }
 
-    void RenderCommand::end() {
-        renderer->clearStates(vertexArray, shader, vertexBuffer, indexBuffer);
+    void Renderer::end() {
+        clearStates();
     }
 
-    void RenderCommand::clear() {
-        delete vertexArray;
-        delete vertexBuffer;
-        delete indexBuffer;
-        delete shader;
-        delete texture;
+    void Renderer::clear() {
+
+        clearStates();
+
+        delete m_command->vertexArray;
+        delete m_command->vertexBuffer;
+        delete m_command->indexBuffer;
+        delete m_command->shader;
+        delete m_command->texture;
+        delete m_command;
+
+        m_command = nullptr;
     }
 
-    // void RenderCommand::execute(float* buffer) {
-    //
-    //     static constexpr int VERTEX_COUNT = 4;
-    //
-    //     vertexBuffer->update(buffer, SHAPE_BUFFER_SIZE(VERTEX_COUNT));
-    //
-    //     renderer->draw(*vertexArray, *indexBuffer, *shader);
-    // }
-
-    void RenderCommand::setConfigs(CommandConfigs configs) {
-        this->configs = configs;
-    }
-
-    void Renderer::clean(float red, float green, float blue, float alpha) const {
-
-        glClearColor(red, green, blue, alpha);
+    void Renderer::clearScreen(glm::vec4 color) {
+        glClearColor(color.x, color.y, color.z, color.w);
         glClear(GL_COLOR_BUFFER_BIT);
     }
 
-    void Renderer::clearStates(VertexArray *va, Shader *shader, VertexBuffer *vb, IndexBuffer *ib) const {
+    void Renderer::clearStates() const {
 
-        if (va) {
-            va->unbind();
+        if (m_command->vertexArray) {
+            m_command->vertexArray->unbind();
         }
 
-        if (shader) {
-            shader->unBind();
+        if (m_command->shader) {
+            m_command->shader->unBind();
         }
 
-        if (ib) {
-            ib->unbind();
+        if (m_command->indexBuffer) {
+            m_command->indexBuffer->unbind();
         }
 
-        if (vb) {
-            vb->unbind();
+        if (m_command->vertexBuffer) {
+            m_command->vertexBuffer->unbind();
         }
     }
 
@@ -128,37 +121,42 @@ namespace xengine {
 
     }
 
-    BufferLayout Renderer::getLayoutSpecificationForVertex() {
+    void Renderer::prepareIndexBuffer(IndexBuffer *ib, uint32_t maxCount) const {
 
-        Vertex vertex = {};
+        uint32_t indices[maxCount] = {};
+        uint32_t offset = 0;
 
-        BufferLayout layout;
-        // Order is very important here. Should reflect the vertex data structure
-        layout.add({VERTEX_ELEMENT_SIZE_FLOAT(vertex.positions), GL_FLOAT, GL_FALSE});
-        layout.add({VERTEX_ELEMENT_SIZE_FLOAT(vertex.color), GL_FLOAT, GL_FALSE});
-        layout.add({VERTEX_ELEMENT_SIZE_FLOAT(vertex.textureCoord), GL_FLOAT, GL_FALSE});
-        layout.add({VERTEX_ELEMENT_SIZE_FLOAT(vertex.textureId), GL_FLOAT, GL_FALSE});
+        // '4' represents 4 vertices of a single quad
+        for (int i = 0; i < maxCount; i += 6 /* Makes up a single quad */) {
+            indices[i + 0] = 0 + offset;
+            indices[i + 1] = 1 + offset;
+            indices[i + 2] = 2 + offset;
 
-        return layout;
-    }
+            indices[i + 3] = 2 + offset;
+            indices[i + 4] = 3 + offset;
+            indices[i + 5] = 0 + offset;
 
-    void Renderer::prepareIndexBuffer(IndexBuffer *ib) const {
-
-        const int indicesSize = 2 * 3;
-        uint32_t indices[] = {
-            0, 1, 2,
-            0, 2, 3
-        };
+            offset += 4;
+        }
 
         ib->bind();
-        ib->fill(indices, indicesSize);
-
+        ib->fill(indices, maxCount);
     }
 
-    void Renderer::execute(const RenderCommand &command) {
+    bool Renderer::executeCurrentCommand() {
 
-        command.vertexBuffer->update(command.configs.newBuffer, SHAPE_BUFFER_SIZE(command.configs.vertexCount));
+        m_command->vertexBuffer->update(m_command->configs.drawBuffer, VERTEX_TOTAL_SIZE(m_command->configs.vertexCount));
 
-        draw(*command.vertexArray, *command.indexBuffer, *command.shader);
+        auto* va = m_command->vertexArray;
+        auto* ib = m_command->indexBuffer;
+        auto* shader = m_command->shader;
+
+        draw(*va, *ib, *shader);
+
+        return true;
+    }
+
+    void RenderCommand::setConfigs(Configs configs) {
+        this->configs = configs;
     }
 }

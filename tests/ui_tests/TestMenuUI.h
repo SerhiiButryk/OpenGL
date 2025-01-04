@@ -15,6 +15,8 @@ namespace test {
         void onCreate() override;
         void onDraw() override;
         void onDestroy() override;
+
+        // Should be called to create ImGui UI
         void onRenderUI() override;
 
         void registerTest(TestCase*, const std::string&);

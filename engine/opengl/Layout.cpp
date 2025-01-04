@@ -12,7 +12,7 @@ namespace xengine {
 		elements.push_back(element);
 		// TODO: Improve this
 		// The actual distance in bytes between positions
-		// Element type + Count = Float + Count
+		// Element type * Count = Float * Count
 		m_Stride += 4 * element.count;
 	}
 

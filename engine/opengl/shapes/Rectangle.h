@@ -8,15 +8,15 @@ namespace xengine {
     class Rectangle 
     {
     public:
-        static constexpr short SIZE = 4;
-        using VertexData = std::array<Vertex, SIZE>;
+        static constexpr short VERTEX_COUNT = 4;
+        using VertexData = std::array<Vertex, VERTEX_COUNT>;
 
-        explicit Rectangle(Point point, float width, float height);
+        explicit Rectangle(glm::vec3 point, float width, float height);
 
-        const VertexData& getBuffer() { return m_dataBuffer; }
+        Vertex* getBuffer() { return m_dataBuffer.data(); }
 
         void setTextureIndex(float index) { m_textureIndex = index; }
-        void setColor(Color color) { m_color = color; }
+        void setColor(glm::vec4 color) { m_color = color; }
 
         // Apply changes
         void update();
@@ -26,7 +26,7 @@ namespace xengine {
 
     private:
         // Bottom left coord of the shape
-        Point m_point;
+        glm::vec3 m_point;
 
         float m_width;
         float m_height;
@@ -35,7 +35,7 @@ namespace xengine {
         VertexData m_dataBuffer = {};
 
         // RGB Color
-        Color m_color = {0.0f, 0.0f, 0.0f, 1.0f};
+        glm::vec4 m_color = {0.0f, 0.0f, 0.0f, 1.0f};
 
         float m_textureIndex = 0.0f;
     };

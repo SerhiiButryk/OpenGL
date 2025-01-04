@@ -23,7 +23,7 @@ namespace test {
         vertexBuffer = new VertexBuffer();
 
         BufferLayout layout;
-        layout.add({2, GL_FLOAT, GL_FALSE});
+        layout.add({3, GL_FLOAT, GL_FALSE});
         layout.add({4, GL_FLOAT, GL_FALSE});
         layout.add({2, GL_FLOAT, GL_FALSE});
         layout.add({1, GL_FLOAT, GL_FALSE});
@@ -102,8 +102,8 @@ namespace test {
 
         using namespace xengine;
 
-        Rectangle rect_1({0.0f, 0.0f}, 100.0f, 100.0f);
-        Rectangle rect_2({200.0f, 0.0f}, 100.0f, 100.0f);
+        Rectangle rect_1({0.0f, 0.0f, 0.0f}, 100.0f, 100.0f);
+        Rectangle rect_2({200.0f, 0.0f, 0.0f}, 100.0f, 100.0f);
 
         // Apply changes
         // rect_1.setColor({1.0f, 0.0f, 0.0f, 1.0f });
@@ -114,16 +114,16 @@ namespace test {
         // rect_2.setTextureIndex(-1.0f);
         // rect_2.update();
 
-        Rectangle::VertexData arr1 = rect_1.getBuffer();
-        Rectangle::VertexData arr2 = rect_2.getBuffer();
-
-        std::array<Vertex, 8> arr3 = {};
-
-        std::copy(arr1.begin(), arr1.end(), arr3.begin());
-        std::copy(arr2.begin(), arr2.end(), arr3.begin() + 4);
-
-        vertexBuffer->update((float*) arr3.data(), 8 * sizeof(Vertex));
-
-        renderer->draw(*vertexArray, *indexBuffer, *shader);
+        // Rectangle::VertexData arr1 = rect_1.getBuffer();
+        // Rectangle::VertexData arr2 = rect_2.getBuffer();
+        //
+        // std::array<Vertex, 8> arr3 = {};
+        //
+        // std::copy(arr1.begin(), arr1.end(), arr3.begin());
+        // std::copy(arr2.begin(), arr2.end(), arr3.begin() + 4);
+        //
+        // vertexBuffer->update((float*) arr3.data(), 8 * sizeof(Vertex));
+        //
+        // renderer->draw(*vertexArray, *indexBuffer, *shader);
     }
 }

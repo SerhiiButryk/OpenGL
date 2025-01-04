@@ -2,6 +2,7 @@
 
 #include <imgui.h>
 #include <common/Log.h>
+#include <opengl/Renderer.h>
 
 static bool testUIClosed = true;
 
@@ -24,46 +25,6 @@ namespace test {
         }
     }
 
-    // Repeatedly called by the MainThread
-    void TestMenuUI::onRenderUI() {
-
-        // Display Test UI
-        if (m_currentTestUI != nullptr && !testUIClosed) {
-            ImGui::Spacing();
-            // If back button is clicked then stop rendering
-            if (ImGui::Button("<--")) {
-                testUIClosed = true;
-                return;
-            }
-            // Render Test UI
-            m_currentTestUI->onRender();
-            return;
-        }
-
-        // Display Menu UI
-        if (testUIClosed) {
-            for (auto&& elem : m_tests) {
-                // Add button for every test
-                if (ImGui::Button(elem.second.c_str())) {
-                    // Select test if button is clicked
-                    m_currentTestUI = elem.first;
-                    testUIClosed = false;
-                    return;
-                }
-            }
-        }
-
-    }
-
-    void TestMenuUI::onDraw() {
-        // Give a chance to first call a test render
-        for (auto&& elem : m_tests) {
-            elem.first->onBeforeRender();
-        }
-        // Render all other UI stuff
-        TestUI::onDraw();
-    }
-
     void TestMenuUI::onDestroy() {
         TestUI::onDestroy();
         LOG_INFO("TestMenuUI::onDestroy");
@@ -74,7 +35,63 @@ namespace test {
     }
 
     void TestMenuUI::registerTest(TestCase* test, const std::string& label) {
+
+        test->setTestUI(this);
+
         m_tests.push_back(std::make_pair(test, label));
+    }
+
+    /**
+    * Start of render pipline
+    * Define base pipline
+    */
+    void TestMenuUI::onDraw() {
+
+        // Clear screen
+        xengine::Renderer::clearScreen(m_color);
+
+        // Give a chance to do something at the beginning of render process
+        if (m_currentTestUI != nullptr) {
+            m_currentTestUI->onBeforeRender();
+        }
+
+        // Render test UI + ImGui
+        TestUI::onDraw();
+    }
+
+    /**
+    * Draw ImGui here
+    */
+    void TestMenuUI::onRenderUI() {
+
+        // Display Test UI
+        if (m_currentTestUI != nullptr && !testUIClosed) {
+            ImGui::Spacing();
+            // If back button is clicked then stop rendering
+            if (ImGui::Button("<--")) {
+                testUIClosed = true;
+                m_currentTestUI = nullptr;
+                return;
+            }
+            // Render Test UI
+            m_currentTestUI->onRender();
+            return;
+        }
+
+        // Display Menu UI
+        if (testUIClosed) {
+
+            // Add button which opens a test
+            for (auto&& elem : m_tests) {
+                if (ImGui::Button(elem.second.c_str())) {
+                    // Select test if button is clicked
+                    m_currentTestUI = elem.first;
+                    testUIClosed = false;
+                    return;
+                }
+            }
+        }
+
     }
 
 }

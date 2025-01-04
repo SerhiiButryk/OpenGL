@@ -15,7 +15,7 @@ namespace test {
 
     xengine::UI* Application::onCreateUI() {
 
-        const char* background_color_btn_label = "Background color";
+        const char* background_color_btn_label = "Set background color";
         const char* texture_btn_label = "Texture";
         const char* batching_btn_label = "Batching";
         const char* batching_dyn_btn_label = "Dynamic batching";

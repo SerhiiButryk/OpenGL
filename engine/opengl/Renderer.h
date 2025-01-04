@@ -7,18 +7,43 @@
 
 namespace xengine {
 
-    class Renderer;
-
     class RenderCommand {
     public:
 
-        struct CommandConfigs {
-            int width, height; // window size in pixels
-            uint32_t vertexCount;
-            float* newBuffer = nullptr;
+        struct Configs {
+            int width {}, height {}; // window size information in pixels
+            uint32_t vertexCount {}; // number of vertices
+            uint32_t indexBufferMaxSize {}; // max number of indecision which we can have
+            float* drawBuffer = nullptr; // actual data buffer
         };
 
-        void begin(Renderer* renderer);
+        void setConfigs(Configs configs);
+
+        Shader* shader = nullptr;
+        VertexArray* vertexArray = nullptr;
+        VertexBuffer* vertexBuffer = nullptr;
+        IndexBuffer* indexBuffer = nullptr;
+        Texture* texture = nullptr;
+
+        Configs configs = {};
+    };
+
+    class Renderer
+    {
+    public:
+
+        static void clearScreen(glm::vec4 color);
+        void clearStates() const;
+
+        void draw(const VertexArray& va, const IndexBuffer& id, const Shader& shader) const;
+
+        void setMVPMatrix(const std::string& name, Shader* shader, int windowWidth, int windowHeight) const;
+
+        void prepareIndexBuffer(IndexBuffer* ib, uint32_t maxCount) const;
+
+        bool executeCurrentCommand();
+
+        void begin(RenderCommand* command);
 
         void prepareShader(const std::string& filePath);
         void prepareTexture(const std::string& filePath, const std::string& textureName);
@@ -28,35 +53,7 @@ namespace xengine {
 
         void clear();
 
-        // void execute(float* buffer);
-
-        void setConfigs(CommandConfigs configs);
-
-        Renderer* renderer = nullptr;
-
-        Shader* shader = nullptr;
-        VertexArray* vertexArray = nullptr;
-        VertexBuffer* vertexBuffer = nullptr;
-        IndexBuffer* indexBuffer = nullptr;
-        Texture* texture = nullptr;
-
-        CommandConfigs configs = {};
-    };
-
-    class Renderer
-    {
-    public:
-
-        void clean(float red, float green, float blue, float alpha) const;
-        void clearStates(VertexArray* va, Shader* shader, VertexBuffer* vb, IndexBuffer* ib) const;
-
-        void draw(const VertexArray& va, const IndexBuffer& id, const Shader& shader) const;
-
-        void setMVPMatrix(const std::string& name, Shader* shader, int windowWidth, int windowHeight) const;
-
-        BufferLayout getLayoutSpecificationForVertex();
-        void prepareIndexBuffer(IndexBuffer* ib) const;
-
-        void execute(const RenderCommand &command);
+    private:
+        RenderCommand* m_command = nullptr;
     };
 }
