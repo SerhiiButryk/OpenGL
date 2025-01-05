@@ -56,6 +56,7 @@ namespace xengine {
         delete m_command->indexBuffer;
         delete m_command->shader;
         delete m_command->texture;
+        delete [] m_command->configs.drawBuffer;
         delete m_command;
 
         m_command = nullptr;
@@ -158,5 +159,31 @@ namespace xengine {
 
     void RenderCommand::setConfigs(Configs configs) {
         this->configs = configs;
+    }
+
+    void RenderCommand::setShape(Rectangle rectangle) {
+
+        if (configs.drawBuffer != nullptr) {
+            // Release previous memory
+            delete [] configs.drawBuffer;
+            configs.drawBuffer = nullptr;
+        }
+
+        auto* data = new Vertex[configs.vertexCount];
+        auto* beginPointer = data;
+
+        auto* rectBuffer = rectangle.getBuffer();
+
+        for (int i = 0; i < Rectangle::VERTEX_COUNT; i++) {
+            beginPointer->position = rectBuffer->position;
+            beginPointer->color = rectBuffer->color;
+            beginPointer->texCoord = rectBuffer->texCoord;
+            beginPointer->texIndex = rectBuffer->texIndex;
+
+            beginPointer++;
+            rectBuffer++;
+        }
+
+        configs.drawBuffer = (float*) data;
     }
 }

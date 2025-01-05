@@ -4,7 +4,6 @@
 #include <opengl/Renderer.h>
 #include <imgui/imgui.h>
 #include <opengl/Textures.h>
-#include <ui/Widgets.h>
 
 static xengine::Renderer *renderer = nullptr;
 static xengine::VertexArray *vertexArray = nullptr;

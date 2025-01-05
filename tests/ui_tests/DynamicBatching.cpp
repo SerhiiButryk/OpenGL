@@ -2,16 +2,12 @@
 
 #include <common/Log.h>
 #include <opengl/Renderer.h>
-#include <imgui/imgui.h>
-#include <opengl/Textures.h>
 #include <opengl/shapes/Rectangle.h>
 
-static xengine::Renderer *renderer = nullptr;
-static xengine::VertexArray *vertexArray = nullptr;
-static xengine::VertexBuffer *vertexBuffer = nullptr;
-static xengine::IndexBuffer *indexBuffer = nullptr;
-static xengine::Shader *shader = nullptr;
-static xengine::Texture *textures = nullptr;
+static xengine::Renderer renderer;
+
+static xengine::Vertex* data = nullptr;
+static xengine::Vertex* beginPointer = data;
 
 namespace test {
 
@@ -19,80 +15,66 @@ namespace test {
 
         using namespace xengine;
 
-        vertexArray = new VertexArray();
-        vertexBuffer = new VertexBuffer();
+        constexpr int SHAPE_COUNT = 5;
+        constexpr int VERTEX_COUNT = 4 * SHAPE_COUNT;
+        constexpr int INDEX_MAX_BUFFER_COUNT = 6 * SHAPE_COUNT;
 
-        BufferLayout layout;
-        layout.add({3, GL_FLOAT, GL_FALSE});
-        layout.add({4, GL_FLOAT, GL_FALSE});
-        layout.add({2, GL_FLOAT, GL_FALSE});
-        layout.add({1, GL_FLOAT, GL_FALSE});
+        /**
+         *  Create a render command
+         */
 
-        vertexArray->bind();
-        vertexBuffer->bind();
+        auto* renderCommand = new RenderCommand();
 
-        vertexBuffer->fill(nullptr, 8 * sizeof(Vertex), true);
+        renderCommand->setConfigs({ app->getWidth(), app->getHeight(), VERTEX_COUNT, INDEX_MAX_BUFFER_COUNT });
 
-        /*
-            Bind vertex buffer and layout into array buffer
-        */
-
-        vertexArray->add(*vertexBuffer, layout);
-
-        const int indicesSize = 4 * 3;
-        uint32_t indices[] = {
-            0, 1, 2,
-            0, 2, 3,
-            4, 5, 6,
-            6, 7, 4
-        };
-
-        indexBuffer = new IndexBuffer();
-
-        indexBuffer->bind();
-        indexBuffer->fill(indices, indicesSize);
-
-        // Projection matrix
-        glm::mat4 proj = glm::ortho(0.0f, 1200.0f, 0.0f, 800.0f, -1.0f, 1.0f);
-
-        // View matrix
-        glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-
-        // Model matrix
-        glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-
-        // MVP matrix
-        glm::mat4 mvp = proj * view * model;
+        renderer.begin(renderCommand);
 
         std::string resPath = app->getResourcePath();
-        shader = new Shader(resPath + "/shader/Basic_2.shader");
 
-        shader->bind();
+        renderer.prepareShader(resPath + "/shader/Basic_2.shader");
+        renderer.prepareMVPMatrix("u_MVP");
+        renderer.prepareTexture(resPath + "/textures/test.png", "u_Texture");
 
-        shader->setUniformMat("u_MVP", mvp);
+        renderer.end();
 
-        textures = new Texture(resPath + "/textures/test.png");
-        textures->bind(0 /* Slot */);
+        /**
+        * Prepare a shape
+        */
 
-        shader->setTexture("u_Texture", 0 /* Slot */);
+        data = new Vertex[VERTEX_COUNT];
+        beginPointer = data;
 
-        renderer = new Renderer();
+        glm::vec3 point = {0.0f, 0.0f, 0.0f};
 
-        /* Clear all states */
+        for (int i = 0; i < SHAPE_COUNT; i++) {
 
-        vertexArray->unbind();
-        shader->unBind();
-        vertexBuffer->unbind();
-        indexBuffer->unbind();
+            Rectangle rect(point, 100.0f, 100.0f);
+
+            auto* rectBuffer = rect.getBuffer();
+
+            for (int i = 0; i < Rectangle::VERTEX_COUNT; i++) {
+                beginPointer->position = rectBuffer->position;
+                beginPointer->color = rectBuffer->color;
+                beginPointer->texCoord = rectBuffer->texCoord;
+                beginPointer->texIndex = rectBuffer->texIndex;
+
+                beginPointer++;
+                rectBuffer++;
+            }
+
+            // Next location
+            point = { point.x + 100.0f, point.y, point.z };
+
+        }
+
+        renderCommand->configs.drawBuffer = (float*) data;
     }
 
     void DynamicBatching::onDestroy() {
-        delete renderer;
-        delete vertexArray;
-        delete vertexBuffer;
-        delete indexBuffer;
-        delete shader;
-        delete textures;
+
+        renderer.clear();
+
+        delete [] data;
     }
 
     void DynamicBatching::onBeforeRender() {
@@ -102,28 +84,6 @@ namespace test {
 
         using namespace xengine;
 
-        Rectangle rect_1({0.0f, 0.0f, 0.0f}, 100.0f, 100.0f);
-        Rectangle rect_2({200.0f, 0.0f, 0.0f}, 100.0f, 100.0f);
-
-        // Apply changes
-        // rect_1.setColor({1.0f, 0.0f, 0.0f, 1.0f });
-        // rect_1.setTextureIndex(-1.0f);
-        // rect_1.update();
-
-        // rect_2.setColor({0.0f, 1.0f, 0.0f, 1.0f });
-        // rect_2.setTextureIndex(-1.0f);
-        // rect_2.update();
-
-        // Rectangle::VertexData arr1 = rect_1.getBuffer();
-        // Rectangle::VertexData arr2 = rect_2.getBuffer();
-        //
-        // std::array<Vertex, 8> arr3 = {};
-        //
-        // std::copy(arr1.begin(), arr1.end(), arr3.begin());
-        // std::copy(arr2.begin(), arr2.end(), arr3.begin() + 4);
-        //
-        // vertexBuffer->update((float*) arr3.data(), 8 * sizeof(Vertex));
-        //
-        // renderer->draw(*vertexArray, *indexBuffer, *shader);
+        renderer.executeCurrentCommand();
     }
 }

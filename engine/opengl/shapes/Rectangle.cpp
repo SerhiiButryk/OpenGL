@@ -29,12 +29,12 @@ namespace xengine {
             c2,
             m_textureIndex };
 
-        m_dataBuffer[2] = { { m_point.x + m_width, m_point.y + m_width, m_point.z },
+        m_dataBuffer[2] = { { m_point.x + m_width, m_point.y + m_height, m_point.z },
             m_color,
             c3,
             m_textureIndex};
 
-        m_dataBuffer[3] = { { m_point.x, m_point.y + m_width, m_point.z },
+        m_dataBuffer[3] = { { m_point.x, m_point.y + m_height, m_point.z },
             m_color,
             c4,
             m_textureIndex};

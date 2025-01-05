@@ -4,9 +4,13 @@
 #include "Shader.h"
 #include "Textures.h"
 #include "VertexArray.h"
+#include "shapes/Rectangle.h"
 
 namespace xengine {
 
+    /**
+     * A command to render
+     */
     class RenderCommand {
     public:
 
@@ -19,6 +23,8 @@ namespace xengine {
 
         void setConfigs(Configs configs);
 
+        void setShape(Rectangle rectangle);
+
         Shader* shader = nullptr;
         VertexArray* vertexArray = nullptr;
         VertexBuffer* vertexBuffer = nullptr;
@@ -28,6 +34,9 @@ namespace xengine {
         Configs configs = {};
     };
 
+    /**
+     * Main Renderer API
+     */
     class Renderer
     {
     public:
@@ -52,6 +61,8 @@ namespace xengine {
         void end();
 
         void clear();
+
+        auto* getCurrentCommand() const { return m_command; };
 
     private:
         RenderCommand* m_command = nullptr;
