@@ -36,10 +36,6 @@ int main()
 
         app->setClientApplication(client);
 
-        auto* clientUi = client->onCreateUI();
-        app->setClientUI(clientUi);
-
-        // Will add UI to the application
         app->attachThread(mainThread);
 
         mainThread->onCreate();

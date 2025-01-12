@@ -26,11 +26,11 @@ namespace xengine {
         ImGui::Spacing();
     }
 
-    void addColorPicker(const char* text, void* value, void (*onClick)(const char* text)) {
+    void addColorPicker(const char* text, float* value, void (*onClick)(const char* text)) {
 
         addSpace();
 
-        if (ImGui::ColorEdit3("Select color", (float*) value)) {
+        if (ImGui::ColorEdit3(text, value)) {
             onClick(text);
         }
     }

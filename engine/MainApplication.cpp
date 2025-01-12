@@ -12,13 +12,8 @@ namespace xengine {
     }
 
     MainApplication::~MainApplication() {
-
-        if (m_clientApp != nullptr) {
-            delete m_clientApp;
-        }
-
+        delete m_clientApp;
         delete m_appUI;
-
         LOG_INFO("MainApplication::~MainApplication() destroyed");
     }
 
@@ -61,9 +56,12 @@ namespace xengine {
 
     void MainApplication::attachThread(MainThread* mainThread) {
         m_main_thread = mainThread;
+        m_appUI->setClientApp(m_clientApp);
+
         mainThread->addThreadObserver(m_parentWindow);
         mainThread->addThreadObserver(m_appUI);
         mainThread->addThreadObserver(this);
+
         LOG_INFO("MainApplication::attachThread()");
     }
 

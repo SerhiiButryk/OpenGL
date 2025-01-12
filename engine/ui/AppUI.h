@@ -1,5 +1,6 @@
 #pragma once
 
+#include <internal/Application.h>
 #include <internal/UI.h>
 #include <internal/MainThreadObserver.h>
 
@@ -21,13 +22,14 @@ namespace xengine {
         void onProcess(void* app) override;
         void onEnd() override;
 
-        void setClientUI(UI* ui) { m_clientUI = ui; }
+        void setClientApp(Application* app) { m_clientApp = app; }
 
 #ifdef UNIT_TESTS
         UI* getClientUI() const { return m_clientUI; }
 #endif
 
     private:
+        Application* m_clientApp = nullptr;
         UI* m_clientUI = nullptr;
     };
 }

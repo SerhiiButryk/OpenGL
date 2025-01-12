@@ -140,7 +140,31 @@ namespace xengine {
         return shaderFile;
     }
 
-    uint32_t Shader::createShader(ShaderFile shaderFile) const
+    bool checkErrors(unsigned int id, int status) {
+        int result;
+        glGetProgramiv(id, status, &result);
+
+        if (result == GL_FALSE)
+        {
+            int length;
+            glGetProgramiv(id, GL_INFO_LOG_LENGTH, &length);
+
+            char* message = (char*)alloca(length * sizeof(char));
+
+            glGetProgramInfoLog(id, length, &length, message);
+
+            if (status == GL_LINK_STATUS)
+                LOG_ERROR("Failed to link: {}", message);
+            else if (status == GL_VALIDATE_STATUS)
+                LOG_ERROR("Failed to validate: {}", message);
+
+            return false;
+        }
+
+        return true;
+    }
+
+    uint32_t Shader::createShader(const ShaderFile &shaderFile) const
     {
         unsigned int program = glCreateProgram();
         unsigned int vs = compileShader(GL_VERTEX_SHADER, shaderFile.vertexShader);
@@ -150,7 +174,20 @@ namespace xengine {
         glAttachShader(program, fs);
 
         glLinkProgram(program);
+
+        if (!checkErrors(program, GL_LINK_STATUS)) {
+            glDeleteShader(vs);
+            glDeleteShader(fs);
+            return 0;
+        }
+
         glValidateProgram(program);
+
+        if (!checkErrors(program, GL_VALIDATE_STATUS)) {
+            glDeleteShader(vs);
+            glDeleteShader(fs);
+            return 0;
+        }
 
         glDeleteShader(vs);
         glDeleteShader(fs);

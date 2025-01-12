@@ -25,8 +25,6 @@ namespace xengine {
 
         void attachThread(MainThread* mainThread);
 
-        inline void setClientUI(UI* clientUI) {  m_appUI->setClientUI(clientUI); }
-
 #ifdef UNIT_TESTS
         void* getParentWindowForTest() const { return m_parentWindow; }
         UI* getClientUI() const { return m_appUI->getClientUI(); }

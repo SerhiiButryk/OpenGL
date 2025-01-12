@@ -11,7 +11,7 @@ namespace xengine {
     // Size in bytes for N vertices
     #define VERTEX_TOTAL_SIZE(VERTEX_COUNT) (sizeof(Vertex) * VERTEX_COUNT)
 
-    // Update the layout if you add/modify this vertex
+    // TODO: For different shapes we might need to create different vertices like VertexLine VertexCircle but don't do that for simplicity
     struct Vertex {
 
         glm::vec3 position;
@@ -28,6 +28,25 @@ namespace xengine {
             layout.add({1, GL_FLOAT, GL_FALSE });
             return layout;
         }
+    };
+
+    class Shape {
+
+        public:
+            Shape() = default;
+            virtual ~Shape() = default;
+
+            virtual Vertex* getBuffer() = 0;
+            virtual uint32_t getVertexCount() const = 0;
+
+            void setColor(glm::vec4 color) { m_color = color; }
+
+            virtual void create() = 0;
+            void update() { create(); }
+
+        protected:
+            // RGB Color
+            glm::vec4 m_color = {0.0f, 0.0f, 0.0f, 1.0f};
     };
 
 }

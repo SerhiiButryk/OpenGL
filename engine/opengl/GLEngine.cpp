@@ -50,7 +50,7 @@ namespace xengine {
     void GLEngine::printInfo() {
         auto version = glGetString(GL_VERSION);
         auto vendor = glGetString(GL_VENDOR);
-        auto render = glGetString(GL_RENDER);
+        auto render = glGetString(GL_RENDERER);
 
         const char* versionStr = "";
         const char* vendorStr = "";
@@ -66,6 +66,38 @@ namespace xengine {
             renderStr = (char*)render;
 
         LOG_INFO("OPENGL: '{}' '{}' '{}'", versionStr, vendorStr, renderStr);
+    }
+
+    char* GLEngine::getVersionsInfo() {
+
+        auto version = glGetString(GL_VERSION);
+        auto vendor = glGetString(GL_VENDOR);
+        auto render = glGetString(GL_RENDERER);
+
+        std::string versionStr = "Versions:\n";
+
+        if (version) {
+            versionStr += "OpenGL - ";
+            versionStr += (char*)version;
+        }
+
+        versionStr += '\n';
+
+        if (vendor) {
+            versionStr += "Vendor - ";
+            versionStr += (char*)vendor;
+        }
+
+        versionStr += '\n';
+
+        if (render) {
+            versionStr += "Renderer - ";
+            versionStr += (char*)render;
+        }
+
+        versionStr += '\n';
+
+        return strdup(versionStr.c_str());
     }
 
     void GLAPIENTRY

@@ -1,17 +1,17 @@
 #include "TextureTest.h"
 
-#include <common/Log.h>
-#include <opengl/Renderer.h>
-#include <imgui/imgui.h>
-#include <opengl/Textures.h>
-#include <ui/Widgets.h>
+#include <public/XEngine.h>
 
-static xengine::Renderer* renderer = nullptr;
+static xengine::Renderer renderer;
+
 static xengine::VertexArray* vertexArray = nullptr;
 static xengine::VertexBuffer* vertexBuffer = nullptr;
 static xengine::IndexBuffer* indexBuffer = nullptr;
 static xengine::Shader* shader = nullptr;
 static xengine::Texture* textures = nullptr;
+
+float g_w = 0;
+float g_h = 0;
 
 namespace test {
 
@@ -72,8 +72,11 @@ namespace test {
         // 1 * 2 = 2
         // glm::mat4 proj = glm::ortho(-1.5f, 1.5f, -1.0f, 1.0f, -1.0f, 1.0f);
 
+        g_w = app->getWidth();
+        g_h = app->getHeight();
+
         // Projection matrix
-        glm::mat4 proj = glm::ortho(0.0f, 1200.0f, 0.0f, 800.0f, -1.0f, 1.0f);
+        glm::mat4 proj = glm::ortho(0.0f, g_w, 0.0f, g_h, -1.0f, 1.0f);
 
         // View matrix
         glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
@@ -98,8 +101,6 @@ namespace test {
 
         shader->setTexture("u_Texture", 0 /* Slot */);
 
-        renderer = new Renderer();
-
         /* Clear all states */
 
         vertexArray->unbind();
@@ -109,7 +110,6 @@ namespace test {
     }
 
     void TextureTest::onDestroy() {
-        delete renderer;
         delete vertexArray;
         delete vertexBuffer;
         delete indexBuffer;
@@ -144,7 +144,7 @@ namespace test {
 
         // Projection matrix
         // Converting to a pixel space = 1200 x 800
-        glm::mat4 proj = glm::ortho(0.0f, 1200.0f, 0.0f, 800.0f, -1.0f, 1.0f);
+        glm::mat4 proj = glm::ortho(0.0f, g_w, 0.0f, g_h, -1.0f, 1.0f);
 
         // View matrix
         // Moving object to the right
@@ -160,7 +160,17 @@ namespace test {
         shader->setUniformMat("u_MVP", mvp);
 
         // shader.setUniform("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
-        renderer->draw(*vertexArray, *indexBuffer, *shader);
+
+        RenderData renderData;
+        renderData.shader = shader;
+        renderData.vertexArray = vertexArray;
+        renderData.indexBuffer = indexBuffer;
+        renderData.texture = textures;
+        renderData.vertexBuffer = vertexBuffer;
+
+        renderer.setData(&renderData);
+
+        renderer.drawRectangle();
 
         ImGui::Spacing();
 

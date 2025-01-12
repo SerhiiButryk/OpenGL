@@ -1,11 +1,9 @@
 #include "BatchingTest.h"
 
-#include <common/Log.h>
-#include <opengl/Renderer.h>
-#include <imgui/imgui.h>
-#include <opengl/Textures.h>
+#include <public/XEngine.h>
 
-static xengine::Renderer *renderer = nullptr;
+static xengine::Renderer renderer;
+
 static xengine::VertexArray *vertexArray = nullptr;
 static xengine::VertexBuffer *vertexBuffer = nullptr;
 static xengine::IndexBuffer *indexBuffer = nullptr;
@@ -74,8 +72,11 @@ namespace test {
         indexBuffer->bind();
         indexBuffer->fill(indices, indicesSize);
 
+        float w = app->getWidth();
+        float h = app->getHeight();
+
         // Projection matrix
-        glm::mat4 proj = glm::ortho(0.0f, 1200.0f, 0.0f, 800.0f, -1.0f, 1.0f);
+        glm::mat4 proj = glm::ortho(0.0f, w, 0.0f, h, -1.0f, 1.0f);
 
         // View matrix
         glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
@@ -98,8 +99,6 @@ namespace test {
 
         shader->setTexture("u_Texture", 0 /* Slot */);
 
-        renderer = new Renderer();
-
         /* Clear all states */
 
         vertexArray->unbind();
@@ -109,7 +108,6 @@ namespace test {
     }
 
     void BatchingTest::onDestroy() {
-        delete renderer;
         delete vertexArray;
         delete vertexBuffer;
         delete indexBuffer;
@@ -121,6 +119,18 @@ namespace test {
     }
 
     void BatchingTest::onRender() {
-        renderer->draw(*vertexArray, *indexBuffer, *shader);
+
+        using namespace xengine;
+
+        RenderData renderData;
+        renderData.shader = shader;
+        renderData.vertexArray = vertexArray;
+        renderData.indexBuffer = indexBuffer;
+        renderData.texture = textures;
+        renderData.vertexBuffer = vertexBuffer;
+
+        renderer.setData(&renderData);
+
+        renderer.drawRectangle();
     }
 }

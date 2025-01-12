@@ -6,7 +6,7 @@ namespace xengine {
 
     void addInputField(const char* text, void* value, void (*onClick)(const char* text));
 
-    void addColorPicker(const char* text, void* value, void (*onClick)(const char* text));
+    void addColorPicker(const char* text, float* value, void (*onClick)(const char* text));
 
     void addSpace();
 

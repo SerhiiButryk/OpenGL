@@ -1,8 +1,6 @@
 #include "TestMenuUI.h"
 
-#include <imgui.h>
-#include <common/Log.h>
-#include <opengl/Renderer.h>
+#include <public/XEngine.h>
 
 static bool testUIClosed = true;
 
@@ -48,7 +46,7 @@ namespace test {
     void TestMenuUI::onDraw() {
 
         // Clear screen
-        xengine::Renderer::clearScreen(m_color);
+        xengine::Renderer::clearScreen({m_color[0], m_color[1], m_color[2], m_color[3]});
 
         // Give a chance to do something at the beginning of render process
         if (m_currentTestUI != nullptr) {

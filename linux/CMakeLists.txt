@@ -38,7 +38,7 @@ add_library(core
     ${PROJECT_ROOT}/engine/opengl/Shader.cpp
     ${PROJECT_ROOT}/engine/opengl/external/GLEWBridge.cpp
     ${PROJECT_ROOT}/engine/opengl/GLEngine.cpp
-    ${PROJECT_ROOT}/engine/opengl/Renderer.cpp
+    ${PROJECT_ROOT}/engine/opengl/render/Renderer.cpp
     ${PROJECT_ROOT}/engine/opengl/Textures.cpp
     # ImGui files
     ${PROJECT_ROOT}/dependencies/imgui/imgui.cpp
@@ -55,6 +55,10 @@ add_library(core
     ${PROJECT_ROOT}/engine/ui/Widgets.cpp
     ${PROJECT_ROOT}/engine/common/Log.cpp
     ${PROJECT_ROOT}/engine/opengl/shapes/Rectangle.cpp
+    ${PROJECT_ROOT}/engine/opengl/render/RenderData.cpp
+    ${PROJECT_ROOT}/engine/opengl/shapes/Line.cpp
+    ${PROJECT_ROOT}/engine/opengl/render/RenderDirector.cpp
+    ${PROJECT_ROOT}/engine/opengl/render/RenderDirectorBase.cpp
 )
 
 # Define macros
@@ -111,12 +115,11 @@ if (BUILD_TEST_APP)
         ../tests/ui_tests/Application.cpp
         ../tests/ui_tests/TestMenuUI.cpp
         ../tests/ui_tests/base/TestUI.cpp
-        ../tests/ui_tests/BackgroundColorTest.cpp
         ../tests/ui_tests/TextureTest.cpp
         ../tests/ui_tests/BatchingTest.cpp
-        ../tests/ui_tests/DynamicBatching.cpp
         ../tests/ui_tests/ShapesTest.cpp
         ../tests/ui_tests/base/TestCase.cpp
+        ../tests/ui_tests/BlankTest.cpp
     )
 
     include_directories(../tests/ui_tests)

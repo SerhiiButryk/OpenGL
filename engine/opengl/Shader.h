@@ -49,7 +49,7 @@ namespace xengine {
         mutable std::unordered_map<std::string, int> m_UniformLocationCache;
 
         unsigned int compileShader(unsigned int type, const std::string& source) const;
-        uint32_t createShader(ShaderFile shaderFile) const;
+        uint32_t createShader(const ShaderFile &shaderFile) const;
         ShaderFile parseShader(const std::string& filePath) const;
 
         int getUniformLocation(const std::string& name) const;

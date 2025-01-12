@@ -13,8 +13,13 @@ namespace xengine {
         static bool initEngine();
 
         static void setViewPorts(int bufferWidth, int bufferHeight);
+
         // Log GL information
         static void printInfo();
+
+        // The returned string should be deleted
+        static char* getVersionsInfo();
+
         static void setDebugCallback();
 
         static void setBlending(bool enable);

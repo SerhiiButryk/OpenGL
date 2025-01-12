@@ -20,8 +20,10 @@ namespace xengine {
 	    glBindBuffer(GL_ARRAY_BUFFER /* Buffer type */, 0);
     }
 
-    void VertexBuffer::fill(float* arr, size_t size, bool isDynamic) const
+    void VertexBuffer::fill(float* arr, size_t size, bool isDynamic)
     {
+        m_IsDynamic =  isDynamic;
+
         /* Fill a vertex buffer with data */
 
         const auto hint = (isDynamic == true) ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW;

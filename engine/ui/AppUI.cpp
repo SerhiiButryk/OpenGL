@@ -6,12 +6,15 @@ namespace xengine {
     }
 
     ApplicationUI::~ApplicationUI() {
-        if (m_clientUI != nullptr) {
-            delete m_clientUI;
-        }
+        delete m_clientUI;
     }
 
     void ApplicationUI::onStart() {
+
+        if (m_clientUI == nullptr) {
+            m_clientUI = m_clientApp->onCreateUI();
+        }
+
         m_clientUI->onCreate();
     }
 
