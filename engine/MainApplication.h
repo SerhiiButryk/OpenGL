@@ -30,7 +30,9 @@ namespace xengine {
         UI* getClientUI() const { return m_appUI->getClientUI(); }
 #endif
 
-        // Events
+        // ------------------------------------
+        // Events from application or window
+        // ------------------------------------
         bool onEvent(const Event &event) override;
 
     private:

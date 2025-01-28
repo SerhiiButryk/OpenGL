@@ -36,6 +36,8 @@ namespace xengine {
         void setTexture(const std::string& name, int slotLocation) const;
         void setUniformMat(const std::string& name, const glm::mat4& mat4) const;
 
+        uint32_t getId() const { return m_RenderId; }
+
 #ifdef UNIT_TESTS
         uint32_t getRendererID() const { return m_RenderId; }
         bool shaderParsedOkay() const { return parsedOkay; }

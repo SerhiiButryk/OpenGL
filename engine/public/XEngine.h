@@ -17,3 +17,5 @@
 
 #include <opengl/shapes/Line.h>
 #include <opengl/shapes/Rectangle.h>
+
+#include <window/input/Input.h>

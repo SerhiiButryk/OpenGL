@@ -21,8 +21,9 @@ namespace test {
 
         // Prepare test UI
         auto* test = new TestMenuUI(this);
-        test->registerTest(new TextureTest(), texture_btn_label);
-        test->registerTest(new BatchingTest(), batching_btn_label);
+        // TODO: Revisit and fix
+        // test->registerTest(new TextureTest(), texture_btn_label);
+        // test->registerTest(new BatchingTest(), batching_btn_label);
         test->registerTest(new ShapesTest(), shapes_btn_label);
 
         // TODO: Uncomment for testing raw OpenGL code

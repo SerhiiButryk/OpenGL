@@ -2,6 +2,10 @@
 
 #include <public/XEngine.h>
 
+#define GLM_ENABLE_EXPERIMENTAL
+
+#include "glm/gtx/string_cast.hpp"
+
 static xengine::Renderer renderer;
 
 static xengine::VertexArray *vertexArray = nullptr;
@@ -77,12 +81,18 @@ namespace test {
 
         // Projection matrix
         glm::mat4 proj = glm::ortho(0.0f, w, 0.0f, h, -1.0f, 1.0f);
+        LOG_INFO("Proj matrix {}", glm::to_string(proj));
 
         // View matrix
         glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+        LOG_INFO("View matrix {}", glm::to_string(view));
 
         // Model matrix
         glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+        LOG_INFO("Model matrix {}", glm::to_string(model));
+
+        glm::mat4 scaling = glm::scale(glm::mat4(1), glm::vec3(2,2,2));
+        LOG_INFO("Scaling matrix {}", glm::to_string(scaling));
 
         // MVP matrix
         glm::mat4 mvp = proj * view * model;

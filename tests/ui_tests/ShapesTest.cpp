@@ -2,20 +2,148 @@
 
 #include <public/XEngine.h>
 
-static xengine::RenderDirectorBase* director;
-
 static float g_color1[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 
 static float g_centerX = 0;
 static float g_centerY = 0;
 
-static float g_width = 100.0f;
-static float g_height = 100.0f;
+static float g_width = 1.0f;
+static float g_height = 1.0f;
 
-static float x_coord = 0.0f;
-static float y_coord = 0.0f;
+static auto* data1 = new xengine::RenderData();
+
+static auto* director = new xengine::RenderDirector();
+// Or
+// static auto* director = new RenderDirectorDebug();
+
+static glm::vec3 g_Position = { 0.0f, 0.0f, 0.0f };
+static float g_RotSpeed = 0.1f;
+static float g_MoveSpeed = 0.01f;
+static float g_Rot = 0.0f;
 
 namespace test {
+
+    xengine::Rectangle createRectShape(glm::vec3 point);
+
+    void ShapesTest::onCreate(Application *app) {
+
+        using namespace xengine;
+
+        g_centerX = app->getWidth() / 2;
+        g_centerY = app->getHeight() / 2;
+
+        // 1. Create a data
+
+        data1->configs.height = app->getHeight();
+        data1->configs.width = app->getWidth();
+        data1->configs.assetsPath = app->getResourcePath();
+
+        // 2. Create a shape
+
+        auto rect = createRectShape({0.0f, 0.0f, 0.0f});
+
+        // 3. Prepare the director
+
+        director->begin(data1);
+
+        director->prepareShader("Basic_2.shader");
+
+        // Draw rectangle
+
+        director->submit(rect);
+
+        // Draw triangle
+
+        xengine::Vertex vertex1 = { { -0.7f, -0.7f, 0.0f },
+            { 1.0f, 0.0f, 0.0f, 1.0f},
+            {0.0f, 0.0f},
+            -1.0f
+        };
+
+        xengine::Vertex vertex2 = { { 0.2f, -0.7f, 0.0f },
+            { 1.0f, 1.0f, 0.0f, 1.0f},
+            {0.0f, 0.0f},
+            -1.0f
+        };
+
+        xengine::Vertex vertex3 = { { -0.2f, -0.2f, 0.0f },
+            { 0.5f, 1.0f, 0.0f, 1.0f},
+            {0.0f, 0.0f},
+            -1.0f
+        };
+
+        director->submit(vertex1);
+        director->submit(vertex2);
+        director->submit(vertex3);
+
+        director->end();
+
+    }
+
+    void ShapesTest::onDestroy() {
+
+        // 4. Release resources
+
+        data1->releaseResources();
+        delete data1;
+
+        delete director;
+    }
+
+    void ShapesTest::onRender() {
+
+        using namespace xengine;
+
+        ////////////////////////////////////
+        // Camera controls
+        ////////////////////////////////////d
+
+        if (Input::IsKeyPressed(XE_KEY_A)) {
+            g_Position.x -= g_MoveSpeed;
+        } else if (Input::IsKeyPressed(XE_KEY_D)) {
+            g_Position.x += g_MoveSpeed;
+        }
+
+        if (Input::IsKeyPressed(XE_KEY_W)) {
+            g_Position.y += g_MoveSpeed;
+        } else if (Input::IsKeyPressed(XE_KEY_S)) {
+            g_Position.y -= g_MoveSpeed;
+        }
+
+        if (Input::IsKeyPressed(XE_KEY_E)) {
+            g_Rot += g_RotSpeed;
+        } else if (Input::IsKeyPressed(XE_KEY_R)) {
+            g_Rot -= g_RotSpeed;
+        }
+
+        ////////////////////////////////////
+        // Camera controls END
+        ////////////////////////////////////
+
+        data1->camera->setPosition(g_Position);
+        data1->camera->setRotation(g_Rot);
+
+        auto updateShape = [](const char* text) {
+
+            glm::vec3 point = {0.0f, 0.0f, 0.0f};
+
+            auto rect = createRectShape(point);
+            director->resetPointer();
+            director->submit(rect);
+        };
+
+        addColorPicker("Select color", g_color1, updateShape);
+
+        addInputField("Width", &g_width, updateShape);
+        addInputField("Height", &g_height, updateShape);
+
+        addInputField("X", &g_centerX, updateShape);
+        addInputField("Y", &g_centerY, updateShape);
+
+        // 4. Render
+
+        director->render();
+    }
 
     xengine::Rectangle createRectShape(glm::vec3 point) {
 
@@ -28,79 +156,5 @@ namespace test {
         rect.update();
 
         return rect;
-    }
-
-    void ShapesTest::onCreate(Application *app) {
-
-        using namespace xengine;
-
-        // 1. Create a data
-
-        auto* renderData = new RenderData();
-
-        renderData->configs.height = app->getHeight();
-        renderData->configs.width = app->getWidth();
-        renderData->configs.assetsPath = app->getResourcePath();
-
-        // 2. Create a shape
-
-        g_centerX = app->getWidth() / 2;
-        g_centerY = app->getHeight() / 2;
-
-        glm::vec3 point = { g_centerX, g_centerY, 0.0f};
-
-        auto rect = createRectShape(point);
-
-        // 3. Prepare the director
-
-        director = new RenderDirector();
-        // Or
-        // director = new RenderDirectorDebug();
-        director->setData(renderData);
-
-        director->addShape(rect);
-
-        director->begin();
-
-        director->prepareShader("Basic_2.shader");
-        director->prepareMVPMatrix("u_MVP");
-        director->prepareTexture("test.png", "u_Texture");
-    }
-
-    void ShapesTest::onDestroy() {
-
-        // 4. Release resources
-
-        director->end();
-
-        delete director;
-    }
-
-    void ShapesTest::onBeforeRender() {
-    }
-
-    void ShapesTest::onRender() {
-
-        using namespace xengine;
-
-        auto updateShape = [](const char* text) {
-
-            glm::vec3 point = {x_coord, y_coord, 0.0f};
-
-            auto rect = createRectShape(point);
-            director->addShape(rect);
-        };
-
-        addColorPicker("Select color", g_color1, updateShape);
-
-        addInputField("Width", &g_width, updateShape);
-        addInputField("Height", &g_height, updateShape);
-
-        addInputField("X", &x_coord, updateShape);
-        addInputField("Y", &y_coord, updateShape);
-
-        // 4. Render
-
-        director->render();
     }
 }

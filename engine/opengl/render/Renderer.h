@@ -14,8 +14,13 @@ namespace xengine {
 
         static void clearScreen(glm::vec4 color);
 
-        void drawRectangle() const override;
+    public:
 
-        void drawLine() const override;
+        void drawRectangle() override;
+
+        void drawLine() override;
+
+    private:
+        void setCommonConfigs();
     };
 }

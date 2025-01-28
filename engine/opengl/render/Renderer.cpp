@@ -9,14 +9,26 @@ namespace xengine {
         glClear(GL_COLOR_BUFFER_BIT);
     }
 
-    void Renderer::drawRectangle() const {
+    void Renderer::setCommonConfigs() {
 
         if (m_renderData->vertexBuffer->isDynamic()) {
-            // If buffer is dynamic we update the vertex buffer
+            // If the buffer is dynamic we update the vertex buffer
             m_renderData->vertexBuffer->update(
                 (float*) m_renderData->configs.drawBuffer,
                 VERTEX_TOTAL_SIZE(m_renderData->configs.vertexCount));
         }
+
+        auto* shader = m_renderData->shader;
+        shader->bind();
+
+        // TODO: Get rid of hardcoding
+        shader->setUniformMat("u_MVP", m_renderData->camera->getViewProjMatrix());
+
+    }
+
+    void Renderer::drawRectangle() {
+
+        setCommonConfigs();
 
         auto* va = m_renderData->vertexArray;
         auto* ib = m_renderData->indexBuffer;
@@ -34,12 +46,9 @@ namespace xengine {
 
     }
 
-    void Renderer::drawLine() const {
+    void Renderer::drawLine() {
 
-        uint32_t count = m_renderData->configs.vertexCount;
-
-        // TODO: Might be a part of RenderCommand
-        m_renderData->vertexBuffer->update((float*) m_renderData->configs.drawBuffer, VERTEX_TOTAL_SIZE(count));
+        setCommonConfigs();
 
         auto* va = m_renderData->vertexArray;
         auto* shader = m_renderData->shader;
@@ -54,6 +63,8 @@ namespace xengine {
         // glLineWidth(aliasedLineRange[1]);
 
         /* Send a draw command */
+
+        uint32_t count = m_renderData->configs.vertexCount;
 
         glDrawArrays(GL_LINES, 0, count);
 

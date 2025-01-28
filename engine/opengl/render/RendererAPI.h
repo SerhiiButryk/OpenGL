@@ -5,7 +5,7 @@
 namespace xengine {
 
     /**
-     * High level renderer abstract API
+     * High level abstract renderer APIs
      */
     class RendererAPI
     {
@@ -13,9 +13,9 @@ namespace xengine {
         RendererAPI() = default;
         virtual ~RendererAPI() = default;
 
-        virtual void drawRectangle() const = 0;
+        virtual void drawRectangle() = 0;
 
-        virtual void drawLine() const = 0;
+        virtual void drawLine() = 0;
 
         auto* getData() const { return m_renderData; }
         void setData(RenderData* command) { m_renderData = command; }

@@ -1,0 +1,54 @@
+#pragma once
+#include <glm/glm.hpp>
+
+namespace xengine {
+
+    class Camera 
+    {
+    public:
+        Camera(float left, float right, float bottom, float top);
+
+        const glm::vec3& getPosition() const {
+            return m_Position;
+        }
+
+        void setPosition(const glm::vec3 &position) {
+            m_Position = position;
+            recalculate();
+        }
+
+        float getRotation() const {
+            return m_Rotation;
+        }
+
+        void setRotation(float rotation) {
+            m_Rotation = rotation;
+            recalculate();
+        }
+
+        const glm::mat4& getProjectionMatrix() const {
+            return m_ProjectionMatrix;
+        }
+
+        const glm::mat4& getViewMatrix() const {
+            return m_ViewMatrix;
+        }
+
+        const glm::mat4& getViewProjMatrix() const {
+            return m_ViewProjMatrix;
+        }
+
+    private:
+        void recalculate();
+
+    private:
+        glm::mat4 m_ProjectionMatrix;
+        glm::mat4 m_ViewMatrix;
+        glm::mat4 m_ViewProjMatrix;
+
+        glm::vec3 m_Position = {0.0f, 0.0f, 0.0f};
+        float m_Rotation = 0.0f;
+
+    };
+
+}

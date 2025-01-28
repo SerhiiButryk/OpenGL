@@ -20,11 +20,10 @@ namespace xengine {
 
         // Pipline settings START
 
-        void begin();
+        void begin(RenderData* data);
 
         void prepareShader(const std::string& filePath);
         void prepareTexture(const std::string& filePath, const std::string& textureName);
-        void prepareMVPMatrix(const std::string& name);
         void prepareIndexBuffer(IndexBuffer* ib, uint32_t maxSize) const;
 
         void end();
@@ -35,7 +34,13 @@ namespace xengine {
 
         virtual void render() = 0;
 
-        virtual void addShape(Shape& shape) = 0;
+        virtual void submit(Shape& shape) = 0;
+        virtual void submit(Vertex& vertex) = 0;
+
+        void resetPointer() {
+            m_renderData->configs.pointerStart = m_renderData->configs.drawBuffer;
+            m_renderData->configs.vertexCount = 0;
+        }
 
         // Getters
 

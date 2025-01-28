@@ -17,7 +17,7 @@ namespace xengine {
 
     }
 
-    void RenderDirector::addShape(Shape& shape) {
+    void RenderDirector::submit(Shape& shape) {
 
         // Create a buffer if it is not created
         createVertexBuffer();
@@ -27,6 +27,26 @@ namespace xengine {
         m_renderData->configs.vertexCount += shape.getVertexCount();
 
     }
+
+    void RenderDirector::submit(Vertex &vertex) {
+
+        // Create a buffer if it is not created
+        createVertexBuffer();
+
+        auto* destPointer = (Vertex*) m_renderData->configs.pointerStart;
+
+        destPointer->position = vertex.position;
+        destPointer->color = vertex.color;
+        destPointer->texCoord = vertex.texCoord;
+        destPointer->texIndex = vertex.texIndex;
+
+        destPointer++;
+
+        m_renderData->configs.pointerStart = destPointer;
+
+        m_renderData->configs.vertexCount += 1;
+    }
+
 
     ////////////////// RenderDirectorDebug //////////////////////////////////////////////////////////////////////////
 
@@ -38,7 +58,7 @@ namespace xengine {
 
     }
 
-    void RenderDirectorDebug::addShape(Shape& shape) {
+    void RenderDirectorDebug::submit(Shape& shape) {
 
         // Create a buffer if it is not created
         createVertexBuffer();
@@ -76,4 +96,7 @@ namespace xengine {
 
     }
 
+    void RenderDirectorDebug::submit(Vertex &vertex) {
+
+    }
 }

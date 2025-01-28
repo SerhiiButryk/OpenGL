@@ -59,6 +59,8 @@ add_library(core
     ${PROJECT_ROOT}/engine/opengl/shapes/Line.cpp
     ${PROJECT_ROOT}/engine/opengl/render/RenderDirector.cpp
     ${PROJECT_ROOT}/engine/opengl/render/RenderDirectorBase.cpp
+    ${PROJECT_ROOT}/engine/opengl/Camera.cpp
+    ${PROJECT_ROOT}/engine/window/input/Input.cpp
 )
 
 # Define macros

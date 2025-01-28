@@ -27,8 +27,11 @@ namespace xengine {
         delete indexBuffer;
         delete shader;
         delete texture;
+        delete camera;
 
         delete [] (float*) configs.drawBuffer;
+        configs.drawBuffer = nullptr;
+        configs.pointerStart = nullptr;
 
     }
 

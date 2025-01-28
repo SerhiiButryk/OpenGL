@@ -6,7 +6,7 @@
 namespace xengine {
 
     RenderDirectorBase::RenderDirectorBase() {
-        // TODO: Might not de a good approach but it is simple way !
+        // TODO: Might not be a good approach but it's a simple way !
         static Renderer renderer;
         m_renderer = &renderer;
     }
@@ -14,7 +14,7 @@ namespace xengine {
     void RenderDirectorBase::batch(Shape& shape) {
 
         auto* srcPointer = shape.getBuffer();
-        auto* destPointer = (Vertex*) m_renderData->configs.pointer;
+        auto* destPointer = (Vertex*) m_renderData->configs.pointerStart;
 
         for (int i = 0; i < shape.getVertexCount(); i++) {
             destPointer->position = srcPointer->position;
@@ -26,7 +26,7 @@ namespace xengine {
             srcPointer++;
         }
 
-        m_renderData->configs.pointer = destPointer;
+        m_renderData->configs.pointerStart = destPointer;
     }
 
     void RenderDirectorBase::createVertexBuffer(unsigned int size) {
@@ -40,37 +40,17 @@ namespace xengine {
             LOG_INFO("RenderCommand::createVertexBuffer() creating a buffer with size = {}", size);
 
             m_renderData->configs.drawBuffer = new Vertex[size]{};
-            m_renderData->configs.pointer = m_renderData->configs.drawBuffer;
+            m_renderData->configs.pointerStart = m_renderData->configs.drawBuffer;
 
         }
 
     }
 
-    void RenderDirectorBase::begin() {
-
-        m_renderData->vertexArray = new VertexArray();
-        m_renderData->vertexBuffer = new VertexBuffer();
-
-        m_renderData->vertexArray->bind();
-        m_renderData->vertexBuffer->bind();
-
-        m_renderData->vertexBuffer->fill(nullptr, VERTEX_TOTAL_SIZE(m_renderData->configs.vertexCount), true);
-
-        /*
-            Bind vertex buffer and layout into array buffer
-        */
-
-        BufferLayout layout = Vertex::getLayout();
-        m_renderData->vertexArray->add(*m_renderData->vertexBuffer, layout);
-
-        m_renderData->indexBuffer = new IndexBuffer();
-
-        prepareIndexBuffer(m_renderData->indexBuffer, m_renderData->configs.indexBufferMaxSize);
-
+    void RenderDirectorBase::begin(RenderData* data) {
+        setData(data);
     }
 
     void RenderDirectorBase::prepareShader(const std::string &filePath) {
-
         std::string path = m_renderData->configs.assetsPath + "/shader/" + filePath;
         m_renderData->shader = new Shader(path);
     }
@@ -83,27 +63,6 @@ namespace xengine {
         m_renderData->texture->bind(0 /* Slot */);
 
         m_renderData->shader->setTexture(textureName, 0 /* Slot */);
-    }
-
-    void RenderDirectorBase::prepareMVPMatrix(const std::string &name) {
-
-        /* Calculate and set default MVP matrix for this shader */
-
-        // Projection matrix
-        glm::mat4 proj = glm::ortho(0.0f, (float) m_renderData->configs.width, 0.0f, (float) m_renderData->configs.height, -1.0f, 1.0f);
-
-        // View matrix
-        glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-
-        // Model matrix
-        glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-
-        // MVP matrix
-        glm::mat4 mvp = proj * view * model;
-
-        m_renderData->shader->bind();
-
-        m_renderData->shader->setUniformMat(name, mvp);
     }
 
     void RenderDirectorBase::prepareIndexBuffer(IndexBuffer *ib, uint32_t maxSize) const {
@@ -135,12 +94,32 @@ namespace xengine {
     }
 
     void RenderDirectorBase::end() {
-        // When we end we release resources and delete the command
-        if (m_renderData != nullptr) {
-            m_renderData->releaseResources();
-            delete m_renderData;
-            m_renderData = nullptr;
-        }
+
+        m_renderData->vertexArray = new VertexArray();
+        m_renderData->vertexBuffer = new VertexBuffer();
+
+        m_renderData->vertexArray->bind();
+        m_renderData->vertexBuffer->bind();
+
+        m_renderData->vertexBuffer->fill(nullptr, VERTEX_TOTAL_SIZE(m_renderData->configs.vertexCount), true);
+
+        /*
+            Bind vertex buffer and layout into array buffer
+        */
+
+        BufferLayout layout = Vertex::getLayout();
+        m_renderData->vertexArray->add(*m_renderData->vertexBuffer, layout);
+
+        m_renderData->indexBuffer = new IndexBuffer();
+
+        prepareIndexBuffer(m_renderData->indexBuffer, m_renderData->configs.indexBufferMaxSize);
+
+        /**
+         * Create a camera
+         */
+
+        // TODO: Revisit this should be configured
+        m_renderData->camera = new Camera(-1.6f, 1.6f, -0.9f, 0.9f);
     }
 
 }

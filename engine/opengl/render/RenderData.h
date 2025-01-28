@@ -1,10 +1,11 @@
 #pragma once
 
-#include "opengl/IndexBuffer.h"
-#include "opengl/Shader.h"
-#include "opengl/Textures.h"
-#include "opengl/VertexArray.h"
-#include "opengl/shapes/Rectangle.h"
+#include <opengl/Camera.h>
+#include <opengl/IndexBuffer.h>
+#include <opengl/Shader.h>
+#include <opengl/Textures.h>
+#include <opengl/VertexArray.h>
+#include <opengl/shapes/Rectangle.h>
 
 namespace xengine {
 
@@ -27,7 +28,7 @@ namespace xengine {
             uint32_t indexBufferMaxSize {};
 
             void* drawBuffer = nullptr; // actual data buffer
-            void* pointer = nullptr; // pointer to last element
+            void* pointerStart = nullptr; // pointer to last element
         };
 
         void releaseResources();
@@ -37,6 +38,7 @@ namespace xengine {
         VertexBuffer* vertexBuffer = nullptr;
         IndexBuffer* indexBuffer = nullptr;
         Texture* texture = nullptr;
+        Camera* camera = nullptr;
 
         Configs configs = {};
 

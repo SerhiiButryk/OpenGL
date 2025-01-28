@@ -25,7 +25,7 @@ namespace test {
 
         ImGui::StyleColorsDark();
 
-        ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*) m_app->getMainApplication()->getWindow(), true);
+        ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*) m_app->getNativeWindow(), true);
 
         const char* glsl_version = "#version 130";
         ImGui_ImplOpenGL3_Init(glsl_version);

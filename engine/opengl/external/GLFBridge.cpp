@@ -2,6 +2,7 @@
 
 #include "../../window/Window.h"
 #include "../../common/Log.h"
+#include <window/input/Input.h>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -102,6 +103,7 @@ namespace xengine {
         window.setBufferSize(bufferWidth, bufferHeight);
 
         // Enable vsync
+        // Basically it limits the frame draw rate for the application
         glfwSwapInterval(1);
 
         // Here we save a ref to the current window, so we can receive callbacks from GLFW
@@ -124,6 +126,7 @@ namespace xengine {
             w->dispatch(event);
         });
 
+        // Keyboard callback
         glfwSetKeyCallback(w, [](GLFWwindow *window, int key, int scancode, int action, int mods) {
 
             auto *w = (Window *) glfwGetWindowUserPointer(window);
@@ -133,18 +136,21 @@ namespace xengine {
             switch (action) {
                 case GLFW_PRESS: {
 
+                    Input::UpdateKeyState((KeyCode)key, KeyState::Pressed);
                     w->dispatch(event);
 
                     break;
                 }
                 case GLFW_RELEASE: {
 
+                    Input::UpdateKeyState((KeyCode)key, KeyState::Released);
                     w->dispatch(event);
 
                     break;
                 }
                 case GLFW_REPEAT: {
 
+                    Input::UpdateKeyState((KeyCode)key, KeyState::Held);
                     w->dispatch(event);
 
                     break;

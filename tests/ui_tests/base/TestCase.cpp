@@ -2,7 +2,4 @@
 
 namespace test {
 
-    void TestCase::onBeforeRender() {
-    }
-
 }

@@ -8,7 +8,8 @@ namespace xengine {
     {
     public:
 
-        void addShape(Shape& shape) override;
+        void submit(Shape& shape) override;
+        void submit(Vertex &vertex) override;
 
         void render() override;
 
@@ -19,7 +20,8 @@ namespace xengine {
 
         void render() override;
 
-        void addShape(Shape& shape) override;
+        void submit(Shape& shape) override;
+        void submit(Vertex &vertex) override;
 
     };
 

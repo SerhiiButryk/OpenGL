@@ -12,7 +12,7 @@ namespace xengine {
     /**
     * Application client interface
     */
-    class Application : public Lifecycle {
+    class Application : public Lifecycle, public EventListener {
     public:
         Application() = default;
         ~Application() override = default;
@@ -41,12 +41,26 @@ namespace xengine {
 
         /**
          * Override to set resource path
-         * @return  resource path
+         * @return new resource path
          */
         virtual std::string getResourcePath() { return ""; }
 
+        /**
+         * Set a reference to internal application class controlled by the engine side
+         */
         void setMainApplication(InternalApplication* app) { m_mainApplication = app; }
-        auto* getMainApplication() const { return m_mainApplication; }
+
+        /**
+         * Get a window native pointer
+         */
+        auto* getNativeWindow() const { return m_mainApplication->getWindow(); }
+
+        /**
+         * Callback to receive new events from application or window
+         */
+        bool onEvent(const Event &event) override {
+            return false;
+        }
 
     protected:
         InternalApplication* m_mainApplication = nullptr;
