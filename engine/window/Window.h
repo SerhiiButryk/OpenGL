@@ -1,6 +1,6 @@
 #pragma once
 
-#include <internal/MainThreadObserver.h>
+#include <MainThreadObserver.h>
 #include <window/events/Event.h>
 #include <window/events/EventListener.h>
 
@@ -12,7 +12,7 @@
 
 namespace xengine {
 
-	class Window : public EventConsumer, public EventDispatcher, public MainThreadObserver
+	class Window final : public EventConsumer, public EventDispatcher, public MainThreadObserver
 	{
 	public:
 

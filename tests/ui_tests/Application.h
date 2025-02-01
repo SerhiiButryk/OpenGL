@@ -4,11 +4,11 @@
 
 namespace test {
     /**
-     *  Our application
+     *  Our client application
      */
     class Application : public xengine::Application {
     public:
-        Application() = default;
+        Application();
         ~Application() override = default;
 
         void onCreate() override {}

@@ -10,7 +10,10 @@ namespace xengine {
     public:
         Log();
 
-        void Init();
+        void init();
+
+        // TODO: Define log levels
+        void setLogLevel(bool enableDebug);
 
         static Log &getInstance() {
             static Log instance;

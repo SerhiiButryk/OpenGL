@@ -1,9 +1,9 @@
 #pragma once
 
-#include "internal/Lifecycle.h"
-#include "internal/InternalApplication.h"
-#include "internal/UI.h"
-#include "window/WindowConfigs.h"
+#include <app/Lifecycle.h>
+#include <app/InternalApplication.h>
+#include <ui/UI.h>
+#include <window/WindowConfigs.h>
 
 #include <string>
 
@@ -20,12 +20,12 @@ namespace xengine {
         /**
          * Callback to allocate resources
          */
-        void onCreate() override {}
+        void onCreate() override = 0;
 
         /**
          * Callback to free resources
          */
-        void onDestroy() override {}
+        void onDestroy() override = 0;
 
         /**
          * Override to set application UI
@@ -61,6 +61,11 @@ namespace xengine {
         bool onEvent(const Event &event) override {
             return false;
         }
+
+        /**
+         * Get frame update time
+         */
+        auto getFrameDeltaTime() const { return m_mainApplication->getFrameDeltaTime(); }
 
     protected:
         InternalApplication* m_mainApplication = nullptr;

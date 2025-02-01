@@ -9,7 +9,7 @@
 
 namespace xengine {
 
-    class GLEWBridge
+    class LoaderOpenGL
     {
     public:
         /* Initializes the GLEW library */

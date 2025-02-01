@@ -3,7 +3,7 @@
 namespace test {
 
     /**
-    *  Call and test OpenGL APIs here
+    *  Test OpenGL APIs here
     */
 
     void BlankTest::onCreate() {

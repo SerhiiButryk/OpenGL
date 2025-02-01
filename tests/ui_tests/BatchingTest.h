@@ -7,9 +7,11 @@ namespace test {
     class BatchingTest : public TestCase
     {
     public:
+        explicit BatchingTest(Application* app) : TestCase(app) {}
+
         void onCreate(Application* app) override;
         void onDestroy() override;
-        void onBeforeRender() override;
+
         void onRender() override;
     };
 

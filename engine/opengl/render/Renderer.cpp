@@ -22,7 +22,9 @@ namespace xengine {
         shader->bind();
 
         // TODO: Get rid of hardcoding
-        shader->setUniformMat("u_MVP", m_renderData->camera->getViewProjMatrix());
+        if (m_renderData->camera) {
+            shader->setUniformMat("u_MVP", m_renderData->camera->getViewProjMatrix());
+        }
 
     }
 

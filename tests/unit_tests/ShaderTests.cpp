@@ -2,7 +2,7 @@
 
 #include <opengl/GLEngine.h>
 #include <opengl/Shader.h>
-#include <opengl/external/GLEWBridge.h>
+#include <opengl/external/LoaderOpenGL.h>
 #include <window/Window.h>
 
 #include "base/Assert.h"
@@ -26,7 +26,7 @@ namespace test {
         WindowConfigs windowConfigs = {100, 100, "Test"};
         window->create(windowConfigs);
 
-        ASSERT_LOG(GLEWBridge::init(), "ShaderTests::run GLEW is not initialized");
+        ASSERT_LOG(LoaderOpenGL::init(), "ShaderTests::run OpenGL is not initialized");
 
         // 2. Load basic shader
         std::string resPath = "../engine/res";

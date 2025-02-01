@@ -23,24 +23,16 @@ namespace test {
         const int size = 8 * 9;
         float positions[] = {
             // first square
-            0.0f, 0.0f, /* position */ 0.0f, 0.0f, 1.0f, 1.0f, /* color */ 0.0f, 0.0f, /* texture */ 0.0f,
-            /* texture id */ // 0
-            100.0f, 0.0f, /* position */ 0.0f, 0.0f, 1.0f, 1.0f, /* color */ 1.0f, 0.0f, /* texture */ 0.0f,
-            /* texture id */ // 1
-            100.f, 100.0f, /* position */ 0.0f, 0.0f, 1.0f, 1.0f, /* color */ 1.0f, 1.0f, /* texture */ 0.0f,
-            /* texture id */ // 2
-            0.0f, 100.0f, /* position */ 0.0f, 0.0f, 1.0f, 1.0f, /* color */ 0.0f, 1.0f, /* texture */ 0.0f,
-            /* texture id */ // 3
+            0.0f, 0.0f, /* position */ 0.0f, 0.0f, 1.0f, 1.0f, /* color */ 0.0f, 0.0f, /* texture */ 0.0f, /* texture id */ // 0
+            100.0f, 0.0f, /* position */ 0.0f, 0.0f, 1.0f, 1.0f, /* color */ 1.0f, 0.0f, /* texture */ 0.0f, /* texture id */ // 1
+            100.f, 100.0f, /* position */ 0.0f, 0.0f, 1.0f, 1.0f, /* color */ 1.0f, 1.0f, /* texture */ 0.0f, /* texture id */ // 2
+            0.0f, 100.0f, /* position */ 0.0f, 0.0f, 1.0f, 1.0f, /* color */ 0.0f, 1.0f, /* texture */ 0.0f, /* texture id */ // 3
 
             // second square
-            200.0f, 0.0f, /* position */ 0.0f, 1.0f, 0.0f, 1.0f, /* color */ 0.0f, 0.0f, /* texture */ 0.0f,
-            /* texture id */ // 4
-            300.0f, 0.0f, /* position */ 0.0f, 1.0f, 0.0f, 1.0f, /* color */ 1.0f, 0.0f, /* texture */ 0.0f,
-            /* texture id */ // 5
-            300.f, 100.0f, /* position */ 0.0f, 1.0f, 0.0f, 1.0f, /* color */ 1.0f, 1.0f, /* texture */ 0.0f,
-            /* texture id */ // 6
-            200.0f, 100.0f, /* position */ 0.0f, 1.0f, 0.0f, 1.0f, /* color */ 0.0f, 1.0f, /* texture */
-            0.0f /* texture id */ // 7
+            200.0f, 0.0f, /* position */ 0.0f, 1.0f, 0.0f, 1.0f, /* color */ 0.0f, 0.0f, /* texture */ 0.0f, /* texture id */ // 4
+            300.0f, 0.0f, /* position */ 0.0f, 1.0f, 0.0f, 1.0f, /* color */ 1.0f, 0.0f, /* texture */ 0.0f, /* texture id */ // 5
+            300.f, 100.0f, /* position */ 0.0f, 1.0f, 0.0f, 1.0f, /* color */ 1.0f, 1.0f, /* texture */ 0.0f, /* texture id */ // 6
+            200.0f, 100.0f, /* position */ 0.0f, 1.0f, 0.0f, 1.0f, /* color */ 0.0f, 1.0f, /* texture */ 0.0f /* texture id */ // 7
         };
 
         vertexArray = new VertexArray();
@@ -123,9 +115,6 @@ namespace test {
         delete indexBuffer;
         delete shader;
         delete textures;
-    }
-
-    void BatchingTest::onBeforeRender() {
     }
 
     void BatchingTest::onRender() {

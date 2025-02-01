@@ -14,7 +14,7 @@ static auto* data1 = new xengine::RenderData();
 
 static auto* director = new xengine::RenderDirector();
 // Or
-// static auto* director = new RenderDirectorDebug();
+// static auto* director = new xengine::RenderDirectorDebug();
 
 static glm::vec3 g_Position = { 0.0f, 0.0f, 0.0f };
 static float g_RotSpeed = 0.1f;
@@ -54,19 +54,19 @@ namespace test {
 
         // Draw triangle
 
-        xengine::Vertex vertex1 = { { -0.7f, -0.7f, 0.0f },
+        Vertex vertex1 = { { -0.7f, -0.7f, 0.0f },
             { 1.0f, 0.0f, 0.0f, 1.0f},
             {0.0f, 0.0f},
             -1.0f
         };
 
-        xengine::Vertex vertex2 = { { 0.2f, -0.7f, 0.0f },
+        Vertex vertex2 = { { 0.2f, -0.7f, 0.0f },
             { 1.0f, 1.0f, 0.0f, 1.0f},
             {0.0f, 0.0f},
             -1.0f
         };
 
-        xengine::Vertex vertex3 = { { -0.2f, -0.2f, 0.0f },
+        Vertex vertex3 = { { -0.2f, -0.2f, 0.0f },
             { 0.5f, 1.0f, 0.0f, 1.0f},
             {0.0f, 0.0f},
             -1.0f
@@ -93,6 +93,9 @@ namespace test {
     void ShapesTest::onRender() {
 
         using namespace xengine;
+
+        Timestamp times = m_app->getFrameDeltaTime();
+        LOG_INFO("ShapesTest::onRender() time {}s {}m", times.getSeconds(), times.getMilliseconds());
 
         ////////////////////////////////////
         // Camera controls

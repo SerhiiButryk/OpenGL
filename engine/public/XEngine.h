@@ -3,8 +3,8 @@
 */
 #pragma once
 
-#include <internal/Application.h>
-#include <internal/UI.h>
+#include <app/Application.h>
+#include <ui/UI.h>
 #include <ui/Widgets.h>
 
 #include <opengl/render/Renderer.h>

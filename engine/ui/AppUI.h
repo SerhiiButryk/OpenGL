@@ -1,8 +1,8 @@
 #pragma once
 
-#include <internal/Application.h>
-#include <internal/UI.h>
-#include <internal/MainThreadObserver.h>
+#include <app/Application.h>
+#include <ui/UI.h>
+#include <MainThreadObserver.h>
 
 namespace xengine {
 
@@ -17,10 +17,10 @@ namespace xengine {
         explicit ApplicationUI();
         ~ApplicationUI() override;
 
-        // Get called by Main thread
-        void onStart() override;
         void onProcess(void* app) override;
-        void onEnd() override;
+
+        void onCreate() override;
+        void onDestroy() override;
 
         void setClientApp(Application* app) { m_clientApp = app; }
 

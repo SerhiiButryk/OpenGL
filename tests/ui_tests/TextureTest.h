@@ -7,12 +7,12 @@ namespace test {
     class TextureTest : public TestCase
     {
     public:
-        TextureTest() = default;
+        explicit TextureTest(Application* app) : TestCase(app) {}
         ~TextureTest() override = default;
 
         void onCreate(Application* app) override;
         void onDestroy() override;
-        void onBeforeRender() override;
+
         void onRender() override;
     };
 

@@ -7,7 +7,7 @@ namespace test {
     class TestCase
     {
     public:
-        TestCase() = default;
+        explicit TestCase(Application* app) { m_app = app; };
         virtual ~TestCase() = default;
 
         virtual void onCreate(Application* app) {}
@@ -20,6 +20,9 @@ namespace test {
 
     private:
         void* testUI = nullptr;
+
+    protected:
+        Application* m_app = nullptr;
     };
 
 }

@@ -17,7 +17,7 @@ namespace test {
 
         virtual ~Test() = default;
 
-        virtual int run() const {}
+        virtual int run() const { return 0; }
         virtual const char* name() const { return ""; }
 
         void setMemoryTracker(MemoryTracker* memoryTracker) { m_memoryTracker = memoryTracker; }

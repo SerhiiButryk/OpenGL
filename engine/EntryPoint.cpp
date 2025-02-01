@@ -1,13 +1,13 @@
 #include <opengl/GLEngine.h>
-#include <opengl/external/GLFBridge.h>
+#include <external/PlatformGateWay.h>
 
-#include "common/Log.h"
-#include "MainApplication.h"
-#include "MainThread.h"
-#include "common/Exception.h"
+#include <common/Log.h>
+#include <app/MainApplication.h>
+#include <MainThread.h>
+#include <common/Exception.h>
 
 ///////////////////////////////////////////////////////////////////
-///////////// MAIN ENTRY POINT OF OUR PROGRAM //////////////////////
+///////////// ENTRY POINT /////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
 
 /**
@@ -28,7 +28,7 @@ int main()
 
         // Initialize
         if (!GLEngine::initEngine()) {
-            throwApplicationInitException(ApplicationInitException::WINDOW_CREATION_ERROR);
+            throwApplicationInitException(ApplicationInitException::LIB_INIT_ERROR);
         }
 
         auto* client = createApplication();
@@ -47,15 +47,15 @@ int main()
         retCode = 1;
     }
 
-    // Release resources either if we got an error
+    // Release resources either if we got an exception
     // or the program has been closed
     mainThread->onDestroy();
 
     delete app;
     delete mainThread;
 
-    // Clean up our engine
-    GLFBridge::cleanup();
+    // Clean up platform resources
+    PlatformGateWay::cleanup();
 
     LOG_INFO("Finished with code {}", retCode);
 

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "internal/Lifecycle.h"
-#include "internal/InternalApplication.h"
-#include "internal/MainThreadObserver.h"
+#include <app/Lifecycle.h>
+#include <app/InternalApplication.h>
+#include <MainThreadObserver.h>
 
 #include <vector>
 
@@ -11,7 +11,7 @@ namespace xengine {
     /**
     * Class which manages program execution on the main thread.
     */
-    class MainThread : public Lifecycle
+    class MainThread final : public Lifecycle
     {
     public:
         MainThread() = default;

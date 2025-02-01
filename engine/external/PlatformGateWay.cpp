@@ -1,7 +1,6 @@
-#include "GLFBridge.h"
+#include "PlatformGateWay.h"
 
-#include "../../window/Window.h"
-#include "../../common/Log.h"
+#include <common/Log.h>
 #include <window/input/Input.h>
 
 #include <GL/glew.h>
@@ -14,14 +13,14 @@ namespace xengine {
         LOG_ERROR("GLFW Error ({0}): {1}", error, description);
     }
 
-    bool GLFBridge::init() {
+    bool PlatformGateWay::init() {
 
         glfwSetErrorCallback(GLFWErrorCallback);
 
         /* Initializes the GLFW library */
 
         if (!glfwInit()) {
-            LOG_ERROR("GLFBridge::init() failed to init GLFW library");
+            LOG_ERROR("PlatformGateWay::init() failed to init GLFW library");
             return false;
         }
 
@@ -42,20 +41,24 @@ namespace xengine {
         return true;
     }
 
-    void GLFBridge::cleanup() {
-        LOG_INFO("GLFBridge::cleanup()");
+    void PlatformGateWay::cleanup() {
+        LOG_INFO("PlatformGateWay::cleanup()");
         glfwTerminate();
     }
 
-    bool GLFBridge::createWindow(Window &window, const char *title, int width, int height) {
-        LOG_INFO("GLFBridge::createWindow()");
+    bool PlatformGateWay::createWindow(Window &window, const char *title, int width, int height) {
+        LOG_INFO("PlatformGateWay::createWindow()");
+
+        int monitorX = 0, monitorY = 0;
+        const GLFWvidmode *videoMode = nullptr;
 
         GLFWmonitor *primaryMonitor = glfwGetPrimaryMonitor();
-        // Monitor and display information
-        const GLFWvidmode *videoMode = glfwGetVideoMode(primaryMonitor);
 
-        int monitorX, monitorY;
-        glfwGetMonitorPos(primaryMonitor, &monitorX, &monitorY);
+        if (primaryMonitor) {
+            // Monitor and display information
+            videoMode = glfwGetVideoMode(primaryMonitor);
+            glfwGetMonitorPos(primaryMonitor, &monitorX, &monitorY);
+        }
 
         // Window hints
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
@@ -66,8 +69,10 @@ namespace xengine {
         }
 
 #ifndef UNIT_TESTS
-        // Show window in the center
-        glfwSetWindowPos(w, monitorX + (videoMode->width - width) / 2, monitorY + (videoMode->height - height) / 2);
+        if (videoMode) {
+            // Show window in the center
+            glfwSetWindowPos(w, monitorX + (videoMode->width - width) / 2, monitorY + (videoMode->height - height) / 2);
+        }
         glfwShowWindow(w);
 #endif
 
@@ -79,12 +84,12 @@ namespace xengine {
         return true;
     }
 
-    void GLFBridge::destroyWindow(const Window &window) {
-        LOG_INFO("GLFBridge::destroyWindow()");
+    void PlatformGateWay::destroyWindow(const Window &window) {
+        LOG_INFO("PlatformGateWay::destroyWindow()");
         glfwDestroyWindow(static_cast<GLFWwindow *>(window.getWindow()));
     }
 
-    void GLFBridge::initWindowConfigs(Window &window) {
+    void PlatformGateWay::initWindowConfigs(Window &window) {
         /*
           Get view buffer size information
         */
@@ -94,7 +99,7 @@ namespace xengine {
 
         glfwGetFramebufferSize(w, &bufferWidth, &bufferHeight);
 
-        LOG_INFO("GLFBridge::initWindowConfigs() View port information: '{}' '{}'", bufferWidth, bufferHeight);
+        LOG_INFO("PlatformGateWay::initWindowConfigs() View port information: '{}' '{}'", bufferWidth, bufferHeight);
 
         /* Set the window's OpenGL context to be the current on this thread */
 
@@ -104,7 +109,9 @@ namespace xengine {
 
         // Enable vsync
         // Basically it limits the frame draw rate for the application
-        glfwSwapInterval(1);
+        if (false) {
+            glfwSwapInterval(1);
+        }
 
         // Here we save a ref to the current window, so we can receive callbacks from GLFW
         // Other solution could be a map which maps GLFWwindow pointer to Window pointer

@@ -1,6 +1,6 @@
 #include "BasicTest.h"
 
-#include <MainApplication.h>
+#include <app/MainApplication.h>
 #include <common/Log.h>
 #include <opengl/GLEngine.h>
 #include <base/Assert.h>
@@ -15,12 +15,11 @@ static bool stopped = false;
 
 namespace test {
 
-    class ThreadObserverForTest : public xengine::MainThreadObserver {
+    class TestThreadObserver : public xengine::MainThreadObserver {
     public:
-
-        virtual void onStart() { startCalled = true; }
-        virtual void onProcess(void* app) {}
-        virtual void onEnd() { endCalled = true; }
+        void onStart() override { startCalled = true; }
+        void onProcess(void* app) override {}
+        void onEnd() override { endCalled = true; }
 
         void onCreate() override { createCalled = true; }
         void onDestroy() override { destroyCalled = true; }
@@ -29,6 +28,20 @@ namespace test {
         bool destroyCalled = false;
         bool startCalled = false;
         bool endCalled = false;
+    };
+
+    class TestUI : public xengine::UI {
+    public:
+    };
+
+    class TestApp : public xengine::Application {
+    public:
+        void onCreate() override {}
+        void onDestroy() override {}
+
+        xengine::UI* onCreateUI() override { return new TestUI; }
+
+        xengine::WindowConfigs onCreateWindow() override { return {100, 100, "Test"}; }
     };
 
     /**
@@ -51,14 +64,18 @@ namespace test {
             ASSERT(mainApp->getClientApplication() == 0);
             ASSERT(mainApp->getClientUI() == 0);
 
-            mainApp->setClientApplication(new Application());
-            mainApp->setClientUI(new UI());
+            ASSERT_LOG(GLEngine::initEngine(), "BasicTest::run failed to init engine");
+
+            mainApp->setClientApplication(new TestApp());
+            mainApp->onCreate();
 
             void* p1 = mainApp->getClientApplication();
             void* p2 = mainApp->getClientUI();
             void* p3 = mainApp->getParentWindowForTest();
 
             m_memoryTracker->setTrack(true);
+
+            mainApp->onDestroy();
 
             delete mainApp;
 
@@ -82,7 +99,7 @@ namespace test {
             // Preconditions
             ASSERT(mainThread.checkEmptyListForTest());
 
-            auto ob = ThreadObserverForTest();
+            auto ob = TestThreadObserver();
 
             mainThread.addThreadObserver(&ob);
 

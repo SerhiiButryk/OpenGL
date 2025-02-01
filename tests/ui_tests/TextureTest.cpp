@@ -117,9 +117,6 @@ namespace test {
         delete textures;
     }
 
-    void TextureTest::onBeforeRender() {
-    }
-
     static float x_Shift = 0.0f;
     static float y_Shift = 0.0f;
 
@@ -158,7 +155,7 @@ namespace test {
         glm::mat4 mvp = proj * view * model;
 
         shader->setUniformMat("u_MVP", mvp);
-
+        // Or
         // shader.setUniform("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
 
         RenderData renderData;

@@ -4,12 +4,12 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "opengl/external/GLFBridge.h"
-#include "common/Log.h"
-#include <MainApplication.h>
+#include <external/PlatformGateWay.h>
+#include <common/Log.h>
+#include <app/MainApplication.h>
 #include <common/Diagnostic.h>
 #include <opengl/GLEngine.h>
-#include <opengl/external/GLEWBridge.h>
+#include <opengl/external/LoaderOpenGL.h>
 
 namespace xengine {
 
@@ -30,7 +30,7 @@ namespace xengine {
 			return false;
 		}
 
-		bool result = GLFBridge::createWindow(*this, configs.title, configs.width, configs.height);
+		bool result = PlatformGateWay::createWindow(*this, configs.title, configs.width, configs.height);
 
 		if (!result) {
 			LOG_ERROR("Window::create() Failed to create window");
@@ -38,7 +38,7 @@ namespace xengine {
 		}
 
 		// At this point we should make sure that GLEW is initialized
-		if (!GLEWBridge::init()) {
+		if (!LoaderOpenGL::init()) {
 			LOG_ERROR("Window::create() Failed to init GLEW lib");
 			return false;
 		}
@@ -66,7 +66,7 @@ namespace xengine {
 			return;
 		}
 
-		GLFBridge::destroyWindow(*this);
+		PlatformGateWay::destroyWindow(*this);
 		window = nullptr;
 
 		LOG_INFO("Window::destroy() Window is destroyed");
@@ -92,6 +92,9 @@ namespace xengine {
 	}
 
 	bool Window::onEvent(const Event &event) {
+
+		// Window not handling any events currently
+
 		return false;
 	}
 

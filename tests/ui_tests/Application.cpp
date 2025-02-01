@@ -9,8 +9,14 @@
 
 namespace test {
     /**
-     *  Our application implementation
+     *  Our client application implementation
      */
+
+    Application::Application() {
+        // TODO: Config this somehow
+        // xengine::Log::getInstance().setLogLevel(true);
+    }
+
     std::string Application::getResourcePath() { return "../engine/res"; }
 
     xengine::UI* Application::onCreateUI() {
@@ -21,10 +27,9 @@ namespace test {
 
         // Prepare test UI
         auto* test = new TestMenuUI(this);
-        // TODO: Revisit and fix
-        // test->registerTest(new TextureTest(), texture_btn_label);
-        // test->registerTest(new BatchingTest(), batching_btn_label);
-        test->registerTest(new ShapesTest(), shapes_btn_label);
+        test->registerTest(new TextureTest(this), texture_btn_label);
+        test->registerTest(new BatchingTest(this), batching_btn_label);
+        test->registerTest(new ShapesTest(this), shapes_btn_label);
 
         // TODO: Uncomment for testing raw OpenGL code
         // return new BlankTest();

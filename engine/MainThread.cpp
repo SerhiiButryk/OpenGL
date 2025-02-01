@@ -1,6 +1,6 @@
 #include "MainThread.h"
 
-#include <MainApplication.h>
+#include <app/MainApplication.h>
 #include <common/Log.h>
 
 namespace xengine {
@@ -31,14 +31,11 @@ namespace xengine {
             ob->onStart();
         }
 
-        /* Loop until we are not stopped */
+        /* Loop until we are stopped */
 
         while (!m_stop) {
-            // We go in reverse oder here.
-            // Makes sense when we want to execute code in reverse oder so the first would be the last.
-            // So we can run post action like swap buffers or get user event at the end of this loop.
-            for (auto riter = m_observers.rbegin(); riter != m_observers.rend(); ++riter) {
-                (*riter)->onProcess(app);
+            for (auto & m_observer : m_observers) {
+                m_observer->onProcess(app);
             }
         }
 

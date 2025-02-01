@@ -1,8 +1,8 @@
 #pragma once
 
 #include <ui/AppUI.h>
-#include "MainThread.h"
-#include "internal/Application.h"
+#include <MainThread.h>
+#include <app/Application.h>
 
 namespace xengine {
 
@@ -10,18 +10,36 @@ namespace xengine {
      * A class which represents an instance of our application.
      * An application manages only high level states or configurations, like a window.
      */
-    class MainApplication : public InternalApplication, public EventListener{
+    class MainApplication final : public InternalApplication, public EventListener {
     public:
         MainApplication();
         ~MainApplication() override;
 
         void onCreateWindow() const;
 
+        /////////////////////////////////
+        // Thread lifecycle callbacks
+        /////////////////////////////////
+
         void onCreate() override;
         void onDestroy() override;
 
-        inline void setClientApplication(Application* app) { m_clientApp = app; }
-        inline Application* getClientApplication() const { return m_clientApp; }
+        /////////////////////////////////
+        // Thread while loop callbacks
+        /////////////////////////////////
+
+        void onStart() override;
+
+        void onProcess(void *app) override;
+
+        void onEnd() override;
+
+        void setClientApplication(Application* app) {
+            m_clientApp = app;
+            m_appUI->setClientApp(m_clientApp);
+        }
+
+        auto getClientApplication() const { return m_clientApp; }
 
         void attachThread(MainThread* mainThread);
 

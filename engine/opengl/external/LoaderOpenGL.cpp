@@ -1,11 +1,11 @@
-#include "GLEWBridge.h"
+#include "LoaderOpenGL.h"
 
 #include <common/Log.h>
 #include <GL/glew.h>
 
 namespace xengine {
 
-    bool GLEWBridge::init()
+    bool LoaderOpenGL::init()
     {
         if (IS_INITIALIZED)
             return IS_OPENGL_CAN_BE_USED;

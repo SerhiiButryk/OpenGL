@@ -2,20 +2,22 @@
 
 #include <GL/glew.h>
 
-#include "external/GLFBridge.h"
+#include <external/PlatformGateWay.h>
 #include <common/Log.h>
 #include <common/Diagnostic.h>
 
 namespace xengine {
 
     bool GLEngine::initEngine() {
+        LOG_DEBUG("GLEngine::initEngine()");
 
         if (IS_INITIALIZED) {
+            LOG_DEBUG("GLEngine::initEngine() already initialized");
             return CAN_BE_USED;
         }
 
         /* Initializing the GLFW library */
-        if (!GLFBridge::init()) {
+        if (!PlatformGateWay::init()) {
             LOG_ERROR("Failed to init GLFW library");
             CAN_BE_USED = false;
             return false;
@@ -23,6 +25,8 @@ namespace xengine {
 
         IS_INITIALIZED = true;
         CAN_BE_USED = true;
+
+        LOG_DEBUG("GLEngine::initEngine() done");
 
         return true;
     }

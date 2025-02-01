@@ -34,9 +34,9 @@ add_library(core
     ${PROJECT_ROOT}/engine/opengl/VertexBuffer.cpp
     ${PROJECT_ROOT}/engine/opengl/Layout.cpp
     ${PROJECT_ROOT}/engine/window/Window.cpp
-    ${PROJECT_ROOT}/engine/opengl/external/GLFBridge.cpp
+    ${PROJECT_ROOT}/engine/external/PlatformGateWay.cpp
     ${PROJECT_ROOT}/engine/opengl/Shader.cpp
-    ${PROJECT_ROOT}/engine/opengl/external/GLEWBridge.cpp
+    ${PROJECT_ROOT}/engine/opengl/external/LoaderOpenGL.cpp
     ${PROJECT_ROOT}/engine/opengl/GLEngine.cpp
     ${PROJECT_ROOT}/engine/opengl/render/Renderer.cpp
     ${PROJECT_ROOT}/engine/opengl/Textures.cpp
@@ -47,7 +47,7 @@ add_library(core
     ${PROJECT_ROOT}/dependencies/imgui/imgui_widgets.cpp
     ${PROJECT_ROOT}/dependencies/imgui/backends/imgui_impl_opengl3.cpp
     ${PROJECT_ROOT}/dependencies/imgui/backends/imgui_impl_glfw.cpp
-    ${PROJECT_ROOT}/engine/MainApplication.cpp
+    ${PROJECT_ROOT}/engine/app/MainApplication.cpp
     ${PROJECT_ROOT}/engine/common/Exception.cpp
     ${PROJECT_ROOT}/engine/MainThread.cpp
     ${PROJECT_ROOT}/engine/EntryPoint.cpp
@@ -61,6 +61,8 @@ add_library(core
     ${PROJECT_ROOT}/engine/opengl/render/RenderDirectorBase.cpp
     ${PROJECT_ROOT}/engine/opengl/Camera.cpp
     ${PROJECT_ROOT}/engine/window/input/Input.cpp
+    ${PROJECT_ROOT}/engine/component/LayerStack.cpp
+    ${PROJECT_ROOT}/engine/common/Timestamp.cpp
 )
 
 # Define macros
