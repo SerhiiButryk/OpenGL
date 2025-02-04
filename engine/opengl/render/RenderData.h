@@ -38,7 +38,9 @@ namespace xengine {
         VertexBuffer* vertexBuffer = nullptr;
         IndexBuffer* indexBuffer = nullptr;
         Texture* texture = nullptr;
+        // Camera is not owned by this class
         Camera* camera = nullptr;
+        glm::mat4 tansform = glm::mat4(1.0f);
 
         Configs configs = {};
 

@@ -110,8 +110,11 @@ namespace xengine {
 
         // Enable vsync
         // Basically it limits the frame draw rate for the application
-        if (false) {
+        bool enableVSync = false;
+        if (enableVSync) {
             glfwSwapInterval(1);
+        } else {
+            glfwSwapInterval(0);
         }
 
         // Here we save a ref to the current window, so we can receive callbacks from GLFW

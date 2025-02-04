@@ -27,7 +27,8 @@ namespace xengine {
         delete indexBuffer;
         delete shader;
         delete texture;
-        delete camera;
+        // Camera is not owned by this class
+        // delete camera
 
         delete [] (float*) configs.drawBuffer;
         configs.drawBuffer = nullptr;

@@ -14,11 +14,11 @@ namespace xengine {
 
         static void clearScreen(glm::vec4 color);
 
-        void drawRectangle() override;
+        void drawRectangle(const glm::mat4& tansform = glm::mat4(1.0f)) override;
 
-        void drawLine() override;
+        void drawLine(const glm::mat4& tansform = glm::mat4(1.0f)) override;
 
     private:
-        void setCommonConfigs();
+        void setCommonConfigs(const glm::mat4& tansform);
     };
 }

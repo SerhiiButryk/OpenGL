@@ -94,7 +94,7 @@ namespace test {
 
         shader->bind();
 
-        shader->setUniformMat("u_MVP", mvp);
+        shader->setUniformMat("u_ViewProjMatrix", mvp);
 
         textures = new Texture(resPath + "/textures/test.png");
         textures->bind(0 /* Slot */);

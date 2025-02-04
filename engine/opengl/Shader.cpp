@@ -53,7 +53,7 @@ namespace xengine {
         int location = glGetUniformLocation(m_RenderId, name.c_str()); // Get the id of uniform variable
         if (location == -1) {
             // This can mean that uniform is not active or not found
-            LOG_ERROR("Shader::setUniform() unable to get uniform location for {}", name);
+            LOG_WARN("Shader::setUniform() unable to get uniform location for {}", name);
         }
 
         // Cache the location
@@ -66,24 +66,29 @@ namespace xengine {
     void Shader::setUniform(const std::string& name, float red, float green, float blue, float opacity) const
     {
         int location = getUniformLocation(name);
-        glUniform4f(location, red, green, blue, opacity); // Set a color in RGB format
+        if (location != -1) {
+            glUniform4f(location, red, green, blue, opacity); // Set a color in RGB format
+        }
     }
 
     void Shader::setTexture(const std::string& name, int slotLocation) const {
         int location = getUniformLocation(name);
-        glUniform1i(location, slotLocation);
+        if (location != -1) {
+            glUniform1i(location, slotLocation);
+        }
     }
 
     void Shader::setUniformMat(const std::string& name, const glm::mat4& mat4) const {
         int location = getUniformLocation(name);
-        glUniformMatrix4fv(location, 1, GL_FALSE, &mat4[0][0]);
+        if (location != -1) {
+            glUniformMatrix4fv(location, 1, GL_FALSE, &mat4[0][0]);
+        }
     }
 
     ShaderFile Shader::parseShader(const std::string& filePath) const
     {
         std::filesystem::path current_path = std::filesystem::current_path();
-        LOG_INFO("Shader::parseShader() Working dir: '{}'", current_path.string());
-        LOG_INFO("Shader::parseShader() File path: '{}'", filePath);
+        LOG_INFO("Shader::parseShader() Working dir: '{}', file path: '{}'", current_path.string(), filePath);
 
         std::ifstream istream(filePath);
 

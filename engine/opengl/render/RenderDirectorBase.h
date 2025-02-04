@@ -22,9 +22,8 @@ namespace xengine {
 
         void begin(RenderData* data);
 
-        void prepareShader(const std::string& filePath);
-        void prepareTexture(const std::string& filePath, const std::string& textureName);
-        void prepareIndexBuffer(IndexBuffer* ib, uint32_t maxSize) const;
+        void setShader(const std::string& filePath);
+        void setTexture(const std::string& filePath, const std::string& textureName);
 
         void end();
 
@@ -51,6 +50,9 @@ namespace xengine {
     protected:
         RenderData* m_renderData {};
         RendererAPI* m_renderer {};
+
+    private:
+        void setIndexBuffer(IndexBuffer* ib, uint32_t maxSize) const;
     };
 
 }

@@ -50,12 +50,12 @@ namespace xengine {
         setData(data);
     }
 
-    void RenderDirectorBase::prepareShader(const std::string &filePath) {
+    void RenderDirectorBase::setShader(const std::string &filePath) {
         std::string path = m_renderData->configs.assetsPath + "/shader/" + filePath;
         m_renderData->shader = new Shader(path);
     }
 
-    void RenderDirectorBase::prepareTexture(const std::string &filePath, const std::string& textureName) {
+    void RenderDirectorBase::setTexture(const std::string &filePath, const std::string& textureName) {
 
         std::string path = m_renderData->configs.assetsPath + "/textures/" + filePath;
         m_renderData->texture = new Texture(path);
@@ -65,7 +65,7 @@ namespace xengine {
         m_renderData->shader->setTexture(textureName, 0 /* Slot */);
     }
 
-    void RenderDirectorBase::prepareIndexBuffer(IndexBuffer *ib, uint32_t maxSize) const {
+    void RenderDirectorBase::setIndexBuffer(IndexBuffer *ib, uint32_t maxSize) const {
 
         if (maxSize == 0) {
             maxSize = RenderData::DEFAULT_INDEX_BUFF_SIZE;
@@ -112,14 +112,8 @@ namespace xengine {
 
         m_renderData->indexBuffer = new IndexBuffer();
 
-        prepareIndexBuffer(m_renderData->indexBuffer, m_renderData->configs.indexBufferMaxSize);
+        setIndexBuffer(m_renderData->indexBuffer, m_renderData->configs.indexBufferMaxSize);
 
-        /**
-         * Create a camera
-         */
-
-        // TODO: Revisit this should be configured
-        m_renderData->camera = new Camera(-1.6f, 1.6f, -0.9f, 0.9f);
     }
 
 }

@@ -9,7 +9,7 @@ namespace xengine {
         glClear(GL_COLOR_BUFFER_BIT);
     }
 
-    void Renderer::setCommonConfigs() {
+    void Renderer::setCommonConfigs(const glm::mat4& tansform) {
 
         if (m_renderData->vertexBuffer->isDynamic()) {
             // If the buffer is dynamic we update the vertex buffer
@@ -23,14 +23,18 @@ namespace xengine {
 
         // TODO: Get rid of hardcoding
         if (m_renderData->camera) {
-            shader->setUniformMat("u_MVP", m_renderData->camera->getViewProjMatrix());
+            // Set camera matrix
+            shader->setUniformMat("u_ViewProjMatrix", m_renderData->camera->getViewProjMatrix());
         }
+
+        // Set transformation for our object
+        shader->setUniformMat("u_ModelMatrix", tansform);
 
     }
 
-    void Renderer::drawRectangle() {
+    void Renderer::drawRectangle(const glm::mat4& tansform) {
 
-        setCommonConfigs();
+        setCommonConfigs(tansform);
 
         auto* va = m_renderData->vertexArray;
         auto* ib = m_renderData->indexBuffer;
@@ -48,9 +52,9 @@ namespace xengine {
 
     }
 
-    void Renderer::drawLine() {
+    void Renderer::drawLine(const glm::mat4& tansform) {
 
-        setCommonConfigs();
+        setCommonConfigs(tansform);
 
         auto* va = m_renderData->vertexArray;
         auto* shader = m_renderData->shader;

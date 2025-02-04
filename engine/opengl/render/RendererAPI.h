@@ -13,9 +13,9 @@ namespace xengine {
         RendererAPI() = default;
         virtual ~RendererAPI() = default;
 
-        virtual void drawRectangle() = 0;
+        virtual void drawRectangle(const glm::mat4& tansform = glm::mat4(1.0f)) = 0;
 
-        virtual void drawLine() = 0;
+        virtual void drawLine(const glm::mat4& tansform = glm::mat4(1.0f)) = 0;
 
         auto* getData() const { return m_renderData; }
         void setData(RenderData* command) { m_renderData = command; }

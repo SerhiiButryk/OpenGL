@@ -13,7 +13,7 @@ namespace xengine {
 
         m_renderer->setData(m_renderData);
 
-        m_renderer->drawRectangle();
+        m_renderer->drawRectangle(m_renderData->tansform);
 
     }
 
@@ -54,7 +54,7 @@ namespace xengine {
 
         m_renderer->setData(m_renderData);
 
-        m_renderer->drawLine();
+        m_renderer->drawLine(m_renderData->tansform);
 
     }
 
@@ -97,6 +97,6 @@ namespace xengine {
     }
 
     void RenderDirectorDebug::submit(Vertex &vertex) {
-
+        // TODO: Implement
     }
 }
