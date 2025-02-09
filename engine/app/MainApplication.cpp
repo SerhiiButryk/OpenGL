@@ -1,23 +1,28 @@
 #include "MainApplication.h"
 
 #include <common/Log.h>
-#include <ui/AppUI.h>
 #include <common/Timestamp.h>
 #include <GLFW/glfw3.h>
 #include <common/Exception.h>
 
-static float m_LastTime = 0.0f;
-
 namespace xengine {
 
-    MainApplication::MainApplication() : m_appUI(new ApplicationUI()) {
+    MainApplication::MainApplication() {
         LOG_INFO("MainApplication::MainApplication() created");
+        m_decoratorUI = new DecoratorUI(m_parentWindow);
+        // Push our decorator layer
+        pushLayer(m_decoratorUI);
     }
 
     MainApplication::~MainApplication() {
         LOG_INFO("MainApplication::~MainApplication() destroyed");
         delete m_clientApp;
-        delete m_appUI;
+
+        // Detach layer objects
+        for (const auto & it : m_layerStack) {
+            it->onDetach();
+            delete it;
+        }
     }
 
     // Called from main thread
@@ -31,12 +36,13 @@ namespace xengine {
 
         m_parentWindow->onCreate();
 
-        onCreateWindow();
+        /* Create a window and its OpenGL context */
+
+        WindowConfigs windowConfigs = m_clientApp->onCreateWindow();
+
+        m_parentWindow->onCreateWindow(windowConfigs);
 
         m_parentWindow->setEventListener(this);
-
-        m_appUI->onCreate();
-
     }
 
     // Called from main thread
@@ -46,28 +52,9 @@ namespace xengine {
 
         m_parentWindow->onDestroy();
 
-        m_appUI->onDestroy();
-
-        /* Release resources */
-        m_parentWindow->destroy();
-
         // Release client app resources
         if (m_clientApp != nullptr) {
             m_clientApp->onDestroy();
-        }
-
-    }
-
-    void MainApplication::onCreateWindow() const {
-
-        LOG_INFO("MainApplication::onCreateWindow()");
-
-        /* Create a window and its OpenGL context */
-
-        WindowConfigs windowConfigs = m_clientApp->onCreateWindow();
-
-        if (!m_parentWindow->create(windowConfigs)) {
-            throwApplicationInitException(ApplicationInitException::WINDOW_CREATION_ERROR);
         }
     }
 
@@ -85,8 +72,15 @@ namespace xengine {
         if (event.type == EVENT_WINDOW_CLOSE)
             m_main_thread->quit();
 
+        for (const auto & it : m_layerStack) {
+            if (it->onEvent(event)) {
+                // Break and stop propagating the event
+                return true;
+            }
+        }
+
         // handled
-        return true;
+        return false;
     }
 
     ////////////////////////////// Callback from main thread ///////////////////////////////////
@@ -95,7 +89,9 @@ namespace xengine {
 
         m_parentWindow->onStart();
 
-        m_appUI->onStart();
+        for (const auto & it : m_layerStack) {
+            it->onAttach();
+        }
 
     }
 
@@ -103,14 +99,18 @@ namespace xengine {
 
     void MainApplication::onProcess(void *app) {
 
+        static float lastTime = 0.0f;
+
         // Calculate frame update time
-        // TODO: Abstract glfw call
+        // TODO: Abstract glfw call !!!
         auto systemCurrentTime = (float) glfwGetTime();
-        Timestamp deltaTime = systemCurrentTime - m_LastTime;
-        m_LastTime = systemCurrentTime;
+        Timestamp deltaTime = systemCurrentTime - lastTime;
+        lastTime = systemCurrentTime;
         ((InternalApplication*) app)->setFrameDeltaTime(deltaTime);
 
-        m_appUI->onProcess(app);
+        for (const auto & it : m_layerStack) {
+            it->onDraw();
+        }
 
         m_parentWindow->onProcess(app);
 
@@ -120,9 +120,25 @@ namespace xengine {
 
         m_parentWindow->onEnd();
 
-        m_appUI->onEnd();
-
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////
+
+    void MainApplication::pushLayer(Layer *layer) {
+        m_layerStack.pushLayer(layer);
+    }
+
+    void MainApplication::popLayer(Layer *layer) {
+        m_layerStack.popLayer(layer);
+        layer->onDetach();
+    }
+
+    void MainApplication::pushOverLayer(Layer *layer) {
+        m_layerStack.pushOverlay(layer);
+    }
+
+    void MainApplication::popOverLayer(Layer *layer) {
+        m_layerStack.popOverlay(layer);
+        layer->onDetach();
+    }
 }

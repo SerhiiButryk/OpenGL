@@ -10,10 +10,11 @@ static float g_centerY = 0;
 static float g_width = 1.0f;
 static float g_height = 1.0f;
 
-static auto* data1 = new xengine::RenderData();
-static auto* data2 = new xengine::RenderData();
+static auto data1 = std::make_unique<xengine::RenderData>();
+static auto data2 = std::make_unique<xengine::RenderData>();
+static auto data3 = std::make_unique<xengine::RenderData>();
 
-static auto* director = new xengine::RenderDirector();
+static auto director = std::make_unique<xengine::RenderDirector>();
 // Or
 // static auto* director = new xengine::RenderDirectorDebug();
 
@@ -24,48 +25,53 @@ static float g_Rot = 0.0f;
 
 static glm::vec3 g_Rect_Pos = { 0.0f, 0.0f, 0.0f };
 
-static xengine::Camera* g_camera = new xengine::Camera(-1.6f, 1.6f, -0.9f, 0.9f);
+static auto g_camera = std::make_unique<xengine::Camera>(-1.6f, 1.6f, -0.9f, 0.9f);
 
 namespace test {
 
     xengine::Rectangle createRectShape(glm::vec3 point);
 
-    void ShapesTest::onCreate(Application *app) {
+    void ShapesTest::onAttach() {
 
         using namespace xengine;
 
-        g_centerX = app->getWidth() / 2;
-        g_centerY = app->getHeight() / 2;
+        g_centerX = m_app->getWidth() / 2;
+        g_centerY = m_app->getHeight() / 2;
 
         // Set initial configs
 
-        data1->configs.height = app->getHeight();
-        data1->configs.width = app->getWidth();
-        data1->configs.assetsPath = app->getResourcePath();
-        data1->camera = g_camera;
+        data1->configs.height = m_app->getHeight();
+        data1->configs.width = m_app->getWidth();
+        data1->configs.assetsPath = m_app->getResourcePath();
+        data1->camera = g_camera.get();
 
-        data2->configs.height = app->getHeight();
-        data2->configs.width = app->getWidth();
-        data2->configs.assetsPath = app->getResourcePath();
-        data2->camera = g_camera;
+        data2->configs.height = m_app->getHeight();
+        data2->configs.width = m_app->getWidth();
+        data2->configs.assetsPath = m_app->getResourcePath();
+        data2->camera = g_camera.get();
+
+        data3->configs.height = m_app->getHeight();
+        data3->configs.width = m_app->getWidth();
+        data3->configs.assetsPath = m_app->getResourcePath();
+        data3->camera = g_camera.get();
 
         auto rect = createRectShape(g_Rect_Pos);
 
-        ////////////////// first shape //////////////////
+        ////////////////// Circle shape //////////////////
 
-        director->begin(data1);
+        director->begin(data1.get());
 
-        director->setShader("Basic_2.shader");
+        director->setShader("circle.shader");
 
         director->submit(rect);
 
         director->end();
 
-        ////////////////// end //////////////////
+        ////////////////////////////////////////////////////
 
-        ////////////////// second shape //////////////////
+        ////////////////// Triangle shape //////////////////
 
-        director->begin(data2);
+        director->begin(data2.get());
 
         director->setShader("Basic_2.shader");
 
@@ -93,26 +99,30 @@ namespace test {
 
         director->end();
 
-        ////////////////// end //////////////////
+        ////////////////////////////////////////////////////
+
+        ////////////////// Circle shape //////////////////
+
+        director->begin(data3.get());
+
+        director->setShader("Basic_2.shader");
+
+        director->submit(rect);
+
+        director->end();
+
+        ////////////////////////////////////////////////////
 
     }
 
-    void ShapesTest::onDestroy() {
-
+    void ShapesTest::onDetach() {
         // Release resources
-
         data1->releaseResources();
-        delete data1;
-
         data2->releaseResources();
-        delete data2;
-
-        delete g_camera;
-
-        delete director;
+        data3->releaseResources();
     }
 
-    void ShapesTest::onRender() {
+    void ShapesTest::onDraw() {
 
         using namespace xengine;
 
@@ -171,19 +181,27 @@ namespace test {
         // 4. Render 2 shapes with different transform
 
         glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, 0.0f, 0.0f)) * scale;
+        glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(0.7f, 0.0f, 0.0f)) * scale;
 
         data1->tansform = transform;
 
-        director->setData(data1);
+        director->setData(data1.get());
         director->render();
 
         glm::mat4 scale2 = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f));
-        glm::mat4 transform2 = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -0.25f, 0.0f)) * scale2;
+        glm::mat4 transform2 = glm::translate(glm::mat4(1.0f), glm::vec3(0.2f, -0.25f, 0.0f)) * scale2;
 
         data2->tansform = transform2;
 
-        director->setData(data2);
+        director->setData(data2.get());
+        director->render();
+
+        glm::mat4 scale3 = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
+        glm::mat4 transform3 = glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f, 0.0f, 0.0f)) * scale3;
+
+        data3->tansform = transform3;
+
+        director->setData(data3.get());
         director->render();
     }
 

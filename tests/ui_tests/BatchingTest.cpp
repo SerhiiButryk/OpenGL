@@ -16,7 +16,7 @@ static xengine::Texture *textures = nullptr;
 
 namespace test {
 
-    void BatchingTest::onCreate(Application *app) {
+    void BatchingTest::onAttach() {
 
         using namespace xengine;
 
@@ -68,28 +68,28 @@ namespace test {
         indexBuffer->bind();
         indexBuffer->fill(indices, indicesSize);
 
-        float w = app->getWidth();
-        float h = app->getHeight();
+        float w = m_app->getWidth();
+        float h = m_app->getHeight();
 
         // Projection matrix
         glm::mat4 proj = glm::ortho(0.0f, w, 0.0f, h, -1.0f, 1.0f);
-        LOG_INFO("Proj matrix {}", glm::to_string(proj));
+        // LOG_INFO("Proj matrix {}", glm::to_string(proj));
 
         // View matrix
         glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-        LOG_INFO("View matrix {}", glm::to_string(view));
+        // LOG_INFO("View matrix {}", glm::to_string(view));
 
         // Model matrix
         glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-        LOG_INFO("Model matrix {}", glm::to_string(model));
+        // LOG_INFO("Model matrix {}", glm::to_string(model));
 
         glm::mat4 scaling = glm::scale(glm::mat4(1), glm::vec3(2,2,2));
-        LOG_INFO("Scaling matrix {}", glm::to_string(scaling));
+        // LOG_INFO("Scaling matrix {}", glm::to_string(scaling));
 
         // MVP matrix
         glm::mat4 mvp = proj * view * model;
 
-        std::string resPath = app->getResourcePath();
+        std::string resPath = m_app->getResourcePath();
         shader = new Shader(resPath + "/shader/Basic_2.shader");
 
         shader->bind();
@@ -109,7 +109,7 @@ namespace test {
         indexBuffer->unbind();
     }
 
-    void BatchingTest::onDestroy() {
+    void BatchingTest::onDetach() {
         delete vertexArray;
         delete vertexBuffer;
         delete indexBuffer;
@@ -117,7 +117,7 @@ namespace test {
         delete textures;
     }
 
-    void BatchingTest::onRender() {
+    void BatchingTest::onDraw() {
 
         using namespace xengine;
 

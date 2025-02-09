@@ -9,9 +9,11 @@ namespace test {
     public:
         explicit ShapesTest(Application* app) : TestCase(app) {}
 
-        void onCreate(Application* app) override;
-        void onDestroy() override;
-        void onRender() override;
+        void onAttach() override;
+
+        void onDraw() override;
+
+        void onDetach() override;
     
     };
 

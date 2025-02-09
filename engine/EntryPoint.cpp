@@ -32,7 +32,7 @@ int main()
         }
 
         auto* client = createApplication();
-        client->setMainApplication(app);
+        client->setDelegate(app);
 
         app->setClientApplication(client);
 

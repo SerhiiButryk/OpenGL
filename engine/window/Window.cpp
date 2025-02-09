@@ -8,6 +8,7 @@
 #include <common/Log.h>
 #include <app/MainApplication.h>
 #include <common/Diagnostic.h>
+#include <common/Exception.h>
 #include <opengl/GLEngine.h>
 #include <opengl/external/LoaderOpenGL.h>
 
@@ -21,6 +22,22 @@ namespace xengine {
 	{
 		// Should be null at this point
 		ASSERT(window == nullptr);
+	}
+
+	void Window::onCreate() {
+		LOG_INFO("Window::onCreate()");
+	}
+
+	void Window::onDestroy() {
+		LOG_INFO("Window::onDestroy()");
+		destroy();
+	}
+
+	void Window::onCreateWindow(WindowConfigs windowConfigs) {
+		LOG_INFO("Window::onCreateWindow()");
+		if (!create(windowConfigs)) {
+			throwApplicationInitException(ApplicationInitException::WINDOW_CREATION_ERROR);
+		}
 	}
 
 	bool Window::create(WindowConfigs configs)
@@ -60,6 +77,8 @@ namespace xengine {
 
 	void Window::destroy()
 	{
+		LOG_DEBUG("Window::destroy()");
+
 		if (window == nullptr)
 		{
 			LOG_ERROR("Window::destroy() Window is null, return");
@@ -69,7 +88,7 @@ namespace xengine {
 		PlatformGateWay::destroyWindow(*this);
 		window = nullptr;
 
-		LOG_INFO("Window::destroy() Window is destroyed");
+		LOG_DEBUG("Window::destroy() Window is destroyed");
 	}
 
 	void Window::onProcess(void* app) {

@@ -6,7 +6,7 @@ namespace test {
     *  Test OpenGL APIs here
     */
 
-    void BlankTest::onCreate() {
+    void BlankTest::onAttach() {
 
     }
 
@@ -14,7 +14,7 @@ namespace test {
 
     }
 
-    void BlankTest::onDestroy() {
+    void BlankTest::onDetach() {
 
     }
 }

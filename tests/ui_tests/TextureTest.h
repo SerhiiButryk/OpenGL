@@ -10,10 +10,11 @@ namespace test {
         explicit TextureTest(Application* app) : TestCase(app) {}
         ~TextureTest() override = default;
 
-        void onCreate(Application* app) override;
-        void onDestroy() override;
+        void onAttach() override;
 
-        void onRender() override;
+        void onDraw() override;
+
+        void onDetach() override;
     };
 
 }

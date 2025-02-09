@@ -13,24 +13,16 @@ static const char* version_info_label;
 
 namespace test {
 
-    void TestUI::onCreate() {
-        LOG_INFO("TestUI::onCreate");
-
-        ImGui::CreateContext();
-
-        ImGuiIO& io = ImGui::GetIO();
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-        io.Fonts->AddFontDefault();
-        io.FontGlobalScale = 1.3f;;
-
-        ImGui::StyleColorsDark();
-
-        ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*) m_app->getNativeWindow(), true);
-
-        const char* glsl_version = "#version 130";
-        ImGui_ImplOpenGL3_Init(glsl_version);
+    void TestUI::onAttach() {
 
         version_info_label = xengine::GLEngine::getVersionsInfo();
+
+    }
+
+    void TestUI::onDetach() {
+
+        free((char*) version_info_label);
+
     }
 
     void TestUI::onDraw() {
@@ -92,16 +84,4 @@ namespace test {
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     }
 
-    void TestUI::onDestroy() {
-        LOG_INFO("TestUI::onDestroy");
-        // Clear ImGui
-        ImGui_ImplOpenGL3_Shutdown();
-        ImGui_ImplGlfw_Shutdown();
-        ImGui::DestroyContext();
-
-        free((char*) version_info_label);
-    }
-
-    void TestUI::onRenderUI() {
-    }
 }

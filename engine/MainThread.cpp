@@ -10,7 +10,10 @@ namespace xengine {
 
         // Initialize components
         for (auto&& ob : m_observers) {
-            ob->onCreate();
+            auto lc = dynamic_cast<Lifecycle*>(ob);
+            if (lc) {
+                lc->onCreate();
+            }
         }
     }
 
@@ -19,7 +22,10 @@ namespace xengine {
 
         // Clean up
         for (auto&& ob : m_observers) {
-            ob->onDestroy();
+            auto lc = dynamic_cast<Lifecycle*>(ob);
+            if (lc) {
+                lc->onDestroy();
+            }
         }
 
         m_observers.clear();

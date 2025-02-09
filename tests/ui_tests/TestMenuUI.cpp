@@ -14,21 +14,21 @@ namespace test {
         LOG_INFO("TestMenuUI::~TestMenuUI");
     }
 
-    void TestMenuUI::onCreate() {
-        TestUI::onCreate();
-        LOG_INFO("TestMenuUI::onCreate");
+    void TestMenuUI::onAttach() {
+        TestUI::onAttach();
+        LOG_INFO("TestMenuUI::onAttach");
         // Call test to initialize any stuff
         for (auto&& elem : m_tests) {
-            elem.first->onCreate(m_app);
+            elem.first->onAttach();
         }
     }
 
-    void TestMenuUI::onDestroy() {
-        TestUI::onDestroy();
-        LOG_INFO("TestMenuUI::onDestroy");
-        // Call test to destroy any stuff
+    void TestMenuUI::onDetach() {
+        TestUI::onDetach();
+        LOG_INFO("TestMenuUI::onDetach");
+        // Call test to destroy all stuff
         for (auto&& elem : m_tests) {
-            elem.first->onDestroy();
+            elem.first->onDetach();
         }
     }
 
@@ -36,7 +36,7 @@ namespace test {
 
         test->setTestUI(this);
 
-        m_tests.push_back(std::make_pair(test, label));
+        m_tests.emplace_back(test, label);
     }
 
     /**
@@ -47,11 +47,6 @@ namespace test {
 
         // Clear screen
         xengine::Renderer::clearScreen({m_color[0], m_color[1], m_color[2], m_color[3]});
-
-        // Give a chance to do something at the beginning of render process
-        if (m_currentTestUI != nullptr) {
-            m_currentTestUI->onBeforeRender();
-        }
 
         // Render test UI + ImGui
         TestUI::onDraw();
@@ -72,7 +67,7 @@ namespace test {
                 return;
             }
             // Render Test UI
-            m_currentTestUI->onRender();
+            m_currentTestUI->onDraw();
             return;
         }
 

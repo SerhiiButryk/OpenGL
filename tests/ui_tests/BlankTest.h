@@ -8,15 +8,15 @@ namespace test {
     *  Call and test OpenGL APIs here
     */
 
-    class BlankTest : public xengine::UI
+    class BlankTest : public xengine::UIComponent
     {
     public:
 
-        void onCreate() override;
+        void onAttach() override;
 
         void onDraw() override;
 
-        void onDestroy() override;
+        void onDetach() override;
     };
 
 }

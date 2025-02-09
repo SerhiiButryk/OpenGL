@@ -2,12 +2,13 @@
 
 #include <common/Timestamp.h>
 #include <window/Window.h>
+#include <component/LayerStack.h>
 
 namespace xengine {
 
     /**
-    * Our internal application class which we use inside engine.
-    * Expose only an interface for client side.
+    * Internal application class which is an implementation detail of the engine.
+    * Exposed only as an interface.
     */
     class InternalApplication : public MainThreadObserver {
 
@@ -23,6 +24,15 @@ namespace xengine {
 
         auto getFrameDeltaTime() const { return m_frameDeltaTime; }
         void setFrameDeltaTime(Timestamp timestamp) { m_frameDeltaTime = timestamp; }
+
+        // ------------------------------------
+        // UI layer APIs
+        // ------------------------------------
+
+        virtual void pushLayer(Layer *layer) = 0;
+        virtual void popLayer(Layer *layer) = 0;
+        virtual void pushOverLayer(Layer *layer) = 0;
+        virtual void popOverLayer(Layer *layer) = 0;
 
     protected:
         Window* m_parentWindow = nullptr;

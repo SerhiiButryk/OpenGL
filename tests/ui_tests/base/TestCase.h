@@ -7,13 +7,14 @@ namespace test {
     class TestCase
     {
     public:
-        explicit TestCase(Application* app) { m_app = app; };
+        explicit TestCase(Application* app) { m_app = app; }
         virtual ~TestCase() = default;
 
-        virtual void onCreate(Application* app) {}
-        virtual void onBeforeRender() {}
-        virtual void onDestroy() {}
-        virtual void onRender() {}
+        virtual void onAttach() {}
+
+        virtual void onDraw() {}
+
+        virtual void onDetach() {}
 
         void setTestUI(void* ptr) { testUI = ptr; }
         void* getTestUI() { return testUI; }

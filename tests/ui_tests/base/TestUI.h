@@ -7,7 +7,7 @@
 
 namespace test {
 
-    class TestUI : public xengine::UI
+    class TestUI : public xengine::UIComponent
     {
     public:
         TestUI() = default;
@@ -15,12 +15,14 @@ namespace test {
 
         ~TestUI() override = default;
 
-        void onCreate() override;
+        void onAttach() override;
+
+        void onDetach() override;
+
         void onDraw() override;
-        void onDestroy() override;
 
         // Should be called to create ImGui UI
-        virtual void onRenderUI();
+        virtual void onRenderUI() = 0;
 
     protected:
         Application* m_app = nullptr;

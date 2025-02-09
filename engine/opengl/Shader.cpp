@@ -12,6 +12,7 @@ namespace xengine {
 
     Shader::Shader(const std::string& filePath)
     {
+        m_FilePath = filePath;
         auto shaderFile = parseShader(filePath);
         m_RenderId = createShader(shaderFile);
         LOG_INFO("Shader::Shader() created, id = {}", m_RenderId);
@@ -41,7 +42,7 @@ namespace xengine {
 
         if (m_UniformLocationCache.find(name) != m_UniformLocationCache.end()) {
             int location = m_UniformLocationCache[name];
-            LOG_DEBUG("Shader::setUniform() from the cache '{}'", location);
+            LOG_DEBUG("Shader::setUniform() from the cache '{}:{}'", name, location);
 #ifdef UNIT_TESTS
             fromCache = true;
 #endif

@@ -9,10 +9,11 @@ namespace test {
     public:
         explicit BatchingTest(Application* app) : TestCase(app) {}
 
-        void onCreate(Application* app) override;
-        void onDestroy() override;
+        void onAttach() override;
 
-        void onRender() override;
+        void onDraw() override;
+
+        void onDetach() override;
     };
 
 }

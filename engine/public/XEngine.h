@@ -4,7 +4,7 @@
 #pragma once
 
 #include <app/Application.h>
-#include <ui/UI.h>
+#include <ui/UIComponent.h>
 #include <ui/Widgets.h>
 
 #include <opengl/render/Renderer.h>

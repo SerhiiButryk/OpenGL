@@ -15,26 +15,27 @@ namespace test {
     Application::Application() {
         // TODO: Config this somehow
         // xengine::Log::getInstance().setLogLevel(true);
-    }
-
-    std::string Application::getResourcePath() { return "../engine/res"; }
-
-    xengine::UI* Application::onCreateUI() {
 
         const char* texture_btn_label = "Texture";
         const char* batching_btn_label = "Batching";
         const char* shapes_btn_label = "Shapes";
 
         // Prepare test UI
-        auto* test = new TestMenuUI(this);
+        auto test = new TestMenuUI(this);
         test->registerTest(new TextureTest(this), texture_btn_label);
         test->registerTest(new BatchingTest(this), batching_btn_label);
         test->registerTest(new ShapesTest(this), shapes_btn_label);
 
-        // TODO: Uncomment for testing raw OpenGL code
-        // return new BlankTest();
-        return test;
+        testMenuUI = test;
     }
+
+    void Application::onCreate() {
+        // TODO: Uncomment for testing raw OpenGL code
+        // pushLayer(new BlankTest());
+        pushLayer(static_cast<TestMenuUI*>(testMenuUI));
+    }
+
+    std::string Application::getResourcePath() { return "../engine/res"; }
 
     xengine::WindowConfigs Application::onCreateWindow() {
         xengine::WindowConfigs config = { width, height, title };

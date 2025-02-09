@@ -2,7 +2,6 @@
 
 #include <app/Lifecycle.h>
 #include <app/InternalApplication.h>
-#include <ui/UI.h>
 #include <window/WindowConfigs.h>
 
 #include <string>
@@ -28,12 +27,6 @@ namespace xengine {
         void onDestroy() override = 0;
 
         /**
-         * Override to set application UI
-         * @return new application UI
-         */
-        virtual UI* onCreateUI() { return nullptr; }
-
-        /**
          * Override to set window configurations
          * @return new window configurations
          */
@@ -48,12 +41,12 @@ namespace xengine {
         /**
          * Set a reference to internal application class controlled by the engine side
          */
-        void setMainApplication(InternalApplication* app) { m_mainApplication = app; }
+        void setDelegate(InternalApplication* app) { m_delegate = app; }
 
         /**
          * Get a window native pointer
          */
-        auto* getNativeWindow() const { return m_mainApplication->getWindow(); }
+        auto* getNativeWindow() const { return m_delegate->getWindow(); }
 
         /**
          * Callback to receive new events from application or window
@@ -65,10 +58,30 @@ namespace xengine {
         /**
          * Get frame update time
          */
-        auto getFrameDeltaTime() const { return m_mainApplication->getFrameDeltaTime(); }
+        auto getFrameDeltaTime() const { return m_delegate->getFrameDeltaTime(); }
+
+        /**
+         * Push UI layer
+         */
+        void pushLayer(Layer *layer) { m_delegate->pushLayer(layer); }
+
+        /**
+        * Pop UI layer
+        */
+        void popLayer(Layer *layer) { m_delegate->popLayer(layer); }
+
+        /**
+        * Push UI overlay
+        */
+        void pushOverLayer(Layer *layer) { m_delegate->pushOverLayer(layer); }
+
+        /**
+        * Pop UI overlay
+        */
+        void popOverLayer(Layer *layer) { m_delegate->popOverLayer(layer); }
 
     protected:
-        InternalApplication* m_mainApplication = nullptr;
+        InternalApplication* m_delegate = nullptr;
     };
 
 }

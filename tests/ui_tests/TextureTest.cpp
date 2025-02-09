@@ -10,12 +10,12 @@ static xengine::IndexBuffer* indexBuffer = nullptr;
 static xengine::Shader* shader = nullptr;
 static xengine::Texture* textures = nullptr;
 
-float g_w = 0;
-float g_h = 0;
+static float g_w = 0;
+static float g_h = 0;
 
 namespace test {
 
-    void TextureTest::onCreate(Application* app) {
+    void TextureTest::onAttach() {
 
         using namespace xengine;
 
@@ -72,8 +72,8 @@ namespace test {
         // 1 * 2 = 2
         // glm::mat4 proj = glm::ortho(-1.5f, 1.5f, -1.0f, 1.0f, -1.0f, 1.0f);
 
-        g_w = app->getWidth();
-        g_h = app->getHeight();
+        g_w = m_app->getWidth();
+        g_h = m_app->getHeight();
 
         // Projection matrix
         glm::mat4 proj = glm::ortho(0.0f, g_w, 0.0f, g_h, -1.0f, 1.0f);
@@ -88,7 +88,7 @@ namespace test {
         glm::mat4 mvp = proj * view * model;
 
         /* Create a shader */
-        std::string resPath = app->getResourcePath();
+        std::string resPath = m_app->getResourcePath();
         shader = new Shader(resPath + "/shader/Basic_texture.shader");
 
         shader->bind();
@@ -109,7 +109,7 @@ namespace test {
         indexBuffer->unbind();
     }
 
-    void TextureTest::onDestroy() {
+    void TextureTest::onDetach() {
         delete vertexArray;
         delete vertexBuffer;
         delete indexBuffer;
@@ -135,7 +135,7 @@ namespace test {
         LOG_INFO("onClick() {} {}", x_Shift, y_Shift);
     }
 
-    void TextureTest::onRender() {
+    void TextureTest::onDraw() {
 
         using namespace xengine;
 

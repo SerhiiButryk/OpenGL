@@ -12,9 +12,9 @@ namespace test {
         explicit TestMenuUI(Application* app) : TestUI(app) {}
         ~TestMenuUI() override;
 
-        void onCreate() override;
+        void onAttach() override;
         void onDraw() override;
-        void onDestroy() override;
+        void onDetach() override;
 
         // Should be called to create ImGui UI
         void onRenderUI() override;

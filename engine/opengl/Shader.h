@@ -56,6 +56,8 @@ namespace xengine {
 
         int getUniformLocation(const std::string& name) const;
 
+        std::string m_FilePath;
+
 #ifdef UNIT_TESTS
         mutable bool parsedOkay = false;
         mutable bool fromCache = false;

@@ -85,7 +85,7 @@ namespace xengine {
     }
 
     void PlatformGateWay::destroyWindow(const Window &window) {
-        LOG_DEBUG("PlatformGateWay::destroyWindow() w = '{:p}'", fmt::ptr(&window));
+        LOG_DEBUG("PlatformGateWay::destroyWindow() p = '{:p}'", fmt::ptr(&window));
         glfwDestroyWindow(static_cast<GLFWwindow *>(window.getWindow()));
         LOG_DEBUG("PlatformGateWay::destroyWindow() done");
     }

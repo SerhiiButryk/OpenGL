@@ -11,12 +11,11 @@ namespace test {
         Application();
         ~Application() override = default;
 
-        void onCreate() override {}
+        void onCreate() override;
         void onDestroy() override {}
 
         std::string getResourcePath() override;
 
-        xengine::UI* onCreateUI() override;
         xengine::WindowConfigs onCreateWindow() override;
 
         int getWidth() const { return width; }
@@ -26,5 +25,6 @@ namespace test {
         int width = 1280;
         int height = 720;
         const char* title = "Test app";
+        void* testMenuUI = nullptr;
     };
 }

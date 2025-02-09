@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ui/AppUI.h>
+#include <ui/DecoratorUI.h>
 #include <MainThread.h>
 #include <app/Application.h>
 
@@ -10,12 +10,12 @@ namespace xengine {
      * A class which represents an instance of our application.
      * An application manages only high level states or configurations, like a window.
      */
-    class MainApplication final : public InternalApplication, public EventListener {
+    class MainApplication final : public InternalApplication,
+        public EventListener, public Lifecycle
+    {
     public:
         MainApplication();
         ~MainApplication() override;
-
-        void onCreateWindow() const;
 
         /////////////////////////////////
         // Thread lifecycle callbacks
@@ -25,7 +25,7 @@ namespace xengine {
         void onDestroy() override;
 
         /////////////////////////////////
-        // Thread while loop callbacks
+        // Thread state callbacks
         /////////////////////////////////
 
         void onStart() override;
@@ -36,7 +36,6 @@ namespace xengine {
 
         void setClientApplication(Application* app) {
             m_clientApp = app;
-            m_appUI->setClientApp(m_clientApp);
         }
 
         auto getClientApplication() const { return m_clientApp; }
@@ -49,14 +48,26 @@ namespace xengine {
 #endif
 
         // ------------------------------------
-        // Events from application or window
+        // Events from the system or window
         // ------------------------------------
         bool onEvent(const Event &event) override;
 
+        // ------------------------------------
+        // UI layer APIs
+        // ------------------------------------
+
+        void pushLayer(Layer *layer) override;
+        void popLayer(Layer *layer) override;
+        void pushOverLayer(Layer *layer) override;
+        void popOverLayer(Layer *layer) override;
+
     private:
         Application* m_clientApp = nullptr;
-        ApplicationUI* m_appUI = nullptr;
+        DecoratorUI* m_decoratorUI = nullptr;
         MainThread* m_main_thread = nullptr;
+        // Layer stack manages UI layers of our application
+        // It could be a client UI layers or our own UI layers
+        LayerStack m_layerStack;
     };
 
 }
