@@ -72,34 +72,41 @@ namespace xengine {
         LOG_INFO("OPENGL: '{}' '{}' '{}'", versionStr, vendorStr, renderStr);
     }
 
-    char* GLEngine::getVersionsInfo() {
-
+    char* GLEngine::getGLInfoAsString() {
         auto version = glGetString(GL_VERSION);
-        auto vendor = glGetString(GL_VENDOR);
-        auto render = glGetString(GL_RENDERER);
 
-        std::string versionStr = "Versions:\n";
+        std::string versionStr;
 
         if (version) {
-            versionStr += "OpenGL - ";
+            versionStr += "OpenGL: ";
             versionStr += (char*)version;
         }
 
-        versionStr += '\n';
+        return strdup(versionStr.c_str());
+    }
 
-        if (vendor) {
-            versionStr += "Vendor - ";
-            versionStr += (char*)vendor;
+    char* GLEngine::getVendorInfoAsString() {
+        auto version = glGetString(GL_VENDOR);
+
+        std::string versionStr;
+
+        if (version) {
+            versionStr += "Vendor: ";
+            versionStr += (char*)version;
         }
 
-        versionStr += '\n';
+        return strdup(versionStr.c_str());
+    }
 
-        if (render) {
-            versionStr += "Renderer - ";
-            versionStr += (char*)render;
+    char* GLEngine::getRendererInfoAsString() {
+        auto version = glGetString(GL_RENDERER);
+
+        std::string versionStr;
+
+        if (version) {
+            versionStr += "Renderer: ";
+            versionStr += (char*)version;
         }
-
-        versionStr += '\n';
 
         return strdup(versionStr.c_str());
     }

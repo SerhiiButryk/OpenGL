@@ -2,6 +2,18 @@
 
 #include <public/XEngine.h>
 
+/**
+ * This is a demo example which creates 3 shapes:
+ * 1. Squad
+ * 2. Circle
+ * 3. Triangle
+ *
+ * All shapes are batched together so we draw them in one go.
+ * Changing shape form or materials (color or width & height) is problematical here for a single shape.
+ *
+ * However, we still can change transform or position of a single shape in our world.
+ */
+
 static float g_color1[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 
 static float g_centerX = 0;
@@ -57,7 +69,9 @@ namespace test {
 
         auto rect = createRectShape(g_Rect_Pos);
 
+        ////////////////////////////////////////////////////
         ////////////////// Circle shape //////////////////
+        ////////////////////////////////////////////////////
 
         director->begin(data1.get());
 
@@ -68,8 +82,8 @@ namespace test {
         director->end();
 
         ////////////////////////////////////////////////////
-
         ////////////////// Triangle shape //////////////////
+        ////////////////////////////////////////////////////
 
         director->begin(data2.get());
 
@@ -100,8 +114,8 @@ namespace test {
         director->end();
 
         ////////////////////////////////////////////////////
-
-        ////////////////// Circle shape //////////////////
+        ////////////////// Squad shape //////////////////
+        ////////////////////////////////////////////////////
 
         director->begin(data3.get());
 
@@ -110,9 +124,6 @@ namespace test {
         director->submit(rect);
 
         director->end();
-
-        ////////////////////////////////////////////////////
-
     }
 
     void ShapesTest::onDetach() {
@@ -178,7 +189,7 @@ namespace test {
         addInputField("X", &g_centerX, updateShape);
         addInputField("Y", &g_centerY, updateShape);
 
-        // 4. Render 2 shapes with different transform
+        // 4. Render 3 shapes with different transforms
 
         glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(0.7f, 0.0f, 0.0f)) * scale;
@@ -202,6 +213,8 @@ namespace test {
         data3->tansform = transform3;
 
         director->setData(data3.get());
+
+        // Render all shapes
         director->render();
     }
 

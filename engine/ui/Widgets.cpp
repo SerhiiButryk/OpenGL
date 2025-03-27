@@ -27,11 +27,19 @@ namespace xengine {
     }
 
     void addColorPicker(const char* text, float* value, void (*onClick)(const char* text)) {
-
         addSpace();
-
         if (ImGui::ColorEdit3(text, value)) {
             onClick(text);
         }
+        addSpace();
     }
+
+    void addText(const char* fmt, ...) {
+        addSpace();
+        va_list args;
+        va_start(args, fmt);
+        ImGui::TextV(fmt, args);
+        va_end(args);
+    }
+
 }

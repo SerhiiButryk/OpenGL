@@ -30,6 +30,11 @@ namespace test {
     }
 
     void Application::onCreate() {
+
+        //////////////////////////////////////////////////
+        ////// UI SETUP //////////////////////////////////
+        //////////////////////////////////////////////////
+
         // TODO: Uncomment for testing raw OpenGL code
         // pushLayer(new BlankTest());
         pushLayer(static_cast<TestMenuUI*>(testMenuUI));

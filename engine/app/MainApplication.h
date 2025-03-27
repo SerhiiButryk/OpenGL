@@ -44,7 +44,6 @@ namespace xengine {
 
 #ifdef UNIT_TESTS
         void* getParentWindowForTest() const { return m_parentWindow; }
-        UI* getClientUI() const { return m_appUI->getClientUI(); }
 #endif
 
         // ------------------------------------

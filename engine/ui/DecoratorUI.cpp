@@ -17,29 +17,47 @@ namespace xengine {
     void DecoratorUI::onAttach() {
         LOG_INFO("DecoratorUI::onAttach init decorator layer");
 
-        ImGui::CreateContext();
+        if (!m_isAttached) {
+            ImGui::CreateContext();
 
-        ImGuiIO& io = ImGui::GetIO();
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-        io.Fonts->AddFontDefault();
-        io.FontGlobalScale = 1.3f;;
+            ImGuiIO& io = ImGui::GetIO();
+            io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+            io.Fonts->AddFontDefault();
+            io.FontGlobalScale = 1.3f;;
 
-        ImGui::StyleColorsDark();
+            ImGui::StyleColorsDark();
 
-        auto window = static_cast<Window*>(m_nativeWindow);
+            auto window = static_cast<Window*>(m_nativeWindow);
 
-        ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*) window->getWindow(), true);
+            ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*) window->getWindow(), true);
 
-        const char* glsl_version = "#version 130";
-        ImGui_ImplOpenGL3_Init(glsl_version);
+            const char* glsl_version = "#version 130";
+            ImGui_ImplOpenGL3_Init(glsl_version);
+
+            m_isAttached = true;
+        } else {
+            LOG_ERROR("DecoratorUI::onAttach layer already attached");
+#ifndef UNIT_TESTS
+            throw std::runtime_error("DecoratorUI::onAttach layer already attached");
+#endif
+        }
     }
 
     void DecoratorUI::onDetach() {
         LOG_INFO("DecoratorUI::onDetach release decorator layer");
-        // Clear ImGui
-        ImGui_ImplOpenGL3_Shutdown();
-        ImGui_ImplGlfw_Shutdown();
-        ImGui::DestroyContext();
+        if (m_isAttached) {
+            // Clear ImGui
+            ImGui_ImplOpenGL3_Shutdown();
+            ImGui_ImplGlfw_Shutdown();
+            ImGui::DestroyContext();
+
+            m_isAttached = false;
+        } else {
+            LOG_ERROR("DecoratorUI::onDetach layer not attached");
+#ifndef UNIT_TESTS
+            throw std::runtime_error(std::string("DecoratorUI::onDetach layer not attached"));
+#endif
+        }
     }
 
     void DecoratorUI::onDraw() {

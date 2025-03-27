@@ -2,6 +2,10 @@
 
 #include <public/XEngine.h>
 
+/**
+ * This is an example to demonstrate how to work with a texture
+ */
+
 static xengine::Renderer renderer;
 
 static xengine::VertexArray* vertexArray = nullptr;

@@ -2,6 +2,10 @@
 
 #include <public/XEngine.h>
 
+/**
+ * This is an example to demonstrate how to batch shapes using index array buffer
+ */
+
 #define GLM_ENABLE_EXPERIMENTAL
 
 #include "glm/gtx/string_cast.hpp"

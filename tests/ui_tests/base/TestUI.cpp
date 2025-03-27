@@ -6,23 +6,27 @@
 #include <imgui/backends/imgui_impl_opengl3.h>
 #include <opengl/GLEngine.h>
 
+#include <memory>
+
 static const char* title = "Test menu";
-static const char* title2 = "Settings menu";
+static const char* title2 = "Debug menu";
 static const char* fps_label = "Performance: %.3f ms/frame (%.1f FPS)";
-static const char* version_info_label;
+
+static std::unique_ptr<char> versionInfo1;
+static std::unique_ptr<char> versionInfo2;
+static std::unique_ptr<char> versionInfo3;
 
 namespace test {
 
     void TestUI::onAttach() {
-
-        version_info_label = xengine::GLEngine::getVersionsInfo();
-
+        // get.. fun creates a duplicated string that's why we need to delete it
+        // smart pointer will do this
+        versionInfo1.reset(xengine::GLEngine::getGLInfoAsString());
+        versionInfo2.reset(xengine::GLEngine::getVendorInfoAsString());
+        versionInfo3.reset(xengine::GLEngine::getRendererInfoAsString());
     }
 
     void TestUI::onDetach() {
-
-        free((char*) version_info_label);
-
     }
 
     void TestUI::onDraw() {
@@ -45,9 +49,11 @@ namespace test {
         // Tab 2
         ImGui::Begin(title2);
 
-        ImGui::Text(fps_label, 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-
-        ImGui::Text(version_info_label);
+        // Debug info
+        xengine::addText(fps_label, 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        xengine::addText(versionInfo1.get());
+        xengine::addText(versionInfo2.get());
+        xengine::addText(versionInfo3.get());
 
         // TODO: Add a list selection
         // const char* items[] = { "AAAA", "BBBB", "CCCC", "DDDD", "EEEE", "FFFF", "GGGG", "HHHH", "IIII", "JJJJ", "KKKK", "LLLLLLL", "MMMM", "OOOOOOO" };

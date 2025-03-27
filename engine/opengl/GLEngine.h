@@ -17,8 +17,10 @@ namespace xengine {
         // Log GL information
         static void printInfo();
 
-        // The returned string should be deleted
-        static char* getVersionsInfo();
+        // The caller owns the string and it should call free() in the end
+        static char* getGLInfoAsString();
+        static char* getVendorInfoAsString();
+        static char* getRendererInfoAsString();
 
         static void setDebugCallback();
 

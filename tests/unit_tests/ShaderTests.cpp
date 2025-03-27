@@ -24,7 +24,7 @@ namespace test {
         const auto window = std::make_unique<Window>();
 
         WindowConfigs windowConfigs = {100, 100, "Test"};
-        window->create(windowConfigs);
+        window->onCreateWindow(windowConfigs);
 
         ASSERT_LOG(LoaderOpenGL::init(), "ShaderTests::run OpenGL is not initialized");
 
@@ -50,7 +50,7 @@ namespace test {
         // Check this
         ASSERT_LOG(shader->gotLastUniformFromCache(), "ShaderTests::run Not from cache uniform");
 
-        window->destroy();
+        window->onDestroy();
 
         return 0;
     }

@@ -4,6 +4,7 @@
 #include <common/Log.h>
 #include <opengl/GLEngine.h>
 #include <base/Assert.h>
+#include <ui/UIComponent.h>
 
 #include <mutex>
 #include <condition_variable>
@@ -18,28 +19,29 @@ namespace test {
     class TestThreadObserver : public xengine::MainThreadObserver {
     public:
         void onStart() override { startCalled = true; }
-        void onProcess(void* app) override {}
+        void onProcess(void* app) override { onProcessCalled = true; }
         void onEnd() override { endCalled = true; }
 
-        void onCreate() override { createCalled = true; }
-        void onDestroy() override { destroyCalled = true; }
-
-        bool createCalled = false;
-        bool destroyCalled = false;
         bool startCalled = false;
         bool endCalled = false;
+        bool onProcessCalled = false;
     };
 
-    class TestUI : public xengine::UI {
+    class TestUI : public xengine::UIComponent {
     public:
+        void onDraw() override {
+
+        }
     };
 
     class TestApp : public xengine::Application {
     public:
-        void onCreate() override {}
-        void onDestroy() override {}
 
-        xengine::UI* onCreateUI() override { return new TestUI; }
+        void onCreate() override {
+            pushLayer(new TestUI());
+        }
+
+        void onDestroy() override {}
 
         xengine::WindowConfigs onCreateWindow() override { return {100, 100, "Test"}; }
     };
@@ -62,16 +64,17 @@ namespace test {
 
             // Preconditions
             ASSERT(mainApp->getClientApplication() == 0);
-            ASSERT(mainApp->getClientUI() == 0);
 
             ASSERT_LOG(GLEngine::initEngine(), "BasicTest::run failed to init engine");
 
-            mainApp->setClientApplication(new TestApp());
+            auto testApp = new TestApp();
+            testApp->setDelegate(mainApp);
+
+            mainApp->setClientApplication(testApp);
             mainApp->onCreate();
 
             void* p1 = mainApp->getClientApplication();
-            void* p2 = mainApp->getClientUI();
-            void* p3 = mainApp->getParentWindowForTest();
+            void* p2 = mainApp->getParentWindowForTest();
 
             m_memoryTracker->setTrack(true);
 
@@ -83,9 +86,6 @@ namespace test {
             ASSERT_LOG(res, "BasicTest::run possible leak with client application object");
 
             res = m_memoryTracker->checkIfDeallocated(p2);
-            ASSERT_LOG(res, "BasicTest::run possible leak with client UI object");
-
-            res = m_memoryTracker->checkIfDeallocated(p3);
             ASSERT_LOG(res, "BasicTest::run possible leak with window object");
         }
 
@@ -104,7 +104,6 @@ namespace test {
             mainThread.addThreadObserver(&ob);
 
             mainThread.onCreate();
-            ASSERT(ob.createCalled);
 
             std::thread thread([&]() {
                 LOG_INFO("BasicTest::run thread started");
@@ -120,22 +119,26 @@ namespace test {
 
             thread.detach();
 
+            // Give sometime for main thread to run
+            using namespace std::chrono_literals;
+            std::this_thread::sleep_for(1000ms);
+
             LOG_INFO("BasicTest::run try to quit thread");
             mainThread.quit();
 
             std::unique_lock lock(m);
             if (!stopped) {
                 LOG_INFO("BasicTest::run wait for thread to quit");
-                cv.wait_for(lock, std::chrono::milliseconds(100));
+                cv.wait_for(lock, std::chrono::milliseconds(10 * 1000));
             }
 
             ASSERT_LOG(stopped, "BasicTest::run failed to quit thread");
 
             ASSERT(ob.startCalled);
             ASSERT(ob.endCalled);
+            ASSERT(ob.onProcessCalled);
 
             mainThread.onDestroy();
-            ASSERT(ob.destroyCalled);
 
             // After deletion
             ASSERT(mainThread.checkEmptyListForTest());
@@ -154,11 +157,11 @@ namespace test {
             ASSERT_LOG(window.getWindow() == 0, "BasicTest::run window is not null");
 
             WindowConfigs windowConfigs = {100, 100, "Test"};
-            window.create(windowConfigs);
+            window.onCreateWindow(windowConfigs);
 
             ASSERT_LOG(window.getWindow() != 0, "BasicTest::run window is not created");
 
-            window.destroy();
+            window.onDestroy();
 
             ASSERT_LOG(window.getWindow() == 0, "BasicTest::run window is not destroyed");
         }

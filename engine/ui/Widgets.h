@@ -10,4 +10,6 @@ namespace xengine {
 
     void addSpace();
 
+    void addText(const char* fmt, ...);
+
 }

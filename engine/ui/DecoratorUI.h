@@ -24,5 +24,6 @@ namespace xengine {
     private:
         // Ref to window implementation
         void* m_nativeWindow;
+        bool m_isAttached = false;
     };
 }
