@@ -38,6 +38,10 @@ namespace xengine {
         // Enable OpenGL debug context which may give more info about errors
         glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, 1);
 
+        int major, minor, rev;
+        glfwGetVersion(&major, &minor, &rev);
+        LOG_INFO("PlatformGateWay::init() GLFW version: {}.{} rev: {}", major, minor, rev);
+
         return true;
     }
 
@@ -100,7 +104,7 @@ namespace xengine {
 
         glfwGetFramebufferSize(w, &bufferWidth, &bufferHeight);
 
-        LOG_INFO("PlatformGateWay::initWindowConfigs() View port information: '{}' '{}'", bufferWidth, bufferHeight);
+        LOG_INFO("PlatformGateWay::initWindowConfigs() with view ports: '{}' '{}'", bufferWidth, bufferHeight);
 
         /* Set the window's OpenGL context to be the current on this thread */
 

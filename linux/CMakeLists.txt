@@ -23,6 +23,9 @@ if (UNIX)
     message("Enabled warning for Unix target")
 endif ()
 
+# Switch to local GLFW build
+#add_subdirectory(/home/serhii/Development/GitHub/OpenGL/dependencies/glfw /home/serhii/Development/GitHub/OpenGL/dependencies/glfw)
+
 ##############################################################################
 # Create static lib
 ##############################################################################
@@ -105,6 +108,8 @@ include_directories(${PROJECT_DEPENDENCIES}/imgui/backends)
 # 2) glew
 target_link_libraries(core ${OPENGL_LIBRARY})
 target_link_libraries(core ${PROJECT_DEPENDENCIES}/linux/GLFW/libs/libglfw.so.3)
+# Switch to local GLFW build
+#target_link_libraries(core glfw)
 target_link_libraries(core ${PROJECT_DEPENDENCIES}/linux/GLEW/lib/libGLEW.so)
 
 ##############################################################################

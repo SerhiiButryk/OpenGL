@@ -9,7 +9,6 @@
 namespace xengine {
 
     bool GLEngine::initEngine() {
-        LOG_DEBUG("GLEngine::initEngine()");
 
         if (IS_INITIALIZED) {
             LOG_DEBUG("GLEngine::initEngine() already initialized");
@@ -134,7 +133,7 @@ namespace xengine {
         float version = std::stof(versionString);
 
         if (version >= 4.5f) {
-            LOG_INFO("GLEngine::setDebugCallback() Can set a debug callback. Version = {}", version);
+            LOG_INFO("GLEngine::setDebugCallback() Can set a debug callback for this version");
             glDebugMessageCallback(MessageCallback, 0);
         } else {
             // TODO: Implement error handling in this case

@@ -56,7 +56,7 @@ namespace xengine {
 
 		// At this point we should make sure that GLEW is initialized
 		if (!LoaderOpenGL::init()) {
-			LOG_ERROR("Window::create() Failed to init GLEW lib");
+			LOG_ERROR("Window::create() Failed to load OpenGL");
 			return false;
 		}
 

@@ -6,8 +6,9 @@ namespace xengine {
 
     /**
     * Application UI component.
-    * This is a first UI layer of our application.
-    * It could add additional UI components in the future.
+    *
+    * This is the first layer of our application.
+    * It could add additional UI components or perform some work.
     */
     class DecoratorUI : public Layer
     {
