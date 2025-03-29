@@ -5,10 +5,10 @@
 namespace xengine {
 
     /**
-    * Application UI component.
-    *
+    * Internal application UI component.
     * This is the first layer of our application.
-    * It could add additional UI components or perform some work.
+    * It could add additional UI components or perform some UI work.
+    * Currently, it initializes GUI library (ImGUI lib)
     */
     class DecoratorUI : public Layer
     {

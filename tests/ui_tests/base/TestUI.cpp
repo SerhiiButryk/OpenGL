@@ -2,8 +2,6 @@
 
 #include <common/Log.h>
 #include <imgui/imgui.h>
-#include <imgui/backends/imgui_impl_glfw.h>
-#include <imgui/backends/imgui_impl_opengl3.h>
 #include <opengl/GLEngine.h>
 
 #include <memory>
@@ -31,10 +29,7 @@ namespace test {
 
     void TestUI::onDraw() {
 
-        // Start the Dear ImGui frame
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
+        beginGUI();
 
         // Tab 1
         ImGui::Begin(title);
@@ -83,11 +78,7 @@ namespace test {
 
         xengine::addColorPicker("Set color", m_color, [](const char* text) {});
 
-        ImGui::End();
-
-        // Rendering
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        endGUI();
     }
 
 }

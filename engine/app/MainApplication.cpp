@@ -109,7 +109,12 @@ namespace xengine {
         ((InternalApplication*) app)->setFrameDeltaTime(deltaTime);
 
         for (const auto & it : m_layerStack) {
+
+            // Draw custom graphics or shapes
             it->onDraw();
+
+            // Draw other UI
+            // it->onDrawGUIInternal();
         }
 
         m_parentWindow->onProcess(app);

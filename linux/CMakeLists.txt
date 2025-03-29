@@ -23,9 +23,6 @@ if (UNIX)
     message("Enabled warning for Unix target")
 endif ()
 
-# Switch to local GLFW build
-#add_subdirectory(/home/serhii/Development/GitHub/OpenGL/dependencies/glfw /home/serhii/Development/GitHub/OpenGL/dependencies/glfw)
-
 ##############################################################################
 # Create static lib
 ##############################################################################
@@ -66,6 +63,8 @@ add_library(core
     ${PROJECT_ROOT}/engine/window/input/Input.cpp
     ${PROJECT_ROOT}/engine/component/LayerStack.cpp
     ${PROJECT_ROOT}/engine/common/Timestamp.cpp
+    ${PROJECT_ROOT}/engine/external/GUIHelper.cpp
+    ${PROJECT_ROOT}/engine/component/Layer.cpp
 )
 
 # Define macros
@@ -88,9 +87,12 @@ endif ()
 # Ask Cmake to find OpenGL on the system
 find_package(OpenGL REQUIRED)
 
+# Switch to local GLFW build
+add_subdirectory(${PROJECT_DEPENDENCIES}/glfw ${PROJECT_DEPENDENCIES}/glfw)
+
 # Include dirs & libs
 include_directories(${PROJECT_DEPENDENCIES}/linux/GLEW/include)
-include_directories(${PROJECT_DEPENDENCIES}/linux/GLFW/include)
+include_directories(${PROJECT_DEPENDENCIES}/glfw/include)
 
 include_directories(${PROJECT_ROOT}/engine)
 include_directories(${PROJECT_DEPENDENCIES})
@@ -103,13 +105,11 @@ include_directories(${PROJECT_DEPENDENCIES}/imgui/backends)
 # Link all dependencies
 ##############################################################################
 
-# 1) glfw
-# 2) opengl
-# 2) glew
+# opengl
 target_link_libraries(core ${OPENGL_LIBRARY})
-target_link_libraries(core ${PROJECT_DEPENDENCIES}/linux/GLFW/libs/libglfw.so.3)
-# Switch to local GLFW build
-#target_link_libraries(core glfw)
+# glfw
+target_link_libraries(core glfw)
+# glew
 target_link_libraries(core ${PROJECT_DEPENDENCIES}/linux/GLEW/lib/libGLEW.so)
 
 ##############################################################################

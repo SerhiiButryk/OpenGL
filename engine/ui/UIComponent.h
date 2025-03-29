@@ -26,7 +26,7 @@ namespace xengine {
         void onDetach() override {}
 
         /**
-         * Callback to draw this user interface
+         * Callback to draw some shapes
          * Should be overridden
          */
         void onDraw() override = 0;
