@@ -41,11 +41,12 @@ jobs:
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
 
-    - name: Install OpenGL
+    - name: Install OpenGL & other deps
       run: |
         sudo apt update
         sudo apt install libgl1-mesa-dev
         sudo apt install libglu1-mesa-dev
+        sudo apt-get install xorg-dev libglu1-mesa-dev
 
     - name: Configure for test app
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
