@@ -172,12 +172,18 @@ namespace test {
         renderer.setData(&renderData);
 
         renderer.drawRectangle();
+    }
 
-        ImGui::Spacing();
+    void TextureTest::onDrawUI() {
+
+        using namespace xengine;
+
+        addSpace();
 
         addButton("Left", &onClick, false);
         addButton("Right", &onClick);
         addButton("Up", &onClick);
         addButton("Down", &onClick);
+
     }
 }

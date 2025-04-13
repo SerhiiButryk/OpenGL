@@ -136,4 +136,8 @@ namespace test {
 
         renderer.drawRectangle();
     }
+
+    void BatchingTest::onDrawUI() {
+
+    }
 }

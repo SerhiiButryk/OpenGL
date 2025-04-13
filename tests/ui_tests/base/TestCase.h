@@ -11,16 +11,16 @@ namespace test {
         virtual ~TestCase() = default;
 
         virtual void onAttach() {}
-
-        virtual void onDraw() {}
-
         virtual void onDetach() {}
 
-        void setTestUI(void* ptr) { testUI = ptr; }
-        void* getTestUI() { return testUI; }
+        virtual void onDraw() {}
+        virtual void onDrawUI() {}
+
+        void setTestUI(void* ptr) { m_testUI = ptr; }
+        void* getTestUI() { return m_testUI; }
 
     private:
-        void* testUI = nullptr;
+        void* m_testUI = nullptr;
 
     protected:
         Application* m_app = nullptr;

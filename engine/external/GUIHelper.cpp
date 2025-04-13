@@ -48,7 +48,6 @@ namespace xengine {
     }
 
     void GUIHelper::beginGUI() {
-
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
@@ -56,9 +55,6 @@ namespace xengine {
     }
 
     void GUIHelper::endGUI() {
-
-        ImGui::End();
-
         // Rendering
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

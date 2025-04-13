@@ -1,5 +1,7 @@
 #pragma once
 
+#include <component/Layer.h>
+
 namespace xengine {
 
     /**
@@ -27,9 +29,13 @@ namespace xengine {
 
         /**
          * Callback to draw some shapes
-         * Should be overridden
          */
-        void onDraw() override = 0;
+        void onDraw() override {}
+
+        /**
+         * Callback to draw UI
+         */
+        void onDrawUI() override {}
 
     };
 

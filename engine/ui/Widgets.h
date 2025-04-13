@@ -12,4 +12,6 @@ namespace xengine {
 
     void addText(const char* fmt, ...);
 
+    bool addCheckBox(const char* label, bool& v);
+
 }

@@ -4,6 +4,7 @@
 #include <common/Timestamp.h>
 #include <GLFW/glfw3.h>
 #include <common/Exception.h>
+#include <external/GUIHelper.h>
 
 namespace xengine {
 
@@ -109,13 +110,16 @@ namespace xengine {
         ((InternalApplication*) app)->setFrameDeltaTime(deltaTime);
 
         for (const auto & it : m_layerStack) {
-
-            // Draw custom graphics or shapes
+            // Draw graphics
             it->onDraw();
-
-            // Draw other UI
-            // it->onDrawGUIInternal();
         }
+
+        GUIHelper::beginGUI();
+        for (const auto & it : m_layerStack) {
+            // Draw UI
+            it->onDrawUI();
+        }
+        GUIHelper::endGUI();
 
         m_parentWindow->onProcess(app);
 

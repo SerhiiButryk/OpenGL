@@ -3,21 +3,19 @@
 #include <vector>
 
 #include "base/TestCase.h"
-#include "base/TestUI.h"
 
 namespace test {
 
-    class TestMenuUI : public TestUI {
+    class TestMenuUI : public xengine::UIComponent {
     public:
-        explicit TestMenuUI(Application* app) : TestUI(app) {}
+        explicit TestMenuUI(Application* app) : m_app(app) {}
         ~TestMenuUI() override;
 
         void onAttach() override;
-        void onDraw() override;
         void onDetach() override;
 
-        // Should be called to create ImGui UI
-        void onRenderUI() override;
+        void onDraw() override;
+        void onDrawUI() override;
 
         void registerTest(TestCase*, const std::string&);
 
@@ -26,6 +24,7 @@ namespace test {
         std::vector<std::pair<TestCase*, std::string>> m_tests;
         // Current text UI
         TestCase* m_currentTestUI = nullptr;
+        Application* m_app = nullptr;
     };
 
 }

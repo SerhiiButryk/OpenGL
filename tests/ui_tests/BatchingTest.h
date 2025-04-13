@@ -13,6 +13,8 @@ namespace test {
 
         void onDraw() override;
 
+        void onDrawUI() override;
+
         void onDetach() override;
     };
 

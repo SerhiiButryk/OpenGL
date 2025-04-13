@@ -17,16 +17,7 @@ namespace xengine {
         virtual void onAttach() {}
         virtual void onDetach() {}
         virtual void onDraw() {}
-
-        /**
-         * Start user interface creation
-        */
-        void beginGUI();
-
-        /**
-         * End user interface creation
-        */
-        void endGUI();
+        virtual void onDrawUI() {}
     };
 
 }

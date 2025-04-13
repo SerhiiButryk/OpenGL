@@ -15,6 +15,14 @@ namespace xengine {
     }
 
     void Log::setLogLevel(bool enableDebug) {
-        spdlog::set_level(spdlog::level::info);
+        if (enableDebug) {
+            spdlog::set_level(spdlog::level::trace);
+        } else {
+            spdlog::set_level(spdlog::level::info);
+        }
+    }
+
+    bool Log::isDebugLogEnabled() {
+        return spdlog::get_level() == spdlog::level::trace;
     }
 }

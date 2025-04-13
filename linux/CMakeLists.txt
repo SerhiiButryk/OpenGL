@@ -123,7 +123,6 @@ if (BUILD_TEST_APP)
     add_executable(TestApp
         ../tests/ui_tests/Application.cpp
         ../tests/ui_tests/TestMenuUI.cpp
-        ../tests/ui_tests/base/TestUI.cpp
         ../tests/ui_tests/TextureTest.cpp
         ../tests/ui_tests/BatchingTest.cpp
         ../tests/ui_tests/ShapesTest.cpp

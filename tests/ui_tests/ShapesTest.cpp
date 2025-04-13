@@ -172,23 +172,6 @@ namespace test {
         data1->camera->setPosition(g_Position_Camera);
         data1->camera->setRotation(g_Rot);
 
-        auto updateShape = [](const char* text) {
-
-            glm::vec3 point = {0.0f, 0.0f, 0.0f};
-
-            auto rect = createRectShape(point);
-            director->resetPointer();
-            director->submit(rect);
-        };
-
-        addColorPicker("Select color", g_color1, updateShape);
-
-        addInputField("Width", &g_width, updateShape);
-        addInputField("Height", &g_height, updateShape);
-
-        addInputField("X", &g_centerX, updateShape);
-        addInputField("Y", &g_centerY, updateShape);
-
         // 4. Render 3 shapes with different transforms
 
         glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
@@ -216,6 +199,29 @@ namespace test {
 
         // Render all shapes
         director->render();
+    }
+
+    void ShapesTest::onDrawUI() {
+
+        using namespace xengine;
+
+        auto updateShape = [](const char* text) {
+
+            glm::vec3 point = {0.0f, 0.0f, 0.0f};
+
+            auto rect = createRectShape(point);
+            director->resetPointer();
+            director->submit(rect);
+        };
+
+        addColorPicker("Select color", g_color1, updateShape);
+
+        addInputField("Width", &g_width, updateShape);
+        addInputField("Height", &g_height, updateShape);
+
+        addInputField("X", &g_centerX, updateShape);
+        addInputField("Y", &g_centerY, updateShape);
+
     }
 
     xengine::Rectangle createRectShape(glm::vec3 point) {
