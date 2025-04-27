@@ -51,3 +51,4 @@ This is a platform dependent process. It has 2 steps:
 
 - https://github.com/dbeyda/OpenGLRenderer
 - https://github.com/htmlboss/OpenGL-Renderer
+- https://learnopengl.com/Getting-started/Hello-Window
