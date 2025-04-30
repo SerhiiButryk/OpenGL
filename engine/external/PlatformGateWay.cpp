@@ -110,7 +110,9 @@ namespace xengine {
 
         glfwMakeContextCurrent(w);
 
+        // Save and tell OpenGL the size of the rendering window
         window.setBufferSize(bufferWidth, bufferHeight);
+        glViewport(0, 0, bufferWidth, bufferHeight);
 
         // Enable vsync
         // Basically it limits the frame draw rate for the application
@@ -222,6 +224,14 @@ namespace xengine {
 
             Event event = {};
             w->dispatch(event);
+        });
+
+        glfwSetFramebufferSizeCallback(w, [](GLFWwindow *window, int w, int h) {
+
+            auto *wind = (Window *) glfwGetWindowUserPointer(window);
+
+            wind->setBufferSize(w, h);
+            glViewport(0, 0, w, h);
         });
     }
 }

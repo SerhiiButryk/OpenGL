@@ -30,6 +30,14 @@ namespace xengine {
         }
     };
 
+    class UniqueIDGenerator {
+    public:
+        static unsigned int getNextID() {
+            static unsigned int counter = 0;
+            return ++counter;
+        }
+    };
+
     class Shape {
 
         public:
@@ -38,15 +46,19 @@ namespace xengine {
 
             virtual Vertex* getBuffer() = 0;
             virtual uint32_t getVertexCount() const = 0;
+            unsigned int getID() const { return m_ID; }
 
             void setColor(glm::vec4 color) { m_color = color; }
+            glm::vec4 getColor() const { return m_color; }
 
             virtual void create() = 0;
-            void update() { create(); }
+            void applyNewValues() { create(); }
 
         protected:
             // RGB Color
             glm::vec4 m_color = {0.0f, 0.0f, 0.0f, 1.0f};
+            // ID
+            unsigned int m_ID = UniqueIDGenerator::getNextID();
     };
 
 }

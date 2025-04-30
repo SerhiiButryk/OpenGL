@@ -29,17 +29,9 @@ namespace xengine {
 
         // Pipline settings END
 
-        void batch(Shape &shape);
-
         virtual void render() = 0;
 
-        virtual void submit(Shape& shape) = 0;
-        virtual void submit(Vertex& vertex) = 0;
-
-        void resetPointer() {
-            m_renderData->configs.pointerStart = m_renderData->configs.drawBuffer;
-            m_renderData->configs.vertexCount = 0;
-        }
+        virtual void submit(Shape* shape) = 0;
 
         // Getters
 
@@ -47,9 +39,19 @@ namespace xengine {
             this->m_renderData = data;
         }
 
+        bool hasRenderData() const {
+            return m_renderData != nullptr;
+        }
+
     protected:
+        /**
+         * NOTE: Class doesn't own render data object
+         * lifecycle should be managed by upper layers
+         */
         RenderData* m_renderData {};
         RendererAPI* m_renderer {};
+
+        void batch(Shape *shape);
 
     private:
         void setIndexBuffer(IndexBuffer* ib, uint32_t maxSize) const;

@@ -11,12 +11,12 @@ namespace xengine {
         m_renderer = &renderer;
     }
 
-    void RenderDirectorBase::batch(Shape& shape) {
+    void RenderDirectorBase::batch(Shape* shape) {
 
-        auto* srcPointer = shape.getBuffer();
-        auto* destPointer = (Vertex*) m_renderData->configs.pointerStart;
+        auto* srcPointer = shape->getBuffer();
+        auto* destPointer = (Vertex*) m_renderData->configs.nextElementPointer;
 
-        for (int i = 0; i < shape.getVertexCount(); i++) {
+        for (int i = 0; i < shape->getVertexCount(); i++) {
             destPointer->position = srcPointer->position;
             destPointer->color = srcPointer->color;
             destPointer->texCoord = srcPointer->texCoord;
@@ -26,7 +26,7 @@ namespace xengine {
             srcPointer++;
         }
 
-        m_renderData->configs.pointerStart = destPointer;
+        m_renderData->configs.nextElementPointer = destPointer;
     }
 
     void RenderDirectorBase::createVertexBuffer(unsigned int size) {
@@ -40,7 +40,7 @@ namespace xengine {
             LOG_INFO("RenderCommand::createVertexBuffer() creating a buffer with size = {}", size);
 
             m_renderData->configs.drawBuffer = new Vertex[size]{};
-            m_renderData->configs.pointerStart = m_renderData->configs.drawBuffer;
+            m_renderData->configs.nextElementPointer = m_renderData->configs.drawBuffer;
 
         }
 

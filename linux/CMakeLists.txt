@@ -57,6 +57,7 @@ add_library(core
     ${PROJECT_ROOT}/engine/opengl/shapes/Rectangle.cpp
     ${PROJECT_ROOT}/engine/opengl/render/RenderData.cpp
     ${PROJECT_ROOT}/engine/opengl/shapes/Line.cpp
+    ${PROJECT_ROOT}/engine/opengl/shapes/Color.cpp
     ${PROJECT_ROOT}/engine/opengl/render/RenderDirector.cpp
     ${PROJECT_ROOT}/engine/opengl/render/RenderDirectorBase.cpp
     ${PROJECT_ROOT}/engine/opengl/Camera.cpp
@@ -65,6 +66,7 @@ add_library(core
     ${PROJECT_ROOT}/engine/common/Timestamp.cpp
     ${PROJECT_ROOT}/engine/external/GUIHelper.cpp
     ${PROJECT_ROOT}/engine/component/Layer.cpp
+    ${PROJECT_ROOT}/engine/opengl/shapes/Triangle.cpp
 )
 
 # Define macros
@@ -128,6 +130,8 @@ if (BUILD_TEST_APP)
         ../tests/ui_tests/ShapesTest.cpp
         ../tests/ui_tests/base/TestCase.cpp
         ../tests/ui_tests/BlankTest.cpp
+            ../tests/ui_tests/ComponentUIFactory.cpp
+            ../tests/ui_tests/ComponentUIFactory.h
     )
 
     include_directories(../tests/ui_tests)

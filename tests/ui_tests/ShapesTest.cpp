@@ -1,139 +1,37 @@
 #include "ShapesTest.h"
 
+#include <ComponentUIFactory.h>
+#include <opengl/shapes/Color.h>
 #include <public/XEngine.h>
+#include <glm/gtc/type_ptr.hpp>
+#include <opengl/shapes/Triangle.h>
 
 /**
- * This is a demo example which creates 3 shapes:
+ * This is a test example of simple shapes:
+ *
  * 1. Squad
  * 2. Circle
  * 3. Triangle
- *
- * All shapes are batched together so we draw them in one go.
- * Changing shape form or materials (color or width & height) is problematical here for a single shape.
- *
- * However, we still can change transform or position of a single shape in our world.
  */
 
-static float g_color1[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-
-static float g_centerX = 0;
-static float g_centerY = 0;
-
-static float g_width = 1.0f;
-static float g_height = 1.0f;
-
-static auto data1 = std::make_unique<xengine::RenderData>();
-static auto data2 = std::make_unique<xengine::RenderData>();
-static auto data3 = std::make_unique<xengine::RenderData>();
-
-static auto director = std::make_unique<xengine::RenderDirector>();
-// Or
-// static auto* director = new xengine::RenderDirectorDebug();
-
 static glm::vec3 g_Position_Camera = { 0.0f, 0.0f, 0.0f };
+
 static float g_RotSpeed = 30.0f;
 static float g_MoveSpeed = 2.0f;
 static float g_Rot = 0.0f;
 
-static glm::vec3 g_Rect_Pos = { 0.0f, 0.0f, 0.0f };
-
-static auto g_camera = std::make_unique<xengine::Camera>(-1.6f, 1.6f, -0.9f, 0.9f);
-
 namespace test {
 
-    xengine::Rectangle createRectShape(glm::vec3 point);
-
-    void ShapesTest::onAttach() {
-
-        using namespace xengine;
-
-        g_centerX = m_app->getWidth() / 2;
-        g_centerY = m_app->getHeight() / 2;
-
-        // Set initial configs
-
-        data1->configs.height = m_app->getHeight();
-        data1->configs.width = m_app->getWidth();
-        data1->configs.assetsPath = m_app->getResourcePath();
-        data1->camera = g_camera.get();
-
-        data2->configs.height = m_app->getHeight();
-        data2->configs.width = m_app->getWidth();
-        data2->configs.assetsPath = m_app->getResourcePath();
-        data2->camera = g_camera.get();
-
-        data3->configs.height = m_app->getHeight();
-        data3->configs.width = m_app->getWidth();
-        data3->configs.assetsPath = m_app->getResourcePath();
-        data3->camera = g_camera.get();
-
-        auto rect = createRectShape(g_Rect_Pos);
-
-        ////////////////////////////////////////////////////
-        ////////////////// Circle shape //////////////////
-        ////////////////////////////////////////////////////
-
-        director->begin(data1.get());
-
-        director->setShader("circle.shader");
-
-        director->submit(rect);
-
-        director->end();
-
-        ////////////////////////////////////////////////////
-        ////////////////// Triangle shape //////////////////
-        ////////////////////////////////////////////////////
-
-        director->begin(data2.get());
-
-        director->setShader("Basic_2.shader");
-
-        Vertex vertex1 = { { -0.7f, 0.0f, 0.0f },
-            { 1.0f, 0.0f, 0.0f, 1.0f},
-            {0.0f, 0.0f},
-            -1.0f
-        };
-
-        Vertex vertex2 = { { 0.0f, 0.0f, 0.0f },
-            { 1.0f, 1.0f, 0.0f, 1.0f},
-            {0.0f, 0.0f},
-            -1.0f
-        };
-
-        Vertex vertex3 = { { -0.2f, 0.5f, 0.0f },
-            { 0.5f, 1.0f, 0.0f, 1.0f},
-            {0.0f, 0.0f},
-            -1.0f
-        };
-
-        director->submit(vertex1);
-        director->submit(vertex2);
-        director->submit(vertex3);
-
-        director->end();
-
-        ////////////////////////////////////////////////////
-        ////////////////// Squad shape //////////////////
-        ////////////////////////////////////////////////////
-
-        director->begin(data3.get());
-
-        director->setShader("Basic_2.shader");
-
-        director->submit(rect);
-
-        director->end();
+    ShapesComponentUI::ShapesComponentUI(Application* app) : TestCase(app) {
     }
 
-    void ShapesTest::onDetach() {
-        // Release resources
-        data1->releaseResources();
-        data2->releaseResources();
-        data3->releaseResources();
+    void ShapesComponentUI::onAttach() {
     }
 
-    void ShapesTest::onDraw() {
+    void ShapesComponentUI::onDetach() {
+    }
+
+    void ShapesComponentUI::onDraw() {
 
         using namespace xengine;
 
@@ -169,71 +67,194 @@ namespace test {
         // Camera controls END
         ////////////////////////////////////
 
-        data1->camera->setPosition(g_Position_Camera);
-        data1->camera->setRotation(g_Rot);
+        // data1->camera->setPosition(g_Position_Camera);
+        // data1->camera->setRotation(g_Rot);
+        //
+        // // 4. Render 3 shapes with different transforms
+        //
+        // glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
+        // glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(0.7f, 0.0f, 0.0f)) * scale;
+        //
+        // data1->tansform = transform;
+        //
+        // director->setData(data1.get());
+        // director->render();
+        //
+        // glm::mat4 scale2 = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f));
+        // glm::mat4 transform2 = glm::translate(glm::mat4(1.0f), glm::vec3(0.2f, -0.25f, 0.0f)) * scale2;
+        //
+        // data2->tansform = transform2;
+        //
+        // director->setData(data2.get());
+        // director->render();
+        //
+        // glm::mat4 scale3 = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
+        // glm::mat4 transform3 = glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f, 0.0f, 0.0f)) * scale3;
+        //
+        // data3->tansform = transform3;
+        //
+        // director->setData(data3.get());
 
-        // 4. Render 3 shapes with different transforms
 
-        glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(0.7f, 0.0f, 0.0f)) * scale;
-
-        data1->tansform = transform;
-
-        director->setData(data1.get());
-        director->render();
-
-        glm::mat4 scale2 = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f));
-        glm::mat4 transform2 = glm::translate(glm::mat4(1.0f), glm::vec3(0.2f, -0.25f, 0.0f)) * scale2;
-
-        data2->tansform = transform2;
-
-        director->setData(data2.get());
-        director->render();
-
-        glm::mat4 scale3 = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
-        glm::mat4 transform3 = glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f, 0.0f, 0.0f)) * scale3;
-
-        data3->tansform = transform3;
-
-        director->setData(data3.get());
-
-        // Render all shapes
-        director->render();
+        if (m_director->hasRenderData())
+            m_director->render();
     }
 
-    void ShapesTest::onDrawUI() {
+    void ShapesComponentUI::onDrawUI() {
 
         using namespace xengine;
 
-        auto updateShape = [](const char* text) {
+        // auto updateShape = [](const char* text) {
+        //
+        //     glm::vec3 point = {0.0f, 0.0f, 0.0f};
+        //
+        //     auto rect = createRectShape(point);
+        //     director->resetPointer();
+        //     director->submit(rect);
+        // };
+        //
+        // addColorPicker("Select color", g_color1, updateShape);
+        //
+        // addInputField("Width", &g_width, updateShape);
+        // addInputField("Height", &g_height, updateShape);
+        //
+        // addInputField("X", &g_centerX, updateShape);
+        // addInputField("Y", &g_centerY, updateShape);
 
-            glm::vec3 point = {0.0f, 0.0f, 0.0f};
+        // ShapesTest* obj = this;
 
-            auto rect = createRectShape(point);
-            director->resetPointer();
-            director->submit(rect);
+        addButton("Rectangle", [&, this](const char *text) {
+            addShape(ShapesUIMode::RECTANGLE_SHAPE);
+        });
+
+        addButton("Triangle", [&, this](const char *text) {
+            addShape(ShapesUIMode::TRIANGLE_SHAPE);
+        });
+
+        addButton("Circle", [&, this](const char *text) {
+            addShape(ShapesUIMode::CIRCLE_SHAPE);
+        });
+
+        auto updateShapeColor = [&, this](const char *text) {
+
+            glm::vec4 newColor = { m_color[0], m_color[1], m_color[2], 1.0f };
+            glm::vec3 defaultPosition = { 0.0f, 0.0f, 0.0f };
+
+            // Resubmit shape
+
+            resetRenderData();
+
+            auto shape = ComponentUIFactory::createRectShape(defaultPosition, newColor);
+
+            submitShape(shape, "base.shader");
         };
 
-        addColorPicker("Select color", g_color1, updateShape);
+        if (m_shapesUIModeCurrent == ShapesUIMode::RECTANGLE_SHAPE) {
 
-        addInputField("Width", &g_width, updateShape);
-        addInputField("Height", &g_height, updateShape);
+            Shape* shape = m_data->getShapeById(m_shapeId);
 
-        addInputField("X", &g_centerX, updateShape);
-        addInputField("Y", &g_centerY, updateShape);
+            auto vec4 = shape->getColor();
+            m_color = glm::value_ptr(vec4);
+
+            addColorPicker("Color", m_color, updateShapeColor);
+        }
+
+        auto updateShapeColor2 = [&, this](const char *text) {
+
+            // Resubmit shape
+
+            resetRenderData();
+
+            glm::vec4 color = { m_colorTriangle[0], m_colorTriangle[1], m_colorTriangle[2], 1.0f};
+
+            auto shape = ComponentUIFactory::createTriangleShape(
+                { -0.5f, -0.5f, 0.0f },
+                { 0.5f, -0.5f, 0.0f },
+                { 0.0f, 0.5f, 0.0f },
+                color);
+
+            submitShape(shape, "base.shader");
+
+        };
+
+        if (m_shapesUIModeCurrent == ShapesUIMode::TRIANGLE_SHAPE) {
+
+            m_colorTriangle = glm::value_ptr(color);
+
+            addColorPicker("Color", m_colorTriangle, updateShapeColor2);
+
+        }
+    }
+
+    void ShapesComponentUI::addShape(ShapesUIMode mode) {
+
+        m_shapesUIModeCurrent = mode;
+
+        resetRenderData();
+
+        glm::vec3 defaultPosition = { 0.0f, 0.0f, 0.0f };
+        glm::vec4 defaultColor = { 0.0f, 0.0f, 0.0f, 1.0f };
+
+        switch (mode) {
+
+            case ShapesUIMode::RECTANGLE_SHAPE:
+                {
+                    auto shape = ComponentUIFactory::createRectShape(defaultPosition, defaultColor);
+
+                    submitShape(shape, "base.shader");
+                }
+
+                break;
+
+            case ShapesUIMode::CIRCLE_SHAPE:
+
+                {
+                    auto shape = ComponentUIFactory::createRectShape(defaultPosition, defaultColor);
+
+                    submitShape(shape, "circle.shader");
+                }
+
+                break;
+
+            case ShapesUIMode::TRIANGLE_SHAPE:
+
+                {
+
+                    glm::vec4 color = { 1.0f, 0.0f, 0.0f, 1.0f};
+
+                    auto shape = ComponentUIFactory::createTriangleShape(
+                        { -0.5f, -0.5f, 0.0f },
+                        { 0.5f, -0.5f, 0.0f },
+                        { 0.0f, 0.5f, 0.0f },
+                        color);
+
+                    submitShape(shape, "base.shader");
+                }
+
+                break;
+        }
 
     }
 
-    xengine::Rectangle createRectShape(glm::vec3 point) {
+    void ShapesComponentUI::submitShape(xengine::Shape* shape, const char* shaderName) {
+
+        m_shapeId = shape->getID();
+
+        ComponentUIFactory::submitShape(shape, m_director.get(), m_data.get(), shaderName);
+
+    }
+
+    void ShapesComponentUI::resetRenderData() {
 
         using namespace xengine;
 
-        Rectangle rect(point, g_width, g_height);
+        // Release previously allocated resource and clear states
+        m_data->releaseResources();
 
-        rect.setTextureIndex(-1.0f);
-        rect.setColor({ g_color1[0], g_color1[1], g_color1[2], g_color1[3] });
-        rect.update();
-
-        return rect;
+        m_data->configs.height = m_app->getHeight();
+        m_data->configs.width = m_app->getWidth();
+        m_data->configs.assetsPath = m_app->getResourcePath();
+        m_data->camera = m_camera.get();
     }
+
 }

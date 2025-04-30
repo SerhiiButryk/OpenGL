@@ -31,8 +31,14 @@ namespace xengine {
         // delete camera
 
         delete [] (float*) configs.drawBuffer;
-        configs.drawBuffer = nullptr;
-        configs.pointerStart = nullptr;
+
+        configs = {};
+
+        for (auto && shape : shapes) {
+            delete shape;
+        }
+
+        shapes.clear();
 
     }
 

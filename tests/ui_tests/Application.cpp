@@ -24,7 +24,7 @@ namespace test {
         auto test = new TestMenuUI(this);
         test->registerTest(new TextureTest(this), texture_btn_label);
         test->registerTest(new BatchingTest(this), batching_btn_label);
-        test->registerTest(new ShapesTest(this), shapes_btn_label);
+        test->registerTest(new ShapesComponentUI(this), shapes_btn_label);
 
         testMenuUI = test;
     }

@@ -17,36 +17,18 @@ namespace xengine {
 
     }
 
-    void RenderDirector::submit(Shape& shape) {
+    void RenderDirector::submit(Shape* shape) {
 
         // Create a buffer if it is not created
         createVertexBuffer();
 
         batch(shape);
 
-        m_renderData->configs.vertexCount += shape.getVertexCount();
+        m_renderData->configs.vertexCount += shape->getVertexCount();
+
+        m_renderData->shapes.push_back(shape);
 
     }
-
-    void RenderDirector::submit(Vertex &vertex) {
-
-        // Create a buffer if it is not created
-        createVertexBuffer();
-
-        auto* destPointer = (Vertex*) m_renderData->configs.pointerStart;
-
-        destPointer->position = vertex.position;
-        destPointer->color = vertex.color;
-        destPointer->texCoord = vertex.texCoord;
-        destPointer->texIndex = vertex.texIndex;
-
-        destPointer++;
-
-        m_renderData->configs.pointerStart = destPointer;
-
-        m_renderData->configs.vertexCount += 1;
-    }
-
 
     ////////////////// RenderDirectorDebug //////////////////////////////////////////////////////////////////////////
 
@@ -58,12 +40,12 @@ namespace xengine {
 
     }
 
-    void RenderDirectorDebug::submit(Shape& shape) {
+    void RenderDirectorDebug::submit(Shape* shape) {
 
         // Create a buffer if it is not created
         createVertexBuffer();
 
-        auto* rect = dynamic_cast<Rectangle*>(&shape);
+        auto rect = dynamic_cast<Rectangle*>(shape);
         if (rect != nullptr) {
 
             auto centerPoint = rect->getCoord();
@@ -82,10 +64,10 @@ namespace xengine {
             Line line4({ centerPoint.x - width * 0.5f, centerPoint.y + height * 0.5f, 0.0f },
                 { centerPoint.x - width * 0.5f, centerPoint.y - height * 0.5f, 0.0f });
 
-            batch(line1);
-            batch(line2);
-            batch(line3);
-            batch(line4);
+            batch(&line1);
+            batch(&line2);
+            batch(&line3);
+            batch(&line4);
 
             m_renderData->configs.vertexCount += line1.getVertexCount() * 4;
 
@@ -96,7 +78,4 @@ namespace xengine {
 
     }
 
-    void RenderDirectorDebug::submit(Vertex &vertex) {
-        // TODO: Implement
-    }
 }

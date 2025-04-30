@@ -60,8 +60,6 @@ namespace xengine {
 			return false;
 		}
 
-		GLEngine::setViewPorts(bufferWidth, bufferHeight);
-
 		// Log debug info
 		GLEngine::printInfo();
 		GLEngine::setDebugCallback();
@@ -96,8 +94,11 @@ namespace xengine {
 		auto* mainApp = static_cast<MainApplication*>(app);
 
 		/*
+			 Swap the color buffer -
+			 a large 2D buffer that contains color values for each pixel in GLFW's window
+
 			 Swap front and back buffers
-			 Back buffer is a buffer which user cannot see.
+			 Back buffer is a buffer which user cannot see, but OpenGL writes data to it.
 			 Front buffer is a buffer which user sees and which the window is using.
 			 We draw to the back buffer, and then we swap the buffer to reflect
 			 things on the screen.
@@ -105,14 +106,14 @@ namespace xengine {
 
 		glfwSwapBuffers((GLFWwindow*) mainApp->getWindow());
 
-		/* Get user or process events */
+		/* Process events. At this moment GLFW should call callbacks which we registered using glfwSet...Callback functions */
 
 		glfwPollEvents();
 	}
 
 	bool Window::onEvent(const Event &event) {
 
-		// Window not handling any events currently
+		// Window is not handling any events currently
 
 		return false;
 	}

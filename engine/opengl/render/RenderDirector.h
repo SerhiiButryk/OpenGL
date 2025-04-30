@@ -8,8 +8,7 @@ namespace xengine {
     {
     public:
 
-        void submit(Shape& shape) override;
-        void submit(Vertex &vertex) override;
+        void submit(Shape* shape) override;
 
         void render() override;
 
@@ -18,10 +17,9 @@ namespace xengine {
     class RenderDirectorDebug : public RenderDirector {
     public:
 
-        void render() override;
+        void submit(Shape* shape) override;
 
-        void submit(Shape& shape) override;
-        void submit(Vertex &vertex) override;
+        void render() override;
 
     };
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stdexcept>
 #include <opengl/Camera.h>
 #include <opengl/IndexBuffer.h>
 #include <opengl/Shader.h>
@@ -28,21 +29,50 @@ namespace xengine {
             uint32_t indexBufferMaxSize {};
 
             void* drawBuffer = nullptr; // actual data buffer
-            void* pointerStart = nullptr; // pointer to last element
+            void* nextElementPointer = nullptr; // pointer to the next vertex place in the buffer
         };
-
-        void releaseResources();
 
         Shader* shader = nullptr;
         VertexArray* vertexArray = nullptr;
         VertexBuffer* vertexBuffer = nullptr;
         IndexBuffer* indexBuffer = nullptr;
         Texture* texture = nullptr;
+
         // Camera is not owned by this class
         Camera* camera = nullptr;
+
         glm::mat4 tansform = glm::mat4(1.0f);
 
         Configs configs = {};
+
+        // Track a list of current shapes which going to render
+        std::vector<Shape*> shapes;
+
+        /**
+         * Releases all resources and states for the current Render data object
+         */
+        void releaseResources();
+
+        /**
+         * Look for a shape in the list
+         */
+        Shape* getShapeById(unsigned int id) {
+            for (auto && shape : shapes) {
+                if (shape->getID() == id) {
+                    return shape;
+                }
+            }
+            throw std::runtime_error("No such shape");
+        }
+
+        bool hasShapeById(unsigned int id) {
+            for (auto && shape : shapes) {
+                if (shape->getID() == id) {
+                    return true;
+                }
+            }
+            return false;
+        }
 
     };
 

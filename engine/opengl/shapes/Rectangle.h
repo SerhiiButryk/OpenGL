@@ -43,7 +43,8 @@ namespace xengine {
         // A vertex buffer which contains 4 vertices to specify the rectangle
         VertexData m_dataBuffer = {};
 
-        float m_textureIndex = 0.0f;
+        // No texture by default
+        float m_textureIndex = -1.0f;
     };
 
 }
