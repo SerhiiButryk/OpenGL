@@ -1,10 +1,10 @@
 #pragma once
 
-#include "RenderDirectorBase.h"
+#include "RenderGLBase.h"
 
 namespace xengine {
 
-    class RenderDirector : public RenderDirectorBase
+    class RenderGL : public RenderGLBase
     {
     public:
 
@@ -14,7 +14,7 @@ namespace xengine {
 
     };
 
-    class RenderDirectorDebug : public RenderDirector {
+    class RenderGLDebug : public RenderGL {
     public:
 
         void submit(Shape* shape) override;

@@ -20,8 +20,7 @@ add_executable(UniTests
         base/Registry.cpp
         BasicTest.cpp
         base/MemoryTracker.cpp
-        InitTests.cpp
-        ShaderTests.cpp
+        BasicScenerioTests.cpp
 )
 
 target_compile_definitions(UniTests PUBLIC -DUNIT_TESTS)
@@ -39,5 +38,4 @@ include_directories(${PROJECT_ROOT}/dependencies)
 
 # Add Unit Tests (Displayed test name + test args)
 add_test(NAME BasicTest COMMAND UniTests BasicTest)
-add_test(NAME InitTests COMMAND UniTests InitTests)
-add_test(NAME ShaderTests COMMAND UniTests ShaderTests)
+add_test(NAME BasicScenerioTests COMMAND UniTests BasicScenerioTests)

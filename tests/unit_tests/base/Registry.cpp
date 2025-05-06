@@ -20,7 +20,6 @@ namespace test {
             return elem->second->run();
         }
         ASSERT_LOG(false, "Registry::runTest() test wasn't found");
-        return 1;
     }
 
     Registry& Registry::instance() {

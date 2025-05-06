@@ -47,7 +47,7 @@ namespace test {
         vertexArray->bind();
 
         vertexBuffer->bind();
-        vertexBuffer->fill(positions, size * sizeof(float));
+        vertexBuffer->createAndInitialize(positions, size * sizeof(float));
 
         /*
             Bind vertex buffer and layout into array buffer

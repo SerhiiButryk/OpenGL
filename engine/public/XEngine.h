@@ -1,5 +1,8 @@
 /**
-* This file has all public engine APIs. Should be included by the client code.
+*
+* This file should have all public library APIs. Should be included by the client code.
+* So we can use one include to access all available APIs potentially.
+*
 */
 #pragma once
 
@@ -7,15 +10,17 @@
 #include <ui/UIComponent.h>
 #include <ui/Widgets.h>
 
-#include <opengl/render/Renderer.h>
 #include <common/Log.h>
 
 #include <imgui/imgui.h>
 
-#include <opengl/render/RenderDirector.h>
-#include <opengl/render/RenderDirectorBase.h>
-
+#include <opengl/render/Renderer.h>
+#include <opengl/render/RenderGL.h>
+#include <opengl/render/RenderGLBase.h>
 #include <opengl/shapes/Line.h>
 #include <opengl/shapes/Rectangle.h>
+#include <opengl/shapes/Triangle.h>
 
 #include <window/input/Input.h>
+
+#include <glm/gtc/type_ptr.hpp>

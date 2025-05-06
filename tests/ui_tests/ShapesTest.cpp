@@ -1,10 +1,7 @@
 #include "ShapesTest.h"
 
 #include <ComponentUIFactory.h>
-#include <opengl/shapes/Color.h>
 #include <public/XEngine.h>
-#include <glm/gtc/type_ptr.hpp>
-#include <opengl/shapes/Triangle.h>
 
 /**
  * This is a test example of simple shapes:
@@ -13,12 +10,6 @@
  * 2. Circle
  * 3. Triangle
  */
-
-static glm::vec3 g_Position_Camera = { 0.0f, 0.0f, 0.0f };
-
-static float g_RotSpeed = 30.0f;
-static float g_MoveSpeed = 2.0f;
-static float g_Rot = 0.0f;
 
 namespace test {
 
@@ -42,86 +33,46 @@ namespace test {
         Timestamp times = m_app->getFrameDeltaTime();
 
         ////////////////////////////////////
-        // Camera controls
+        // Camera
         ////////////////////////////////////
 
+        float rotSpeed = 30.0f;
+        float moveSpeed = 2.0f;
+
+        float rot = 0.0f;
+        glm::vec3 positionCamera = { 0.0f, 0.0f, 0.0f };
+        if (m_renderer->hasRenderData()) {
+            positionCamera = m_renderer->getCamera()->getPosition();
+            rot = m_renderer->getCamera()->getRotation();
+        }
+
         if (Input::IsKeyPressed(XE_KEY_A)) {
-            g_Position_Camera.x -= g_MoveSpeed * times;
+            positionCamera.x -= moveSpeed * times;
         } else if (Input::IsKeyPressed(XE_KEY_D)) {
-            g_Position_Camera.x += g_MoveSpeed * times;
+            positionCamera.x += moveSpeed * times;
         }
 
         if (Input::IsKeyPressed(XE_KEY_W)) {
-            g_Position_Camera.y += g_MoveSpeed * times;
+            positionCamera.y += moveSpeed * times;
         } else if (Input::IsKeyPressed(XE_KEY_S)) {
-            g_Position_Camera.y -= g_MoveSpeed *times;
+            positionCamera.y -= moveSpeed *times;
         }
 
         if (Input::IsKeyPressed(XE_KEY_E)) {
-            g_Rot += g_RotSpeed * times;
+            rot += rotSpeed * times;
         } else if (Input::IsKeyPressed(XE_KEY_R)) {
-            g_Rot -= g_RotSpeed * times;
+            rot -= rotSpeed * times;
         }
 
-        ////////////////////////////////////
-        // Camera controls END
-        ////////////////////////////////////
-
-        // data1->camera->setPosition(g_Position_Camera);
-        // data1->camera->setRotation(g_Rot);
-        //
-        // // 4. Render 3 shapes with different transforms
-        //
-        // glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
-        // glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(0.7f, 0.0f, 0.0f)) * scale;
-        //
-        // data1->tansform = transform;
-        //
-        // director->setData(data1.get());
-        // director->render();
-        //
-        // glm::mat4 scale2 = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f));
-        // glm::mat4 transform2 = glm::translate(glm::mat4(1.0f), glm::vec3(0.2f, -0.25f, 0.0f)) * scale2;
-        //
-        // data2->tansform = transform2;
-        //
-        // director->setData(data2.get());
-        // director->render();
-        //
-        // glm::mat4 scale3 = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
-        // glm::mat4 transform3 = glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f, 0.0f, 0.0f)) * scale3;
-        //
-        // data3->tansform = transform3;
-        //
-        // director->setData(data3.get());
-
-
-        if (m_director->hasRenderData())
-            m_director->render();
+        if (m_renderer->hasRenderData()) {
+            m_renderer->updateCamera(positionCamera, rot);
+            m_renderer->render();
+        }
     }
 
     void ShapesComponentUI::onDrawUI() {
 
         using namespace xengine;
-
-        // auto updateShape = [](const char* text) {
-        //
-        //     glm::vec3 point = {0.0f, 0.0f, 0.0f};
-        //
-        //     auto rect = createRectShape(point);
-        //     director->resetPointer();
-        //     director->submit(rect);
-        // };
-        //
-        // addColorPicker("Select color", g_color1, updateShape);
-        //
-        // addInputField("Width", &g_width, updateShape);
-        // addInputField("Height", &g_height, updateShape);
-        //
-        // addInputField("X", &g_centerX, updateShape);
-        // addInputField("Y", &g_centerY, updateShape);
-
-        // ShapesTest* obj = this;
 
         addButton("Rectangle", [&, this](const char *text) {
             addShape(ShapesUIMode::RECTANGLE_SHAPE);
@@ -135,18 +86,26 @@ namespace test {
             addShape(ShapesUIMode::CIRCLE_SHAPE);
         });
 
-        auto updateShapeColor = [&, this](const char *text) {
+        auto updateRectangle = [&, this](const char *text) {
+
+            auto shape = (Rectangle*) m_data->getShapeById(m_shapeId);
 
             glm::vec4 newColor = { m_color[0], m_color[1], m_color[2], 1.0f };
             glm::vec3 defaultPosition = { 0.0f, 0.0f, 0.0f };
+
+            float texutureIndex = -1.0f;
+
+            if (strcmp(text, "change_texture") == 0) {
+                texutureIndex = shape->getTextureIndex() * -1.0f;
+            }
 
             // Resubmit shape
 
             resetRenderData();
 
-            auto shape = ComponentUIFactory::createRectShape(defaultPosition, newColor);
+            auto newshape = ComponentUIFactory::createRectShape(defaultPosition, newColor, texutureIndex);
 
-            submitShape(shape, "base.shader");
+            submitShape(newshape, "base.shader");
         };
 
         if (m_shapesUIModeCurrent == ShapesUIMode::RECTANGLE_SHAPE) {
@@ -156,10 +115,24 @@ namespace test {
             auto vec4 = shape->getColor();
             m_color = glm::value_ptr(vec4);
 
-            addColorPicker("Color", m_color, updateShapeColor);
+            addColorPicker("Color", m_color, updateRectangle);
+
+            auto rect = (Rectangle*) shape;
+
+            addText("Width: %.1f", rect->getWidth());
+            addText("Height: %.1f", rect->getHeight());
+            addText("Center (X,Y,Z): (%.1f, %.1f, %.1f)", rect->getCoord().x, rect->getCoord().y, rect->getCoord().z);
+
+            static bool enableTexture = false;
+
+            addSpace();
+            if (addCheckBox("Set texture", enableTexture)) {
+                updateRectangle("change_texture");
+            }
+
         }
 
-        auto updateShapeColor2 = [&, this](const char *text) {
+        auto updateTriangle = [&, this](const char *text) {
 
             // Resubmit shape
 
@@ -181,9 +154,38 @@ namespace test {
 
             m_colorTriangle = glm::value_ptr(color);
 
-            addColorPicker("Color", m_colorTriangle, updateShapeColor2);
+            addColorPicker("Color", m_colorTriangle, updateTriangle);
 
+            auto triangle = (Triangle*) m_data->getShapeById(m_shapeId);
+
+            auto arrPtr = triangle->getBuffer();
+            addText("P 1 (X,Y,Z): (%.1f, %.1f, %.1f)", arrPtr->position.x, arrPtr->position.y, arrPtr->position.z);
+
+            arrPtr++; // Next element
+            addText("P 2 (X,Y,Z): (%.1f, %.1f, %.1f)", arrPtr->position.x, arrPtr->position.y, arrPtr->position.z);
+
+            arrPtr++; // Next element
+            addText("P 3 (X,Y,Z): (%.1f, %.1f, %.1f)", arrPtr->position.x, arrPtr->position.y, arrPtr->position.z);
         }
+
+        if (m_shapesUIModeCurrent == ShapesUIMode::CIRCLE_SHAPE) {
+
+            Shape* shape = m_data->getShapeById(m_shapeId);
+
+            auto rect = (Rectangle*) shape;
+
+            addText("Width: %.1f", rect->getWidth());
+            addText("Height: %.1f", rect->getHeight());
+            addText("Center (X,Y,Z): (%.1f, %.1f, %.1f)", rect->getCoord().x, rect->getCoord().y, rect->getCoord().z);
+        }
+
+        if (m_shapesUIModeCurrent != ShapesUIMode::INIT) {
+            addSpace();
+            addText("Camera controls:");
+            addText("Left, right, up, down - A, D, W, S");
+            addText("Rotation - R");
+        }
+
     }
 
     void ShapesComponentUI::addShape(ShapesUIMode mode) {
@@ -240,7 +242,7 @@ namespace test {
 
         m_shapeId = shape->getID();
 
-        ComponentUIFactory::submitShape(shape, m_director.get(), m_data.get(), shaderName);
+        ComponentUIFactory::submitShape(shape, m_renderer.get(), m_data.get(), shaderName);
 
     }
 

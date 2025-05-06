@@ -21,7 +21,9 @@ namespace test {
         virtual const char* name() const { return ""; }
 
         void setMemoryTracker(MemoryTracker* memoryTracker) { m_memoryTracker = memoryTracker; }
+
     protected:
+
         MemoryTracker* m_memoryTracker = nullptr;
     };
 

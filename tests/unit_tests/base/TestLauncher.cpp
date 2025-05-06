@@ -1,9 +1,8 @@
 #include <common/Log.h>
 
-#include <InitTests.h>
 #include <BasicTest.h>
-#include <ShaderTests.h>
 
+#include "BasicScenerioTests.h"
 #include "MemoryTracker.h"
 #include "Registry.h"
 
@@ -35,12 +34,10 @@ int main(int argc, char *argv[]) {
 
     // Our tests
     BasicTest basic_test;
-    InitTests init_tests;
-    ShaderTests shader_tests;
+    BasicScenerioTests basic_scenerio_tests;
 
     Registry::instance().add(&basic_test);
-    Registry::instance().add(&init_tests);
-    Registry::instance().add(&shader_tests);
+    Registry::instance().add(&basic_scenerio_tests);
 
     int result = Registry::instance()
             .runTest(argv[1] /* Current test name */, memoryTracker);;

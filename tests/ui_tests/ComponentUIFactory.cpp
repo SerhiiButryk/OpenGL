@@ -3,30 +3,34 @@
 namespace test {
 
     void ComponentUIFactory::submitShape(xengine::Shape *shape,
-        xengine::RenderDirector* director, xengine::RenderData* data, const char* shaderName) {
+        xengine::RenderGL* renderer, xengine::RenderData* data, const char* shaderName) {
 
-        director->begin(data);
+        renderer->begin(data);
 
-        director->setShader(shaderName);
+        renderer->setShader(shaderName);
+        // TODO: Configure
+        renderer->setTexture("test.png", "u_Texture");
 
-        director->submit(shape);
+        renderer->submit(shape);
 
-        director->end();
+        renderer->end();
     }
 
-    xengine::Rectangle* ComponentUIFactory::createRectShape(glm::vec3 point, glm::vec4 color) {
+    xengine::Rectangle* ComponentUIFactory::createRectShape(glm::vec3 point, glm::vec4 color, float texutureIndex) {
 
         using namespace xengine;
 
         float defaultWidth = 1.0f;
         float defaultHeight = 1.0f;
 
-        auto rect = new Rectangle(point, defaultWidth, defaultHeight);
+        auto shape = new Rectangle(point, defaultWidth, defaultHeight);
 
-        rect->setColor(color);
-        rect->applyNewValues();
+        shape->setColor(color);
+        shape->setTextureIndex(texutureIndex);
 
-        return rect;
+        shape->applyNewValues();
+
+        return shape;
     }
 
     xengine::Triangle* ComponentUIFactory::createTriangleShape(glm::vec3 point1, glm::vec3 point2, glm::vec3 point3, glm::vec4 color) {

@@ -20,14 +20,18 @@ namespace xengine {
 	    glBindBuffer(GL_ARRAY_BUFFER /* Buffer type */, 0);
     }
 
-    void VertexBuffer::fill(float* arr, size_t size, bool isDynamic)
+    void VertexBuffer::createAndInitialize(float* arr, size_t size, bool isDynamic)
     {
+        // Bind our buffer
+        bind();
+
         m_IsDynamic =  isDynamic;
 
         /* Fill a vertex buffer with data */
 
-        const auto hint = (isDynamic == true) ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW;
+        const int hint = isDynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW;
 
+        // Creates and initializes a buffer object's data store on GPU
         glBufferData(
             GL_ARRAY_BUFFER /* Buffer type */,
             size /* Buffer size */,
@@ -47,4 +51,12 @@ namespace xengine {
             arr /* Data which we want to write*/);
     }
 
+    void VertexBuffer::deleteBuffer() {
+
+        // Bind our buffer
+        bind();
+
+        // Delete buffer on GPU so memory can be reused
+        glDeleteBuffers(1 , &m_RenderId);
+    }
 }

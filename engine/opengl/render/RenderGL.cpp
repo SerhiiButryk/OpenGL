@@ -1,4 +1,4 @@
-#include "RenderDirector.h"
+#include "RenderGL.h"
 
 #include <stdexcept>
 #include <common/Log.h>
@@ -7,9 +7,9 @@
 
 namespace xengine {
 
-    ////////////////// RenderDirector //////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////
 
-    void RenderDirector::render() {
+    void RenderGL::render() {
 
         m_renderer->setData(m_renderData);
 
@@ -17,7 +17,7 @@ namespace xengine {
 
     }
 
-    void RenderDirector::submit(Shape* shape) {
+    void RenderGL::submit(Shape* shape) {
 
         // Create a buffer if it is not created
         createVertexBuffer();
@@ -30,9 +30,9 @@ namespace xengine {
 
     }
 
-    ////////////////// RenderDirectorDebug //////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////
 
-    void RenderDirectorDebug::render() {
+    void RenderGLDebug::render() {
 
         m_renderer->setData(m_renderData);
 
@@ -40,7 +40,7 @@ namespace xengine {
 
     }
 
-    void RenderDirectorDebug::submit(Shape* shape) {
+    void RenderGLDebug::submit(Shape* shape) {
 
         // Create a buffer if it is not created
         createVertexBuffer();

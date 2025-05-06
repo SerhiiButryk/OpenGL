@@ -1,6 +1,5 @@
 #pragma once
 
-#include <stdexcept>
 #include <opengl/Camera.h>
 #include <opengl/IndexBuffer.h>
 #include <opengl/Shader.h>
@@ -45,7 +44,8 @@ namespace xengine {
 
         Configs configs = {};
 
-        // Track a list of current shapes which going to render
+        // Track a list of shapes which we render
+        // Shapes are owned by this class. It simplifies client side a bit.
         std::vector<Shape*> shapes;
 
         /**
@@ -53,26 +53,8 @@ namespace xengine {
          */
         void releaseResources();
 
-        /**
-         * Look for a shape in the list
-         */
-        Shape* getShapeById(unsigned int id) {
-            for (auto && shape : shapes) {
-                if (shape->getID() == id) {
-                    return shape;
-                }
-            }
-            throw std::runtime_error("No such shape");
-        }
-
-        bool hasShapeById(unsigned int id) {
-            for (auto && shape : shapes) {
-                if (shape->getID() == id) {
-                    return true;
-                }
-            }
-            return false;
-        }
+        Shape* getShapeById(unsigned int id);
+        bool hasShapeById(unsigned int id);
 
     };
 

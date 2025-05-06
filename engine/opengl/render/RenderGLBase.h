@@ -11,29 +11,25 @@ namespace xengine {
      * This is where we prepare all things for rendering and call render APIs
      *
      */
-    class RenderDirectorBase {
+    class RenderGLBase {
     public:
-        RenderDirectorBase();
-        virtual ~RenderDirectorBase() = default;
+        RenderGLBase();
+        virtual ~RenderGLBase() = default;
 
-        void createVertexBuffer(unsigned int size = 0);
-
-        // Pipline settings START
+        // Pipline APIs ////////////////////
 
         void begin(RenderData* data);
 
         void setShader(const std::string& filePath);
         void setTexture(const std::string& filePath, const std::string& textureName);
 
-        void end();
-
-        // Pipline settings END
-
-        virtual void render() = 0;
-
         virtual void submit(Shape* shape) = 0;
 
-        // Getters
+        void end();
+
+        /////////////////////////////////////
+
+        virtual void render() = 0;
 
         void setData(RenderData *data) {
             this->m_renderData = data;
@@ -43,15 +39,28 @@ namespace xengine {
             return m_renderData != nullptr;
         }
 
+        void updateCamera(glm::vec3 position, float rotation) {
+            m_renderData->camera->setPosition(position);
+            m_renderData->camera->setRotation(rotation);
+        }
+
+        Camera* getCamera() {
+            return m_renderData->camera;
+        }
+
     protected:
         /**
          * NOTE: Class doesn't own render data object
          * lifecycle should be managed by upper layers
          */
-        RenderData* m_renderData {};
-        RendererAPI* m_renderer {};
+        RenderData* m_renderData = nullptr;
+
+        // TODO: Hardcoded might be dynamically configured
+        RendererAPI* m_renderer = nullptr;
 
         void batch(Shape *shape);
+
+        void createVertexBuffer(unsigned int size = 0);
 
     private:
         void setIndexBuffer(IndexBuffer* ib, uint32_t maxSize) const;

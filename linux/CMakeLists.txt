@@ -58,8 +58,8 @@ add_library(core
     ${PROJECT_ROOT}/engine/opengl/render/RenderData.cpp
     ${PROJECT_ROOT}/engine/opengl/shapes/Line.cpp
     ${PROJECT_ROOT}/engine/opengl/shapes/Color.cpp
-    ${PROJECT_ROOT}/engine/opengl/render/RenderDirector.cpp
-    ${PROJECT_ROOT}/engine/opengl/render/RenderDirectorBase.cpp
+    ${PROJECT_ROOT}/engine/opengl/render/RenderGL.cpp
+    ${PROJECT_ROOT}/engine/opengl/render/RenderGLBase.cpp
     ${PROJECT_ROOT}/engine/opengl/Camera.cpp
     ${PROJECT_ROOT}/engine/window/input/Input.cpp
     ${PROJECT_ROOT}/engine/component/LayerStack.cpp
@@ -130,8 +130,7 @@ if (BUILD_TEST_APP)
         ../tests/ui_tests/ShapesTest.cpp
         ../tests/ui_tests/base/TestCase.cpp
         ../tests/ui_tests/BlankTest.cpp
-            ../tests/ui_tests/ComponentUIFactory.cpp
-            ../tests/ui_tests/ComponentUIFactory.h
+        ../tests/ui_tests/ComponentUIFactory.cpp
     )
 
     include_directories(../tests/ui_tests)

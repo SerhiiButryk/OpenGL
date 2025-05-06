@@ -2,6 +2,8 @@
 
 #include "RenderData.h"
 
+#include <algorithm>
+
 namespace xengine {
 
     void RenderData::releaseResources() {
@@ -40,6 +42,19 @@ namespace xengine {
 
         shapes.clear();
 
+    }
+
+    Shape* RenderData::getShapeById(unsigned int id) {
+
+        auto it = std::find_if (shapes.begin(), shapes.end(), [id](Shape* shape) {
+            return shape->getID() == id;
+        });
+
+        return (it == shapes.end()) ? nullptr : *it;
+    }
+
+    bool RenderData::hasShapeById(unsigned int id) {
+        return getShapeById(id) != nullptr;
     }
 
 }

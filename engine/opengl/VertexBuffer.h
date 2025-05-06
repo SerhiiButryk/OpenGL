@@ -21,13 +21,20 @@ namespace xengine {
 		void bind() const;
 		void unbind() const;
 
-		void fill(float* arr, size_t size /* Buffer size in bytes */, bool isDynamic = false);
+		void createAndInitialize(float* arr, size_t size /* Buffer size in bytes */, bool isDynamic = false);
+
 		// Update a buffer dynamically
 		void update(float* arr, size_t size /* Buffer size in bytes */) const;
 
 		bool isDynamic() const {
 			return m_IsDynamic;
 		}
+
+		void deleteBuffer();
+
+#ifdef UNIT_TESTS
+		auto getRenderId() const { return m_RenderId; }
+#endif
 
 	private:
 		uint32_t m_RenderId {};

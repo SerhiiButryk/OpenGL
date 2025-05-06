@@ -1,17 +1,17 @@
-#include "RenderDirectorBase.h"
+#include "RenderGLBase.h"
 
 #include <common/Log.h>
 #include <opengl/render/Renderer.h>
 
 namespace xengine {
 
-    RenderDirectorBase::RenderDirectorBase() {
+    RenderGLBase::RenderGLBase() {
         // TODO: Might not be a good approach but it's a simple way !
         static Renderer renderer;
         m_renderer = &renderer;
     }
 
-    void RenderDirectorBase::batch(Shape* shape) {
+    void RenderGLBase::batch(Shape* shape) {
 
         auto* srcPointer = shape->getBuffer();
         auto* destPointer = (Vertex*) m_renderData->configs.nextElementPointer;
@@ -29,7 +29,7 @@ namespace xengine {
         m_renderData->configs.nextElementPointer = destPointer;
     }
 
-    void RenderDirectorBase::createVertexBuffer(unsigned int size) {
+    void RenderGLBase::createVertexBuffer(unsigned int size) {
 
         if (m_renderData->configs.drawBuffer == nullptr) {
 
@@ -46,16 +46,16 @@ namespace xengine {
 
     }
 
-    void RenderDirectorBase::begin(RenderData* data) {
+    void RenderGLBase::begin(RenderData* data) {
         setData(data);
     }
 
-    void RenderDirectorBase::setShader(const std::string &filePath) {
+    void RenderGLBase::setShader(const std::string &filePath) {
         std::string path = m_renderData->configs.assetsPath + "/shader/" + filePath;
         m_renderData->shader = new Shader(path);
     }
 
-    void RenderDirectorBase::setTexture(const std::string &filePath, const std::string& textureName) {
+    void RenderGLBase::setTexture(const std::string &filePath, const std::string& textureName) {
 
         std::string path = m_renderData->configs.assetsPath + "/textures/" + filePath;
         m_renderData->texture = new Texture(path);
@@ -65,7 +65,7 @@ namespace xengine {
         m_renderData->shader->setTexture(textureName, 0 /* Slot */);
     }
 
-    void RenderDirectorBase::setIndexBuffer(IndexBuffer *ib, uint32_t maxSize) const {
+    void RenderGLBase::setIndexBuffer(IndexBuffer *ib, uint32_t maxSize) const {
 
         if (maxSize == 0) {
             maxSize = RenderData::DEFAULT_INDEX_BUFF_SIZE;
@@ -93,7 +93,7 @@ namespace xengine {
         ib->fill(indices, maxSize);
     }
 
-    void RenderDirectorBase::end() {
+    void RenderGLBase::end() {
 
         m_renderData->vertexArray = new VertexArray();
         m_renderData->vertexBuffer = new VertexBuffer();
@@ -101,7 +101,7 @@ namespace xengine {
         m_renderData->vertexArray->bind();
         m_renderData->vertexBuffer->bind();
 
-        m_renderData->vertexBuffer->fill(nullptr, VERTEX_TOTAL_SIZE(m_renderData->configs.vertexCount), true);
+        m_renderData->vertexBuffer->createAndInitialize(nullptr, VERTEX_TOTAL_SIZE(m_renderData->configs.vertexCount), true);
 
         /*
             Bind vertex buffer and layout into array buffer

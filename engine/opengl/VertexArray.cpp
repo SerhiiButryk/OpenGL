@@ -66,6 +66,8 @@ namespace xengine {
                 ", normalize = '{}', stride = '{}', offset = '{}'", i, layout.count,
                 layout.dataType, layout.nomalize, stride, offset);
 
+	        // Note this will also associate Vertex Buffer Object to Vertex Array Object !!!
+
             glVertexAttribPointer(i /* Index of the first vertex data element */,
                 layout.count /* The number of elements we are using , a kind of 2d or 3d coordinates */,
                 layout.dataType /* Type of the data buffer that we selected */,

@@ -33,12 +33,16 @@ namespace xengine {
             return m_height;
         }
 
+        float getTextureIndex() const {
+            return m_textureIndex;
+        }
+
     private:
         // Center coord of the shape
         glm::vec3 m_point;
 
-        float m_width;
-        float m_height;
+        float m_width = 0.0f;
+        float m_height = 0.0f;
 
         // A vertex buffer which contains 4 vertices to specify the rectangle
         VertexData m_dataBuffer = {};
