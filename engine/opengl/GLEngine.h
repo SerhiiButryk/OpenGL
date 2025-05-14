@@ -27,6 +27,8 @@ namespace xengine {
         static void setBlending(bool enable);
         static void setBlendingMode();
 
+        static void setPolygonEnableMode(bool enable);
+
     private:
         static inline bool IS_INITIALIZED = false;
         static inline bool CAN_BE_USED = false;

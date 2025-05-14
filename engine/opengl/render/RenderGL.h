@@ -8,7 +8,7 @@ namespace xengine {
     {
     public:
 
-        void submit(Shape* shape) override;
+        void submit(RenderData::Objects* object) override;
 
         void render() override;
 
@@ -17,7 +17,7 @@ namespace xengine {
     class RenderGLDebug : public RenderGL {
     public:
 
-        void submit(Shape* shape) override;
+        void submit(RenderData::Objects* object) override;
 
         void render() override;
 

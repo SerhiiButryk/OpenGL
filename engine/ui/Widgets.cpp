@@ -4,15 +4,6 @@
 
 namespace xengine {
 
-    void addInputField(const char* text, void* value, void (*onClick)(const char* text)) {
-
-        addSpace();
-
-        if (ImGui::InputFloat(text, (float*) value)) {
-            onClick(text);
-        }
-    }
-
     void addSpace() {
         ImGui::Spacing();
     }

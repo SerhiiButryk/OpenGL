@@ -1,7 +1,6 @@
 #pragma once
 
-#include <opengl/render/RenderGL.h>
-#include <opengl/shapes/Shape.h>
+#include <opengl/shapes/Rectangle.h>
 #include <opengl/shapes/Triangle.h>
 
 namespace test {
@@ -9,8 +8,6 @@ namespace test {
     class ComponentUIFactory 
     {
     public:
-        static void submitShape(xengine::Shape* shape, xengine::RenderGL* renderer,
-            xengine::RenderData* data, const char* shaderName);
 
         static xengine::Rectangle* createRectShape(glm::vec3 point, glm::vec4 color, float texutureIndex = -1.0f);
 

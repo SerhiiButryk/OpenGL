@@ -5,32 +5,27 @@
 
 namespace xengine {
 
-IndexBuffer::IndexBuffer()
-{
-	glGenBuffers(1 /* Create 1 buffer */, &m_RenderId /* Name of the array where generated buffer is stored */);
-}
+	IndexBuffer::IndexBuffer()
+	{
+		glGenBuffers(1 /* Create 1 buffer */, &m_RenderId /* Name of the array where generated buffer is stored */);
+	}
 
-void IndexBuffer::bind() const
-{
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER /* Buffer type */, m_RenderId /* Buffer name */);
-}
+	void IndexBuffer::bind() const
+	{
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER /* Buffer type */, m_RenderId /* Buffer name */);
+	}
 
-void IndexBuffer::unbind() const
-{
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER /* Buffer type */, 0);
-}
+	void IndexBuffer::unbind() const
+	{
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER /* Buffer type */, 0);
+	}
 
-void IndexBuffer::fill(uint32_t* arr, size_t size)
-{
-	m_IndexCount = size;
+	void IndexBuffer::fill(uint32_t* arr, size_t size)
+	{
+		m_IndexCount = size;
 
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size * sizeof(uint32_t) /* Buffer size in bytes */,
-		arr /* Actually data */, GL_STATIC_DRAW /* A hint for GPU see docs for details */);
-}
-
-uint32_t IndexBuffer::getRenderId() const
-{
-	return m_RenderId;
-}
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, size * sizeof(uint32_t) /* Buffer size in bytes */,
+			arr /* Actually data */, GL_STATIC_DRAW /* A hint for GPU see docs for details */);
+	}
 
 }

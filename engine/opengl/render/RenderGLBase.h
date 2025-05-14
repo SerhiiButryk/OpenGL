@@ -1,5 +1,6 @@
 #pragma once
 
+#include <common/Log.h>
 #include <opengl/render/RenderData.h>
 #include "RendererAPI.h"
 
@@ -18,14 +19,10 @@ namespace xengine {
 
         // Pipline APIs ////////////////////
 
-        void begin(RenderData* data);
+        void setConfigs(RenderData* data);
+        void setPipeline(RenderData::Objects*);
 
-        void setShader(const std::string& filePath);
-        void setTexture(const std::string& filePath, const std::string& textureName);
-
-        virtual void submit(Shape* shape) = 0;
-
-        void end();
+        virtual void submit(RenderData::Objects* object) = 0;
 
         /////////////////////////////////////
 
@@ -35,18 +32,20 @@ namespace xengine {
             this->m_renderData = data;
         }
 
+        RenderData* getData() {
+            return m_renderData;
+        }
+
         bool hasRenderData() const {
             return m_renderData != nullptr;
         }
 
-        void updateCamera(glm::vec3 position, float rotation) {
-            m_renderData->camera->setPosition(position);
-            m_renderData->camera->setRotation(rotation);
-        }
+        void releaseObjects();
+        void releaseDrawBuffer();
+        void releaseConfigs();
 
-        Camera* getCamera() {
-            return m_renderData->camera;
-        }
+        Shape* getShapeById(unsigned int id);
+        bool hasShapeById(unsigned int id);
 
     protected:
         /**
@@ -56,14 +55,21 @@ namespace xengine {
         RenderData* m_renderData = nullptr;
 
         // TODO: Hardcoded might be dynamically configured
-        RendererAPI* m_renderer = nullptr;
+        RendererAPI* m_impl = nullptr;
+
+        // Track a list of objects which we render
+        // Objects are owned by this class.
+        std::vector<RenderData::Objects*> m_objectsList;
+
+        RenderData::Objects* m_currentObject = nullptr;
 
         void batch(Shape *shape);
-
         void createVertexBuffer(unsigned int size = 0);
 
     private:
-        void setIndexBuffer(IndexBuffer* ib, uint32_t maxSize) const;
+
+        void fillIndexBufferWithData(IndexBuffer* ib, uint32_t maxSize) const;
+
     };
 
 }

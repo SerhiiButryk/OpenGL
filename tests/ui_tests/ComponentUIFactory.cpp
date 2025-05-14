@@ -2,20 +2,6 @@
 
 namespace test {
 
-    void ComponentUIFactory::submitShape(xengine::Shape *shape,
-        xengine::RenderGL* renderer, xengine::RenderData* data, const char* shaderName) {
-
-        renderer->begin(data);
-
-        renderer->setShader(shaderName);
-        // TODO: Configure
-        renderer->setTexture("test.png", "u_Texture");
-
-        renderer->submit(shape);
-
-        renderer->end();
-    }
-
     xengine::Rectangle* ComponentUIFactory::createRectShape(glm::vec3 point, glm::vec4 color, float texutureIndex) {
 
         using namespace xengine;

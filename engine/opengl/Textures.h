@@ -21,6 +21,13 @@ namespace xengine {
         void bind(uint32_t slot) const;
         void unbind() const;
 
+        static Texture* createTexture(const std::string& resourcesPath, const std::string& name) {
+            std::string path = resourcesPath+ "/textures/" + name;
+            auto texture = new Texture(path);
+            texture->bind(0);
+            return texture;
+        }
+
     private:
         uint32_t m_RendererID {};
         std::string m_FilePath;

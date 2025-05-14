@@ -19,8 +19,6 @@ namespace xengine {
         }
     }
 
-    void addInputField(const char* text, void* value, void (*onClick)(const char* text));
-
     template <typename Callable>
     void addColorPicker(const char* text, float* value, Callable &&callable) {
         addSpace();
@@ -33,5 +31,15 @@ namespace xengine {
     void addText(const char* fmt, ...);
 
     bool addCheckBox(const char* label, bool& v);
+
+    template <typename Callable>
+    void addInputField(const char* text, void* value, Callable &&callable) {
+
+        addSpace();
+
+        if (ImGui::InputFloat(text, (float*) value)) {
+            callable(text);
+        }
+    }
 
 }

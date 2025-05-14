@@ -23,7 +23,7 @@ namespace xengine {
 
 		void fill(uint32_t* arr, size_t size /* Buffer size in bytes */);
 
-		inline uint32_t getRenderId() const;
+		inline uint32_t getRenderId() const { return m_RenderId; }
 		inline uint32_t getCount() const { return m_IndexCount; }
 
 	private:

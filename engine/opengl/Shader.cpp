@@ -72,7 +72,7 @@ namespace xengine {
         }
     }
 
-    void Shader::setTexture(const std::string& name, int slotLocation) const {
+    void Shader::setTextureUniform(const std::string& name, int slotLocation) const {
         int location = getUniformLocation(name);
         if (location != -1) {
             glUniform1i(location, slotLocation);

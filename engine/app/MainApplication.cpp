@@ -96,7 +96,7 @@ namespace xengine {
 
     }
 
-    // This is called from main thread per frame
+    // This is called by main thread every frame
 
     void MainApplication::onProcess(void *app) {
 
@@ -120,6 +120,9 @@ namespace xengine {
             it->onDrawUI();
         }
         GUIHelper::endGUI();
+
+        // Window should be in the end
+        // It will do some final processing
 
         m_parentWindow->onProcess(app);
 

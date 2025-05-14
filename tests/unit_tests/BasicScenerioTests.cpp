@@ -3,6 +3,7 @@
 #include <base/Assert.h>
 #include <common/Log.h>
 #include <opengl/GLEngine.h>
+#include <opengl/IndexBuffer.h>
 #include <opengl/Shader.h>
 #include <opengl/VertexBuffer.h>
 #include <opengl/external/LoaderOpenGL.h>
@@ -28,7 +29,7 @@ namespace test {
         ASSERT_LOG(LoaderOpenGL::init(), "BasicScenerioTests::run OpenGL is not initialized");
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
-        // VertexBuffer basic test
+        // VertexBuffer test
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         {
             VertexBuffer vb = VertexBuffer();
@@ -59,7 +60,7 @@ namespace test {
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Shader basic test
+        // Shader test
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         {
             // 1. Load basic shader
@@ -85,6 +86,30 @@ namespace test {
 
             // Check this
             ASSERT_LOG(shader->gotLastUniformFromCache(), "BasicScenerioTests::run Not from cache uniform");
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Index buffer test
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        {
+            IndexBuffer ib;
+
+            auto id = ib.getRenderId();
+            LOG_INFO("BasicScenerioTests::run renderer id == {}", id);
+
+            ASSERT_LOG(id > 0, "BasicScenerioTests::run Index Buffer Renderer id is wrong");
+
+            ib.bind();
+
+            uint32_t indices[] = {
+                0, 1, 2,
+            };
+
+            ib.fill(indices, 3);
+
+            ASSERT_LOG(ib.getCount() == 3, "BasicScenerioTests::run Index Buffer Count is wrong");
+
+            ib.unbind();
         }
 
         window->onDestroy();

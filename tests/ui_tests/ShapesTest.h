@@ -25,7 +25,6 @@ namespace test {
 
     private:
 
-        void resetRenderData();
         void addShape(ShapesUIMode shape);
         void submitShape(xengine::Shape* shape, const char* shaderName);
 

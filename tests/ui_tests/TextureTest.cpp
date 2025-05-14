@@ -103,7 +103,7 @@ namespace test {
         textures = new Texture(resPath + "/textures/test.png");
         textures->bind(0 /* Slot */);
 
-        shader->setTexture("u_Texture", 0 /* Slot */);
+        shader->setTextureUniform("u_Texture", 0 /* Slot */);
 
         /* Clear all states */
 
@@ -162,16 +162,16 @@ namespace test {
         // Or
         // shader.setUniform("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
 
-        RenderData renderData;
-        renderData.shader = shader;
-        renderData.vertexArray = vertexArray;
-        renderData.indexBuffer = indexBuffer;
-        renderData.texture = textures;
-        renderData.vertexBuffer = vertexBuffer;
-
-        renderer.setData(&renderData);
-
-        renderer.drawRectangle();
+        // RenderData renderData;
+        // renderData.shader = shader;
+        // renderData.vertexArray = vertexArray;
+        // renderData.indexBuffer = indexBuffer;
+        // renderData.texture = textures;
+        // renderData.vertexBuffer = vertexBuffer;
+        //
+        // renderer.setData(&renderData);
+        //
+        // renderer.drawRectangle();
     }
 
     void TextureTest::onDrawUI() {

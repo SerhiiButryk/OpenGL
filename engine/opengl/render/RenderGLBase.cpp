@@ -2,13 +2,14 @@
 
 #include <common/Log.h>
 #include <opengl/render/Renderer.h>
+#include <algorithm>
 
 namespace xengine {
 
     RenderGLBase::RenderGLBase() {
         // TODO: Might not be a good approach but it's a simple way !
         static Renderer renderer;
-        m_renderer = &renderer;
+        m_impl = &renderer;
     }
 
     void RenderGLBase::batch(Shape* shape) {
@@ -46,32 +47,49 @@ namespace xengine {
 
     }
 
-    void RenderGLBase::begin(RenderData* data) {
+    void RenderGLBase::setConfigs(RenderData* data) {
         setData(data);
     }
 
-    void RenderGLBase::setShader(const std::string &filePath) {
-        std::string path = m_renderData->configs.assetsPath + "/shader/" + filePath;
-        m_renderData->shader = new Shader(path);
+    void RenderGLBase::setPipeline(RenderData::Objects* object) {
+
+        // VAO store calls
+        // VertexBuffer.bind()
+        // VertexBuffer.unbind()
+        // IndexBuffer.bind()
+        // IndexBuffer.unbind()
+        // And attrib pointer data
+
+        object->vertexArray = new VertexArray();
+        object->vertexBuffer = new VertexBuffer();
+
+        object->vertexArray->bind();
+        object->vertexBuffer->bind();
+
+        object->vertexBuffer->createAndInitialize(nullptr, VERTEX_TOTAL_SIZE(m_renderData->configs.vertexCount), true);
+
+        /*
+            Bind vertex buffer and set attrib pointer for ABO
+        */
+
+        BufferLayout layout = Vertex::getLayout();
+        object->vertexArray->add(*object->vertexBuffer, layout);
+
+        object->indexBuffer = new IndexBuffer();
+
+        object->indexBuffer->bind();
+
+        fillIndexBufferWithData(object->indexBuffer, m_renderData->configs.indexBufferMaxSize);
+
     }
 
-    void RenderGLBase::setTexture(const std::string &filePath, const std::string& textureName) {
-
-        std::string path = m_renderData->configs.assetsPath + "/textures/" + filePath;
-        m_renderData->texture = new Texture(path);
-
-        m_renderData->texture->bind(0 /* Slot */);
-
-        m_renderData->shader->setTexture(textureName, 0 /* Slot */);
-    }
-
-    void RenderGLBase::setIndexBuffer(IndexBuffer *ib, uint32_t maxSize) const {
+    void RenderGLBase::fillIndexBufferWithData(IndexBuffer *ib, uint32_t maxSize) const {
 
         if (maxSize == 0) {
             maxSize = RenderData::DEFAULT_INDEX_BUFF_SIZE;
         }
 
-        LOG_INFO("RenderCommand::prepareIndexBuffer() creating a buffer with size = {}", maxSize);
+        LOG_INFO("RenderCommand::fillIndexBufferWithData() creating a buffer with size = {}", maxSize);
 
         uint32_t indices[maxSize] = {};
         uint32_t offset = 0;
@@ -89,31 +107,77 @@ namespace xengine {
             offset += 4;
         }
 
-        ib->bind();
         ib->fill(indices, maxSize);
     }
 
-    void RenderGLBase::end() {
+    void RenderGLBase::releaseObjects() {
 
-        m_renderData->vertexArray = new VertexArray();
-        m_renderData->vertexBuffer = new VertexBuffer();
+        LOG_INFO("RenderGLBase::releaseObjects()");
 
-        m_renderData->vertexArray->bind();
-        m_renderData->vertexBuffer->bind();
+        for (auto && obj : m_objectsList) {
 
-        m_renderData->vertexBuffer->createAndInitialize(nullptr, VERTEX_TOTAL_SIZE(m_renderData->configs.vertexCount), true);
+            if (obj->vertexArray) {
+                obj->vertexArray->unbind();
+            }
 
-        /*
-            Bind vertex buffer and layout into array buffer
-        */
+            if (obj->shader) {
+                obj->shader->unBind();
+            }
 
-        BufferLayout layout = Vertex::getLayout();
-        m_renderData->vertexArray->add(*m_renderData->vertexBuffer, layout);
+            if (obj->indexBuffer) {
+                obj->indexBuffer->unbind();
+            }
 
-        m_renderData->indexBuffer = new IndexBuffer();
+            if (obj->vertexBuffer) {
+                obj->vertexBuffer->unbind();
+            }
 
-        setIndexBuffer(m_renderData->indexBuffer, m_renderData->configs.indexBufferMaxSize);
+            delete obj->vertexArray;
+            delete obj->vertexBuffer;
+            delete obj->indexBuffer;
+            delete obj->shader;
+            delete obj->texture;
+            delete obj->shape;
 
+            delete obj;
+        }
+
+        m_objectsList.clear();
+    }
+
+    void RenderGLBase::releaseDrawBuffer() {
+
+        LOG_INFO("RenderGLBase::releaseDrawBuffer() m_renderData = '{:p}'", fmt::ptr(m_renderData));
+
+        if (m_renderData) {
+
+            delete [] (float*) m_renderData->configs.drawBuffer;
+
+            m_renderData->configs.drawBuffer = nullptr;
+            m_renderData->configs.nextElementPointer = nullptr;
+        }
+    }
+
+    void RenderGLBase::releaseConfigs() {
+
+        LOG_INFO("RenderGLBase::releaseConfigs() m_renderData = '{:p}'", fmt::ptr(m_renderData));
+
+        if (m_renderData) {
+            m_renderData->configs = {};
+        }
+    }
+
+    Shape* RenderGLBase::getShapeById(unsigned int id) {
+
+        auto it = std::find_if (m_objectsList.begin(), m_objectsList.end(), [id](RenderData::Objects* obj) {
+            return obj->shape->getID() == id;
+        });
+
+        return it == m_objectsList.end() ? nullptr : (*it)->shape;
+    }
+
+    bool RenderGLBase::hasShapeById(unsigned int id) {
+        return getShapeById(id) != nullptr;
     }
 
 }

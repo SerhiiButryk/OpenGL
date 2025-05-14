@@ -60,6 +60,9 @@ namespace xengine {
     }
 
     void DecoratorUI::onDraw() {
+
+        GLEngine::setPolygonEnableMode(m_polygonEnableMode);
+
         // Clear screen as we are the first layer to render
         Renderer::clearScreen({m_color[0], m_color[1], m_color[2], m_color[3]});
     }
@@ -70,6 +73,7 @@ namespace xengine {
         static auto fps_label = "Performance: %.3f ms/frame (%.1f FPS)";
         static auto color_picker_label = "Set color";
         static auto debug_log_enable_label = "Enable debug logs";
+        static auto polygon_mode_enable_label = "Enable polygon mode";
 
         // Debug tab
         ImGui::Begin(title);
@@ -84,6 +88,10 @@ namespace xengine {
 
         if (addCheckBox(debug_log_enable_label, m_enableDebugLogs)) {
             Log::getInstance().setLogLevel(m_enableDebugLogs);
+        }
+
+        if (addCheckBox(polygon_mode_enable_label, m_polygonEnableMode)) {
+            // no-op
         }
 
         ImGui::End();

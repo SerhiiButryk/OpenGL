@@ -35,6 +35,7 @@ target_link_libraries(UniTests
 include_directories(${CMAKE_SOURCE_DIR})
 include_directories(${PROJECT_ROOT}/engine)
 include_directories(${PROJECT_ROOT}/dependencies)
+include_directories(${PROJECT_ROOT}/dependencies/GLEW/include)
 
 # Add Unit Tests (Displayed test name + test args)
 add_test(NAME BasicTest COMMAND UniTests BasicTest)

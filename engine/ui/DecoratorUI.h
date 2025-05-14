@@ -39,6 +39,7 @@ namespace xengine {
         float m_color[4] = Color(xengine::GREY_COLOR);
 
         bool m_enableDebugLogs = Log::getInstance().isDebugLogEnabled();
+        bool m_polygonEnableMode = false;
 
     private:
         void drawDebugUI();

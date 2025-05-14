@@ -1,5 +1,7 @@
 #include "Renderer.h"
 
+#include <common/Log.h>
+
 #include "opengl/shapes/Shape.h"
 
 namespace xengine {
@@ -9,36 +11,36 @@ namespace xengine {
         glClear(GL_COLOR_BUFFER_BIT);
     }
 
-    void Renderer::setCommonConfigs(const glm::mat4& tansform) {
+    void Renderer::setCommonConfigs(const RenderData::Objects& object) {
 
-        if (m_renderData->vertexBuffer->isDynamic()) {
+        if (object.vertexBuffer->isDynamic()) {
             // If the buffer is dynamic we update the vertex buffer
-            m_renderData->vertexBuffer->update(
+            object.vertexBuffer->update(
                 (float*) m_renderData->configs.drawBuffer,
                 VERTEX_TOTAL_SIZE(m_renderData->configs.vertexCount));
         }
 
-        auto* shader = m_renderData->shader;
+        auto* shader = object.shader;
         shader->bind();
 
         // TODO: Get rid of hardcoding
-        if (m_renderData->camera) {
-            // Set camera matrix
-            shader->setUniformMat("u_ViewProjMatrix", m_renderData->camera->getViewProjMatrix());
-        }
+        // Set camera matrix
+        shader->setUniformMat("u_ViewProjMatrix", m_renderData->configs.viewProjMatrix);
 
         // Set transformation for our object
-        shader->setUniformMat("u_ModelMatrix", tansform);
+        shader->setUniformMat("u_ModelMatrix", object.tansform);
 
     }
 
-    void Renderer::drawRectangle(const glm::mat4& tansform) {
+    void Renderer::drawRectangle(const RenderData::Objects& object) {
 
-        setCommonConfigs(tansform);
+        LOG_DEBUG("Renderer::drawRectangle() obj = '{:p}' IN", fmt::ptr(&object));
 
-        auto* va = m_renderData->vertexArray;
-        auto* ib = m_renderData->indexBuffer;
-        auto* shader = m_renderData->shader;
+        setCommonConfigs(object);
+
+        auto* va = object.vertexArray;
+        auto* ib = object.indexBuffer;
+        auto* shader = object.shader;
 
         /* Bind everything before making a draw call */
 
@@ -50,14 +52,22 @@ namespace xengine {
 
         glDrawElements(GL_TRIANGLES, ib->getCount(), GL_UNSIGNED_INT, nullptr);
 
+        /* Unbind to be safe  */
+
+        shader->unBind();
+        va->unbind();
+        ib->unbind();
+
+        LOG_DEBUG("Renderer::drawRectangle() obj = '{:p}' OUT", fmt::ptr(&object));
+
     }
 
-    void Renderer::drawLine(const glm::mat4& tansform) {
+    void Renderer::drawLine(const RenderData::Objects& object) {
 
-        setCommonConfigs(tansform);
+        setCommonConfigs(object);
 
-        auto* va = m_renderData->vertexArray;
-        auto* shader = m_renderData->shader;
+        auto* va = object.vertexArray;
+        auto* shader = object.shader;
 
         shader->bind();
         va->bind();

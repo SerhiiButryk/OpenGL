@@ -142,4 +142,12 @@ namespace xengine {
         }
     }
 
+    void GLEngine::setPolygonEnableMode(bool enable) {
+        if (enable) {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        } else {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        }
+    }
+
 }

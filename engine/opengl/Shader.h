@@ -33,10 +33,15 @@ namespace xengine {
         void unBind() const;
 
         void setUniform(const std::string& name, float red, float green, float blue, float opacity) const;
-        void setTexture(const std::string& name, int slotLocation) const;
+        void setTextureUniform(const std::string& name, int slotLocation) const;
         void setUniformMat(const std::string& name, const glm::mat4& mat4) const;
 
         uint32_t getId() const { return m_RenderId; }
+
+        static Shader* createShader(const std::string& resourcesPath, const std::string& name) {
+            std::string path = resourcesPath + "/shader/" + name;
+            return new Shader(path);
+        }
 
 #ifdef UNIT_TESTS
         uint32_t getRendererID() const { return m_RenderId; }
