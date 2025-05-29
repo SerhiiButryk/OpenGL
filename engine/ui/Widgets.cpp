@@ -16,9 +16,13 @@ namespace xengine {
         va_end(args);
     }
 
-    bool addCheckBox(const char* label, bool& v) {
-        addSpace();
+    bool addCheckBox(const char* label, bool& v, bool sameLine) {
+        if (sameLine) { setSameLine(); }
         return ImGui::Checkbox(label, &v);
+    }
+
+    void setSameLine() {
+        ImGui::SameLine();
     }
 
 }

@@ -2,19 +2,18 @@
 
 namespace test {
 
-    xengine::Rectangle* ComponentUIFactory::createRectShape(glm::vec3 point, glm::vec4 color, float texutureIndex) {
+    xengine::Rectangle *ComponentUIFactory::createRectShape(glm::vec3 centerPoint, glm::vec4 color,
+                                                                       float texutureIndex, float width,
+                                                                       float height) {
 
         using namespace xengine;
 
-        float defaultWidth = 1.0f;
-        float defaultHeight = 1.0f;
-
-        auto shape = new Rectangle(point, defaultWidth, defaultHeight);
+        auto shape = new Rectangle(centerPoint, width, height);
 
         shape->setColor(color);
         shape->setTextureIndex(texutureIndex);
 
-        shape->applyNewValues();
+        shape->create();
 
         return shape;
     }
@@ -27,9 +26,9 @@ namespace test {
 
         shape->setColor(color);
 
-        shape->addVertex(point1);
-        shape->addVertex(point2);
-        shape->addVertex(point3);
+        shape->setPoint(point1, 0);
+        shape->setPoint(point2, 1);
+        shape->setPoint(point3, 2);
 
         return shape;
     }

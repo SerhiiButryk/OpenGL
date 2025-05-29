@@ -1,19 +1,23 @@
 #include "Triangle.h"
 
+#include <stdexcept>
+
 namespace xengine {
 
     Triangle::Triangle() {
     }
 
-    void Triangle::create() {
+    void Triangle::setPoint(glm::vec3 point, int index) {
 
-    }
+        if (index < 0 || index >= 3) {
+            throw std::invalid_argument("index out of range");
+        }
 
-    void Triangle::addVertex(glm::vec3 position) {
+        glm::vec2 textCoord = {0.0f, 0.0f};
 
-        Vertex vertex = { position, m_color, {0.0f, 0.0f}, m_textureIndex };
+        Vertex vertex = { point, m_color, textCoord, m_textureIndex };
 
-        m_dataBuffer[m_dataBufferIndex++] = vertex;
+        m_dataBuffer[index] = vertex;
     }
 
 }

@@ -19,16 +19,13 @@ namespace xengine {
 
         Vertex* getBuffer() override { return m_dataBuffer.data(); }
 
-        void create() override;
-
-        void addVertex(glm::vec3 position);
+        void setPoint(glm::vec3 point, int index);
 
     private:
         // No texture by default
         float m_textureIndex = -1.0f;
 
         VertexData m_dataBuffer = {};
-        unsigned int m_dataBufferIndex = 0;
     };
 
 }

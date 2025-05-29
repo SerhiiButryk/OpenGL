@@ -13,7 +13,7 @@
 
 namespace test {
 
-    ShapesComponentUI::ShapesComponentUI(Application* app) : TestCase(app) {
+    ShapesComponentUI::ShapesComponentUI(Application *app) : TestCase(app) {
     }
 
     void ShapesComponentUI::onAttach() {
@@ -23,7 +23,6 @@ namespace test {
     }
 
     void ShapesComponentUI::onDraw() {
-
         using namespace xengine;
 
         ////////////////////////////////////
@@ -51,7 +50,7 @@ namespace test {
         if (Input::IsKeyPressed(XE_KEY_W)) {
             positionCamera.y += moveSpeed * times;
         } else if (Input::IsKeyPressed(XE_KEY_S)) {
-            positionCamera.y -= moveSpeed *times;
+            positionCamera.y -= moveSpeed * times;
         }
 
         if (Input::IsKeyPressed(XE_KEY_E)) {
@@ -70,7 +69,6 @@ namespace test {
     }
 
     void ShapesComponentUI::onDrawUI() {
-
         using namespace xengine;
 
         addSpace();
@@ -85,184 +83,140 @@ namespace test {
         addText("Left, right, up, down: A, D, W, S");
         addText("Rotation: R");
 
-        addColorPicker("Set color", glm::value_ptr(color), [&, this](const char *text) {});
+        addText("--- Shapes settings ---");
+
+        addColorPicker("Set color", glm::value_ptr(m_color), [&, this](const char *text) {
+        });
+
+        addInputField("Center X:", "centerx1", &center.x, [&, this](const char *text) {
+        }, false, 50.0f);
+        addInputField("Y:", "centery1", &center.y, [&, this](const char *text) {
+        }, true, 50.0f);
+        addInputField("Z:", "centerz1", &center.z, [&, this](const char *text) {
+        }, true, 50.0f);
+
+        addInputField("Texture index:", "texindex", &textIndex, [&, this](const char *text) {
+        }, false, 50.0f);
 
         addText("--- Rectangle ---");
 
-        float f = 0.0f;
-        addInputField("Width", &f, [&, this](const char *text) {});
-        addInputField("Height", &f, [&, this](const char *text) {});
-        addInputField("Center1", &f, [&, this](const char *text) {});
+        addInputField("Width:", "Width", &widthAndHeight.x, [&, this](const char *text) {
+        }, false, 50.0f);
+        addInputField("Height:", "Height", &widthAndHeight.y, [&, this](const char *text) {
+        }, true, 50.0f);
 
         addSpace();
-        addButton("Add1", [&, this](const char *text) {
-            addShape(ShapesUIMode::RECTANGLE_SHAPE);
-        }, false);
 
         addText("--- Triangle ---");
 
-        addInputField("X", &f, [&, this](const char *text) {});
-        addInputField("Y", &f, [&, this](const char *text) {});
-        addInputField("Z", &f, [&, this](const char *text) {});
-        addInputField("Center2", &f, [&, this](const char *text) {});
+        addInputField("P1 X:", "P1x", &p1.x, [&, this](const char *text) {
+        }, false, 50.0f);
+        addInputField("Y:", "P1y", &p1.y, [&, this](const char *text) {
+        }, true, 50.0f);
+        addInputField("Z:", "P1z", &p1.z, [&, this](const char *text) {
+        }, true, 50.0f);
+
+        addInputField("P2 X:", "P2x", &p2.x, [&, this](const char *text) {
+        }, false, 50.0f);
+        addInputField("Y:", "P2y", &p2.y, [&, this](const char *text) {
+        }, true, 50.0f);
+        addInputField("Z:", "P2z", &p2.z, [&, this](const char *text) {
+        }, true, 50.0f);
+
+        addInputField("P3 X:", "P3x", &p3.x, [&, this](const char *text) {
+        }, false, 50.0f);
+        addInputField("Y:", "P3y", &p3.y, [&, this](const char *text) {
+        }, true, 50.0f);
+        addInputField("Z:", "P3z", &p3.z, [&, this](const char *text) {
+        }, true, 50.0f);
 
         addSpace();
-        addButton("Add2", [&, this](const char *text) {
-            addShape(ShapesUIMode::TRIANGLE_SHAPE);
-        }, false);
 
         addText("--- Circle ---");
 
+        addText("--- Select shape ---");
+
         addSpace();
-        addButton("Add3", [&, this](const char *text) {
-            addShape(ShapesUIMode::CIRCLE_SHAPE);
-        }, false);
 
-        // auto updateRectangle = [&, this](const char *text) {
-        //
-        //     auto shape = (Rectangle*) m_renderer->getShapeById(m_shapeId);
-        //
-        //     glm::vec4 newColor = { m_color[0], m_color[1], m_color[2], 1.0f };
-        //     glm::vec3 defaultPosition = { 0.0f, 0.0f, 0.0f };
-        //
-        //     float texutureIndex = -1.0f;
-        //
-        //     if (strcmp(text, "change_texture") == 0) {
-        //         texutureIndex = shape->getTextureIndex() * -1.0f;
-        //     }
-        //
-        //     auto newshape = ComponentUIFactory::createRectShape(defaultPosition, newColor, texutureIndex);
-        //
-        //     submitShape(newshape, "base.shader");
-        // };
-        //
-        // if (m_shapesUIModeCurrent == ShapesUIMode::RECTANGLE_SHAPE) {
-        //
-        //     Shape* shape = m_renderer->getShapeById(m_shapeId);
-        //
-        //     auto vec4 = shape->getColor();
-        //     m_color = glm::value_ptr(vec4);
-        //
-        //     addColorPicker("Color", m_color, updateRectangle);
-        //
-        //     auto rect = (Rectangle*) shape;
-        //
-        //     addText("Width: %.1f", rect->getWidth());
-        //     addText("Height: %.1f", rect->getHeight());
-        //     addText("Center (X,Y,Z): (%.1f, %.1f, %.1f)", rect->getCoord().x, rect->getCoord().y, rect->getCoord().z);
-        //
-        //     static bool enableTexture = false;
-        //
-        //     addSpace();
-        //     if (addCheckBox("Set texture", enableTexture)) {
-        //         updateRectangle("change_texture");
-        //     }
-        //
-        // }
-        //
-        // auto updateTriangle = [&, this](const char *text) {
-        //
-        //     glm::vec4 color = { m_colorTriangle[0], m_colorTriangle[1], m_colorTriangle[2], 1.0f};
-        //
-        //     auto shape = ComponentUIFactory::createTriangleShape(
-        //         { -0.5f, -0.5f, 0.0f },
-        //         { 0.5f, -0.5f, 0.0f },
-        //         { 0.0f, 0.5f, 0.0f },
-        //         color);
-        //
-        //     submitShape(shape, "base.shader");
-        //
-        // };
-        //
-        // if (m_shapesUIModeCurrent == ShapesUIMode::TRIANGLE_SHAPE) {
-        //
-        //     m_colorTriangle = glm::value_ptr(color);
-        //
-        //     addColorPicker("Color", m_colorTriangle, updateTriangle);
-        //
-        //     auto triangle = (Triangle*) m_renderer->getShapeById(m_shapeId);
-        //
-        //     auto arrPtr = triangle->getBuffer();
-        //     addText("P 1 (X,Y,Z): (%.1f, %.1f, %.1f)", arrPtr->position.x, arrPtr->position.y, arrPtr->position.z);
-        //
-        //     arrPtr++; // Next element
-        //     addText("P 2 (X,Y,Z): (%.1f, %.1f, %.1f)", arrPtr->position.x, arrPtr->position.y, arrPtr->position.z);
-        //
-        //     arrPtr++; // Next element
-        //     addText("P 3 (X,Y,Z): (%.1f, %.1f, %.1f)", arrPtr->position.x, arrPtr->position.y, arrPtr->position.z);
-        // }
-        //
-        // if (m_shapesUIModeCurrent == ShapesUIMode::CIRCLE_SHAPE) {
-        //
-        //     Shape* shape = m_renderer->getShapeById(m_shapeId);
-        //
-        //     auto rect = (Rectangle*) shape;
-        //
-        //     addText("Width: %.1f", rect->getWidth());
-        //     addText("Height: %.1f", rect->getHeight());
-        //     addText("Center (X,Y,Z): (%.1f, %.1f, %.1f)", rect->getCoord().x, rect->getCoord().y, rect->getCoord().z);
-        // }
-        //
-        // if (m_shapesUIModeCurrent != ShapesUIMode::INIT) {
-        //     addSpace();
-        //     addText("Camera controls:");
-        //     addText("Left, right, up, down - A, D, W, S");
-        //     addText("Rotation - R");
-        // }
+        /////////////////////////
+        /// Shape selection
+        /////////////////////////
 
-    }
+        bool checked1 = (m_shapeSelected == ShapeSelected::CIRCLE_SHAPE);
+        bool checked2 = (m_shapeSelected == ShapeSelected::TRIANGLE_SHAPE);
+        bool checked3 = (m_shapeSelected == ShapeSelected::RECTANGLE_SHAPE);
 
-    void ShapesComponentUI::addShape(ShapesUIMode mode) {
-
-        m_shapesUIModeCurrent = mode;
-
-        glm::vec3 defaultPosition = { 0.0f, 0.0f, 0.0f };
-        glm::vec4 defaultColor = { 0.0f, 0.0f, 0.0f, 1.0f };
-
-        switch (mode) {
-
-            case ShapesUIMode::RECTANGLE_SHAPE:
-                {
-                    auto shape = ComponentUIFactory::createRectShape(defaultPosition, defaultColor);
-
-                    submitShape(shape, "base.shader");
-                }
-
-                break;
-
-            case ShapesUIMode::CIRCLE_SHAPE:
-
-                {
-                    auto shape = ComponentUIFactory::createRectShape(defaultPosition, defaultColor);
-
-                    submitShape(shape, "circle.shader");
-                }
-
-                break;
-
-            case ShapesUIMode::TRIANGLE_SHAPE:
-
-                {
-
-                    glm::vec4 color = { 1.0f, 0.0f, 0.0f, 1.0f};
-
-                    auto shape = ComponentUIFactory::createTriangleShape(
-                        { -0.5f, -0.5f, 0.0f },
-                        { 0.5f, -0.5f, 0.0f },
-                        { 0.0f, 0.5f, 0.0f },
-                        color);
-
-                    submitShape(shape, "base.shader");
-                }
-
-                break;
+        if (addCheckBox("Circle", checked1, true)) {
+            m_shapeSelected = ShapeSelected::CIRCLE_SHAPE;
         }
 
+        if (addCheckBox("Triangle", checked2, true)) {
+            m_shapeSelected = ShapeSelected::TRIANGLE_SHAPE;
+        }
+
+        if (addCheckBox("Rect", checked3, true)) {
+            m_shapeSelected = ShapeSelected::RECTANGLE_SHAPE;
+        }
+
+        addSpace();
+        addSpace();
+
+        /////////////////////////
+        /// Add button
+        /////////////////////////
+
+        addButton("Add", [&, this](const char *) {
+
+            LOG_INFO("Adding new shape:");
+
+            LOG_INFO("*** width {}, height {}", widthAndHeight.x, widthAndHeight.y);
+
+            LOG_INFO("*** P1 ({},{},{}) P2 ({},{},{}) P3 ({},{},{})", p1.x, p1.y, p1.z, p2.x, p2.y, p2.z, p3.x,
+                     p3.y, p3.z);
+
+            LOG_INFO("*** center ({},{},{})", center.x, center.y, center.z);
+
+            addShape();
+
+        }, false);
     }
 
-    void ShapesComponentUI::submitShape(xengine::Shape* shape, const char* shaderName) {
+    void ShapesComponentUI::addShape() {
 
-        m_shapeId = shape->getID();
+        switch (m_shapeSelected) {
+
+            case ShapeSelected::RECTANGLE_SHAPE: {
+
+                auto shape = ComponentUIFactory::createRectShape(center, m_color, textIndex, widthAndHeight.x,
+                                                                 widthAndHeight.y);
+
+                submitShape(shape, "base.shader");
+            }
+
+            break;
+
+            case ShapeSelected::CIRCLE_SHAPE: {
+
+                auto shape = ComponentUIFactory::createRectShape(center, m_color, textIndex, widthAndHeight.x,
+                                                                 widthAndHeight.y);
+
+                submitShape(shape, "circle.shader");
+            }
+
+            break;
+
+            case ShapeSelected::TRIANGLE_SHAPE: {
+
+                auto shape = ComponentUIFactory::createTriangleShape(p1, p2, p3, m_color);
+
+                submitShape(shape, "base.shader");
+            }
+
+            break;
+        }
+    }
+
+    void ShapesComponentUI::submitShape(xengine::Shape *shape, const char *shaderName) {
 
         m_data->configs.height = m_app->getHeight();
         m_data->configs.width = m_app->getWidth();
@@ -281,7 +235,5 @@ namespace test {
         object->shader->setTextureUniform("u_Texture", 0);
 
         m_renderer->submit(object);
-
     }
-
 }

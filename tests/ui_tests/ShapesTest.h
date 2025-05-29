@@ -8,11 +8,10 @@ namespace test {
     {
     public:
 
-        enum class ShapesUIMode : unsigned short {
+        enum class ShapeSelected : unsigned short {
             CIRCLE_SHAPE = 1,
             TRIANGLE_SHAPE,
-            RECTANGLE_SHAPE,
-            INIT
+            RECTANGLE_SHAPE
         };
 
         explicit ShapesComponentUI(Application* app);
@@ -25,7 +24,7 @@ namespace test {
 
     private:
 
-        void addShape(ShapesUIMode shape);
+        void addShape();
         void submitShape(xengine::Shape* shape, const char* shaderName);
 
         std::unique_ptr<xengine::Camera> m_camera = std::make_unique<xengine::Camera>(-1.6f, 1.6f, -0.9f, 0.9f);
@@ -35,13 +34,18 @@ namespace test {
         // Or
         // ... director = new xengine::RenderDirectorDebug();
 
-        ShapesUIMode m_shapesUIModeCurrent = ShapesUIMode::INIT;
-        unsigned int m_shapeId = {};
+        ShapeSelected m_shapeSelected = ShapeSelected::TRIANGLE_SHAPE;
 
-        float* m_color = {};
-        float* m_colorTriangle = {};
+        glm::vec4 m_color = { 1.0f, 0.0f, 0.0f, 1.0f};
 
-        glm::vec4 color = { 1.0f, 0.0f, 0.0f, 1.0f};
+        glm::vec3 p1 = {-0.5f, -0.5f, 0.0f};
+        glm::vec3 p2 = {0.5f, -0.5f, 0.0f};
+        glm::vec3 p3 = {0.0f, 0.5f, 0.0f};
+
+        glm::vec3 center = { 0.0f, 0.0f, 0.0f };
+        float textIndex = -1.0f;
+
+        glm::vec2 widthAndHeight = { 1.0f, 1.0f };
 
     };
 }

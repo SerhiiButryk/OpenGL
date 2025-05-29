@@ -5,6 +5,8 @@
 #include <glm/vec2.hpp>
 #include <opengl/Layout.h>
 
+#include "Color.h"
+
 namespace xengine {
 
     #define VERTEX_ELEMENT_COUNT(x) sizeof (decltype(x)) / sizeof (decltype(x)::value_type)
@@ -51,12 +53,11 @@ namespace xengine {
             void setColor(glm::vec4 color) { m_color = color; }
             glm::vec4 getColor() const { return m_color; }
 
-            virtual void create() = 0;
-            void applyNewValues() { create(); }
+            virtual void create() {}
 
         protected:
             // RGB Color
-            glm::vec4 m_color = {0.0f, 0.0f, 0.0f, 1.0f};
+            glm::vec4 m_color = Color(BLACK_COLOR);
             // ID
             unsigned int m_ID = UniqueIDGenerator::getNextID();
     };
