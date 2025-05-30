@@ -16,6 +16,10 @@ namespace xengine {
 
         static void beginGUI();
         static void endGUI();
+
+    private:
+        static void setColorsForDarkTheme();
+        static void setFonts();
     };
 
 }
