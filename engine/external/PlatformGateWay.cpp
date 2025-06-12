@@ -34,9 +34,9 @@ namespace xengine {
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         // Enable forward compatibility
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-
         // Enable OpenGL debug context which may give more info about errors
         glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, 1);
+        glfwWindowHint(GLFW_RESIZABLE, true);
 
         int major, minor, rev;
         glfwGetVersion(&major, &minor, &rev);

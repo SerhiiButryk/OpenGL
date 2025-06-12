@@ -7,8 +7,9 @@ namespace xengine {
     class RenderGL : public RenderGLBase
     {
     public:
+        ~RenderGL() override;
 
-        void submit(RenderData::Objects* object) override;
+        void submit(Object* object) override;
 
         void render() override;
 
@@ -17,7 +18,9 @@ namespace xengine {
     class RenderGLDebug : public RenderGL {
     public:
 
-        void submit(RenderData::Objects* object) override;
+        ~RenderGLDebug() override;
+
+        void submit(Object* object) override;
 
         void render() override;
 

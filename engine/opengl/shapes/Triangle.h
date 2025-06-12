@@ -16,6 +16,7 @@ namespace xengine {
         void setTextureIndex(float index) { m_textureIndex = index; }
 
         uint32_t getVertexCount() const override { return VERTEX_COUNT; }
+        uint32_t getElementCount() const override { return 3; }
 
         Vertex* getBuffer() override { return m_dataBuffer.data(); }
 

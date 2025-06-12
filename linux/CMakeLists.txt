@@ -126,7 +126,6 @@ if (BUILD_TEST_APP)
         ../tests/ui_tests/Application.cpp
         ../tests/ui_tests/TestMenuUI.cpp
         ../tests/ui_tests/TextureTest.cpp
-        ../tests/ui_tests/BatchingTest.cpp
         ../tests/ui_tests/ShapesTest.cpp
         ../tests/ui_tests/base/TestCase.cpp
         ../tests/ui_tests/BlankTest.cpp

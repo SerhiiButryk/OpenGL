@@ -1,6 +1,5 @@
 #pragma once
 
-#include "glm/vec4.hpp"
 #include "opengl/render/RendererAPI.h"
 
 namespace xengine {
@@ -14,11 +13,11 @@ namespace xengine {
 
         static void clearScreen(glm::vec4 color);
 
-        void drawRectangle(const RenderData::Objects& object) override;
+        void drawRectangle(const Object* object) override;
 
-        void drawLine(const RenderData::Objects& object) override;
+        void drawLine(const Object* object) override;
 
     private:
-        void setCommonConfigs(const RenderData::Objects& object);
+        void setCommonConfigs(const Object* object);
     };
 }

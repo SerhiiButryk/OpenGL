@@ -4,9 +4,4 @@
 
 namespace xengine {
 
-    void RenderData::clear() {
-
-
-    }
-
 }

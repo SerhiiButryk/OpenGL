@@ -4,9 +4,9 @@
 #include <public/XEngine.h>
 
 /**
- * This is a test example of simple shapes:
+ * This is an example to demonstrate how to work with shapes:
  *
- * 1. Squad
+ * 1. Regtangle
  * 2. Circle
  * 3. Triangle
  */
@@ -62,10 +62,7 @@ namespace test {
         m_camera->setPosition(positionCamera);
         m_camera->setRotation(rot);
 
-        if (m_renderer->hasRenderData()) {
-            m_renderer->getData()->configs.viewProjMatrix = m_camera->getViewProjMatrix();
-            m_renderer->render();
-        }
+        m_renderer->render();
     }
 
     void ShapesComponentUI::onDrawUI() {
@@ -74,8 +71,6 @@ namespace test {
         addSpace();
         addButton("Clear draw buffer", [&, this](const char *text) {
             m_renderer->releaseObjects();
-            m_renderer->releaseDrawBuffer();
-            m_renderer->releaseConfigs();
         }, false);
 
         addSpace();
@@ -187,8 +182,10 @@ namespace test {
 
             case ShapeSelected::RECTANGLE_SHAPE: {
 
-                auto shape = ComponentUIFactory::createRectShape(center, m_color, textIndex, widthAndHeight.x,
-                                                                 widthAndHeight.y);
+                // auto shape = ComponentUIFactory::createRectShape(m_color, widthAndHeight.x,
+                                                                 // widthAndHeight.y, textIndex);
+
+                auto shape = ComponentUIFactory::createRectShape(m_color);
 
                 submitShape(shape, "base.shader");
             }
@@ -197,8 +194,10 @@ namespace test {
 
             case ShapeSelected::CIRCLE_SHAPE: {
 
-                auto shape = ComponentUIFactory::createRectShape(center, m_color, textIndex, widthAndHeight.x,
-                                                                 widthAndHeight.y);
+                // auto shape = ComponentUIFactory::createRectShape(m_color, widthAndHeight.x,
+                                                                 // widthAndHeight.y, textIndex);
+
+                auto shape = ComponentUIFactory::createRectShape(m_color);
 
                 submitShape(shape, "circle.shader");
             }
@@ -218,21 +217,32 @@ namespace test {
 
     void ShapesComponentUI::submitShape(xengine::Shape *shape, const char *shaderName) {
 
-        m_data->configs.height = m_app->getHeight();
-        m_data->configs.width = m_app->getWidth();
-        m_data->configs.assetsPath = m_app->getResourcePath();
-        m_data->configs.viewProjMatrix = m_camera->getProjectionMatrix();
-
-        m_renderer->setConfigs(m_data.get());
-
-        // Setup object configs
-        auto object = new xengine::RenderData::Objects();
+        auto object = new xengine::Object();
 
         object->shape = shape;
+
         object->shader = xengine::Shader::createShader(m_app->getResourcePath(), shaderName);
+        object->shader->bind();
+
         object->texture = xengine::Texture::createTexture(m_app->getResourcePath(), "test.png");
 
-        object->shader->setTextureUniform("u_Texture", 0);
+        if (strcasecmp(shaderName, "base.shader") == 0) {
+            object->shader->setTextureUniform("u_Texture", 0);
+        }
+
+        // Projection matrix
+        glm::mat4 proj = glm::perspective(glm::radians(45.0f), 1280.0f / 720.0f, 0.1f, 100.0f);
+
+        // View matrix
+        glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
+
+        // Model matrix
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+        object->shader->setUniformMat("u_Model", model);
+        object->shader->setUniformMat("u_View", view);
+        object->shader->setUniformMat("u_Projection", proj);
 
         m_renderer->submit(object);
     }

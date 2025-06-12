@@ -29,7 +29,6 @@ namespace test {
 
         std::unique_ptr<xengine::Camera> m_camera = std::make_unique<xengine::Camera>(-1.6f, 1.6f, -0.9f, 0.9f);
         std::unique_ptr<xengine::RenderGL> m_renderer = std::make_unique<xengine::RenderGL>();
-        std::unique_ptr<xengine::RenderData> m_data = std::make_unique<xengine::RenderData>();
 
         // Or
         // ... director = new xengine::RenderDirectorDebug();

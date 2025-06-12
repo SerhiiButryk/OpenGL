@@ -6,14 +6,15 @@ layout(location = 1) in vec4 color;
 layout(location = 2) in vec2 texture;
 layout(location = 3) in float texIndex;
 
-uniform mat4 u_ViewProjMatrix;
-uniform mat4 u_ModelMatrix;
+uniform mat4 u_Model;
+uniform mat4 u_View;
+uniform mat4 u_Projection;
 
 out vec3 v_LocalSpace;
 
 void main()
 {
-    gl_Position = u_ViewProjMatrix * u_ModelMatrix * vec4(position, 1.0);
+    gl_Position = u_Projection * u_View * u_Model * vec4(position, 1.0);
     v_LocalSpace = position;
 }
 

@@ -7,39 +7,58 @@ namespace xengine {
 
     ////////////////////////////////////////////////////////////////////////////////////////////
 
+    RenderGL::~RenderGL() {
+        releaseObjects();
+    }
+
     void RenderGL::render() {
 
-        m_impl->setData(m_renderData);
+        // Process the object list
 
         for (auto && object : m_objectsList) {
 
-            LOG_DEBUG("RenderGL::render() obj = '{:p}'", fmt::ptr(object));
+            LOG_DEBUG("RenderGL::render() rendering obj = '{:p}'", fmt::ptr(object));
 
-            m_impl->drawRectangle(*object);
+            // Update buffer if shape is invalid
+            if (object->shape->isInvalid()) {
+
+                // Batch this shape into draw buffer
+                batch(object);
+
+                // Call to create VAO, VBO ets... for this object
+                createGLBuffers(object);
+
+                object->shape->reset();
+            }
+
+            m_impl->drawRectangle(object);
         }
 
     }
 
-    void RenderGL::submit(RenderData::Objects* object) {
-
-        LOG_INFO("RenderGL::submit() obj = '{:p}'", fmt::ptr(object));
+    void RenderGL::submit(Object* object) {
 
         // Create a buffer if it is not created
-        createVertexBuffer();
+        createDrawBuffer(object);
 
-        // Batch to draw buffer
-        batch(object->shape);
+        // Batch this shape into draw buffer
+        batch(object);
 
-        m_renderData->configs.vertexCount += object->shape->getVertexCount();
-
-        // Call to create or configure VAO, VBO ets...
-        setPipeline(object);
+        // Call to create VAO, VBO ets... for this object
+        createGLBuffers(object);
 
         m_objectsList.push_back(object);
+
+        LOG_DEBUG("RenderGL::submit() done, vertex count = '{}', new obj = '{:p}', total objects = '{}'",
+            object->elementCount, fmt::ptr(object), m_objectsList.size());
 
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////
+
+    RenderGLDebug::~RenderGLDebug() {
+        releaseObjects();
+    }
 
     void RenderGLDebug::render() {
 
@@ -49,7 +68,7 @@ namespace xengine {
 
     }
 
-    void RenderGLDebug::submit(RenderData::Objects* object) {
+    void RenderGLDebug::submit(Object* object) {
 
         // // Create a buffer if it is not created
         // createVertexBuffer();

@@ -43,23 +43,37 @@ namespace xengine {
     class Shape {
 
         public:
+
             Shape() = default;
             virtual ~Shape() = default;
 
             virtual Vertex* getBuffer() = 0;
+
             virtual uint32_t getVertexCount() const = 0;
+            virtual uint32_t getElementCount() const { return 0; }
+
             unsigned int getID() const { return m_ID; }
 
-            void setColor(glm::vec4 color) { m_color = color; }
+            void setColor(glm::vec4 color) { m_color = color; create(); }
             glm::vec4 getColor() const { return m_color; }
 
+            void setTextureIndex(float index) { m_textureIndex = index; create(); }
+
             virtual void create() {}
+
+            void invalidate() { invalid = true; }
+            void reset() { invalid = false; }
+            bool isInvalid() const { return invalid; }
 
         protected:
             // RGB Color
             glm::vec4 m_color = Color(BLACK_COLOR);
             // ID
             unsigned int m_ID = UniqueIDGenerator::getNextID();
+            // No texture by default
+            float m_textureIndex = -1.0f;
+            // Marks if shape has changed and it should drown again
+            bool invalid = false;
     };
 
 }

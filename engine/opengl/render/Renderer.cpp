@@ -1,7 +1,6 @@
 #include "Renderer.h"
 
 #include <common/Log.h>
-
 #include "opengl/shapes/Shape.h"
 
 namespace xengine {
@@ -11,36 +10,33 @@ namespace xengine {
         glClear(GL_COLOR_BUFFER_BIT);
     }
 
-    void Renderer::setCommonConfigs(const RenderData::Objects& object) {
+    void Renderer::setCommonConfigs(const Object* object) {
+        // If the buffer is dynamic we update the vertex buffer
+        if (object->vertexBuffer->isDynamic()) {
 
-        if (object.vertexBuffer->isDynamic()) {
-            // If the buffer is dynamic we update the vertex buffer
-            object.vertexBuffer->update(
-                (float*) m_renderData->configs.drawBuffer,
-                VERTEX_TOTAL_SIZE(m_renderData->configs.vertexCount));
+            if (!object->drawBuffer) {
+                LOG_ERROR("Renderer::setCommonConfigs: drawBuffer is not set");
+            }
+
+            if (object->elementCount == 0) {
+                LOG_ERROR("Renderer::setCommonConfigs: vertex count is not set");
+            }
+
+            object->vertexBuffer->update(
+                (float*) object->drawBuffer,
+                VERTEX_TOTAL_SIZE(object->elementCount));
         }
-
-        auto* shader = object.shader;
-        shader->bind();
-
-        // TODO: Get rid of hardcoding
-        // Set camera matrix
-        shader->setUniformMat("u_ViewProjMatrix", m_renderData->configs.viewProjMatrix);
-
-        // Set transformation for our object
-        shader->setUniformMat("u_ModelMatrix", object.tansform);
-
     }
 
-    void Renderer::drawRectangle(const RenderData::Objects& object) {
+    void Renderer::drawRectangle(const Object* object) {
 
-        LOG_DEBUG("Renderer::drawRectangle() obj = '{:p}' IN", fmt::ptr(&object));
+        LOG_DEBUG("Renderer::drawRectangle() obj = '{:p}' START", fmt::ptr(&object));
 
         setCommonConfigs(object);
 
-        auto* va = object.vertexArray;
-        auto* ib = object.indexBuffer;
-        auto* shader = object.shader;
+        auto* va = object->vertexArray;
+        auto* ib = object->indexBuffer;
+        auto* shader = object->shader;
 
         /* Bind everything before making a draw call */
 
@@ -58,19 +54,19 @@ namespace xengine {
         va->unbind();
         ib->unbind();
 
-        LOG_DEBUG("Renderer::drawRectangle() obj = '{:p}' OUT", fmt::ptr(&object));
+        LOG_DEBUG("Renderer::drawRectangle() obj = '{:p}' END", fmt::ptr(&object));
 
     }
 
-    void Renderer::drawLine(const RenderData::Objects& object) {
+    void Renderer::drawLine(const Object* object) {
 
         setCommonConfigs(object);
 
-        auto* va = object.vertexArray;
-        auto* shader = object.shader;
+        // auto* va = object->vertexArray;
+        // auto* shader = object->shader;
 
-        shader->bind();
-        va->bind();
+        // shader->bind();
+        // va->bind();
 
         // TODO: Doesn't work on Ubuntu
         // GLfloat aliasedLineRange[2];
@@ -80,9 +76,9 @@ namespace xengine {
 
         /* Send a draw command */
 
-        uint32_t count = m_renderData->configs.vertexCount;
+        // uint32_t count = m_renderData->configs.vertexCount;
 
-        glDrawArrays(GL_LINES, 0, count);
+        // glDrawArrays(GL_LINES, 0, count);
 
     }
 

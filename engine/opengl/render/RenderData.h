@@ -9,53 +9,28 @@
 
 namespace xengine {
 
-    /**
-     * A data for our render
-     */
-    class RenderData
-    {
-    public:
+    static constexpr unsigned int DEFAULT_VERTEX_BUFF_SIZE = 100;
+    static constexpr unsigned int DEFAULT_INDEX_BUFF_SIZE = 100;
 
-        static constexpr unsigned int DEFAULT_VERTEX_BUFF_SIZE = 100;
-        static constexpr unsigned int DEFAULT_INDEX_BUFF_SIZE = 100;
+    // A per object data for our render[
+    struct Object {
 
-        // Some context configs/data
-        struct RendererConfigs {
+        Shape* shape = nullptr;
+        Shader* shader = nullptr;
+        Texture* texture = nullptr;
 
-            int width {}, height {}; // window size information in pixels
-            std::string assetsPath;
+        glm::mat4 tansform = glm::mat4(1.0f);
 
-            uint32_t vertexCount {}; // number of vertices
-            uint32_t indexBufferMaxSize {};
+        void* drawBuffer = nullptr; // actual data buffer
+        void* drawBufferPointer = nullptr; // pointer to the next vertex place in the buffer
 
-            void* drawBuffer = nullptr; // actual data buffer
-            void* nextElementPointer = nullptr; // pointer to the next vertex place in the buffer
+        uint32_t elementCount {}; // number of vertices to draw
 
-            // Controlled by Camera class
-            glm::mat4 viewProjMatrix = glm::mat4(1.0f);
-        };
+        uint32_t indexBufferSizeDefault = DEFAULT_INDEX_BUFF_SIZE;
 
-        // Per object configs/data
-        struct Objects {
-
-            Shape* shape = nullptr;
-
-            Shader* shader = nullptr;
-            VertexArray* vertexArray = nullptr;
-            VertexBuffer* vertexBuffer = nullptr;
-            IndexBuffer* indexBuffer = nullptr;
-            Texture* texture = nullptr;
-
-            glm::mat4 tansform = glm::mat4(1.0f);
-        };
-
-        RendererConfigs configs = {};
-
-        /**
-         * Releases all resources and states for the current Render data object
-         */
-        void clear();
-
+        VertexArray* vertexArray = nullptr;
+        VertexBuffer* vertexBuffer = nullptr;
+        IndexBuffer* indexBuffer = nullptr;
     };
 
 }

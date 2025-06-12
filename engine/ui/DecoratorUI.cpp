@@ -5,6 +5,7 @@
 #include <external/GUIHelper.h>
 #include <opengl/GLEngine.h>
 #include <opengl/render/Renderer.h>
+#include <file/Resources.h>
 
 #include "Widgets.h"
 
@@ -71,9 +72,11 @@ namespace xengine {
 
         static auto title = "Debug menu";
         static auto fps_label = "Performance: %.3f ms/frame (%.1f FPS)";
-        static auto color_picker_label = "Set color";
-        static auto debug_log_enable_label = "Enable debug logs";
-        static auto polygon_mode_enable_label = "Enable polygon mode";
+        static auto color_picker_label = "Background";
+        static auto debug_log_enable_label = "Debug logs";
+        static auto polygon_mode_enable_label = "Polygon mode";
+        static auto current_prog_path = "Path: ";
+        static auto logs_prog_path = "Logs: ";
 
         // Debug tab
         ImGui::Begin(title);
@@ -83,6 +86,13 @@ namespace xengine {
         addText(versionInfo1.get());
         addText(versionInfo2.get());
         addText(versionInfo3.get());
+
+        auto currentPath = std::string(current_prog_path);
+        auto progPath = currentPath + file::getCurrentPath();
+        addText(progPath.c_str());
+
+        auto logsPath = logs_prog_path + file::getCurrentPath() + "/" + Log::CORE_LOG_FILE_NAME;
+        addText(logsPath.c_str());
 
         addColorPicker(color_picker_label, m_color, [](const char* text) {});
 

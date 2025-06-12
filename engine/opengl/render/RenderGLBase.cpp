@@ -3,21 +3,21 @@
 #include <common/Log.h>
 #include <opengl/render/Renderer.h>
 #include <algorithm>
+#include <opengl/shapes/Triangle.h>
 
 namespace xengine {
 
     RenderGLBase::RenderGLBase() {
-        // TODO: Might not be a good approach but it's a simple way !
         static Renderer renderer;
         m_impl = &renderer;
     }
 
-    void RenderGLBase::batch(Shape* shape) {
+    void RenderGLBase::batch(Object* object) {
 
-        auto* srcPointer = shape->getBuffer();
-        auto* destPointer = (Vertex*) m_renderData->configs.nextElementPointer;
+        auto* srcPointer = object->shape->getBuffer();
+        auto* destPointer = (Vertex*) object->drawBufferPointer;
 
-        for (int i = 0; i < shape->getVertexCount(); i++) {
+        for (int i = 0; i < object->shape->getVertexCount(); i++) {
             destPointer->position = srcPointer->position;
             destPointer->color = srcPointer->color;
             destPointer->texCoord = srcPointer->texCoord;
@@ -27,33 +27,26 @@ namespace xengine {
             srcPointer++;
         }
 
-        m_renderData->configs.nextElementPointer = destPointer;
+        object->elementCount += object->shape->getElementCount();
     }
 
-    void RenderGLBase::createVertexBuffer(unsigned int size) {
+    void RenderGLBase::createDrawBuffer(Object* object, unsigned int size) {
 
-        if (m_renderData->configs.drawBuffer == nullptr) {
+        if (object->drawBuffer == nullptr) {
 
-            if (size == 0) {
-                size = RenderData::DEFAULT_VERTEX_BUFF_SIZE;
-            }
+            size = object->shape->getVertexCount();
 
-            LOG_INFO("RenderCommand::createVertexBuffer() creating a buffer with size = {}", size);
+            object->drawBuffer = new Vertex[size]{};
+            object->drawBufferPointer = object->drawBuffer;
 
-            m_renderData->configs.drawBuffer = new Vertex[size]{};
-            m_renderData->configs.nextElementPointer = m_renderData->configs.drawBuffer;
-
+            LOG_DEBUG("RenderGLBase::createVertexBuffer() created a buffer with size = {}", size);
         }
 
     }
 
-    void RenderGLBase::setConfigs(RenderData* data) {
-        setData(data);
-    }
+    void RenderGLBase::createGLBuffers(Object* object) {
 
-    void RenderGLBase::setPipeline(RenderData::Objects* object) {
-
-        // VAO store calls
+        // VAO store the next calls
         // VertexBuffer.bind()
         // VertexBuffer.unbind()
         // IndexBuffer.bind()
@@ -66,7 +59,7 @@ namespace xengine {
         object->vertexArray->bind();
         object->vertexBuffer->bind();
 
-        object->vertexBuffer->createAndInitialize(nullptr, VERTEX_TOTAL_SIZE(m_renderData->configs.vertexCount), true);
+        object->vertexBuffer->createAndInitialize(nullptr, VERTEX_TOTAL_SIZE(object->elementCount), true);
 
         /*
             Bind vertex buffer and set attrib pointer for ABO
@@ -76,38 +69,52 @@ namespace xengine {
         object->vertexArray->add(*object->vertexBuffer, layout);
 
         object->indexBuffer = new IndexBuffer();
-
         object->indexBuffer->bind();
 
-        fillIndexBufferWithData(object->indexBuffer, m_renderData->configs.indexBufferMaxSize);
+        fillIndexBufferWithData(object);
 
     }
 
-    void RenderGLBase::fillIndexBufferWithData(IndexBuffer *ib, uint32_t maxSize) const {
+    void RenderGLBase::fillIndexBufferWithData(Object* object) const {
 
-        if (maxSize == 0) {
-            maxSize = RenderData::DEFAULT_INDEX_BUFF_SIZE;
-        }
+        size_t maxSize = object->elementCount;
 
-        LOG_INFO("RenderCommand::fillIndexBufferWithData() creating a buffer with size = {}", maxSize);
+        LOG_INFO("RenderGLBase::fillIndexBufferWithData() creating a buffer with size = {}", maxSize);
 
         uint32_t indices[maxSize] = {};
         uint32_t offset = 0;
 
-        // '6' represents 2 triangles with 3 * 2 vertices
-        for (int i = 0; i < maxSize; i += 6 /* Makes up a single quad */) {
-            indices[i + 0] = 0 + offset;
-            indices[i + 1] = 1 + offset;
-            indices[i + 2] = 2 + offset;
+        // Set index buffer for rectangle
 
-            indices[i + 3] = 2 + offset;
-            indices[i + 4] = 3 + offset;
-            indices[i + 5] = 0 + offset;
+        auto rectangle = dynamic_cast<Rectangle*>(object->shape);
 
-            offset += 4;
+        if (rectangle) {
+            // '6' represents 2 triangles with 3 * 2 vertices
+            for (int i = 0; i < maxSize; i += 6 /* Makes up a single quad */) {
+
+                indices[i + 0] = 0 + offset;
+                indices[i + 1] = 1 + offset;
+                indices[i + 2] = 2 + offset;
+
+                indices[i + 3] = 2 + offset;
+                indices[i + 4] = 3 + offset;
+                indices[i + 5] = 0 + offset;
+
+                offset += 4;
+            }
         }
 
-        ib->fill(indices, maxSize);
+        // Set index buffer for triangle
+
+        auto triangle = dynamic_cast<Triangle*>(object->shape);
+
+        if (triangle) {
+            indices[0] = 0;
+            indices[1] = 1;
+            indices[2] = 2;
+        }
+
+        object->indexBuffer->fill(indices, maxSize);
     }
 
     void RenderGLBase::releaseObjects() {
@@ -132,6 +139,14 @@ namespace xengine {
                 obj->vertexBuffer->unbind();
             }
 
+            if (obj->drawBuffer) {
+
+                delete [] (float*) obj->drawBuffer;
+
+                obj->drawBuffer = nullptr;
+                obj->drawBufferPointer = nullptr;
+            }
+
             delete obj->vertexArray;
             delete obj->vertexBuffer;
             delete obj->indexBuffer;
@@ -145,31 +160,9 @@ namespace xengine {
         m_objectsList.clear();
     }
 
-    void RenderGLBase::releaseDrawBuffer() {
-
-        LOG_INFO("RenderGLBase::releaseDrawBuffer() m_renderData = '{:p}'", fmt::ptr(m_renderData));
-
-        if (m_renderData) {
-
-            delete [] (float*) m_renderData->configs.drawBuffer;
-
-            m_renderData->configs.drawBuffer = nullptr;
-            m_renderData->configs.nextElementPointer = nullptr;
-        }
-    }
-
-    void RenderGLBase::releaseConfigs() {
-
-        LOG_INFO("RenderGLBase::releaseConfigs() m_renderData = '{:p}'", fmt::ptr(m_renderData));
-
-        if (m_renderData) {
-            m_renderData->configs = {};
-        }
-    }
-
     Shape* RenderGLBase::getShapeById(unsigned int id) {
 
-        auto it = std::find_if (m_objectsList.begin(), m_objectsList.end(), [id](RenderData::Objects* obj) {
+        auto it = std::find_if (m_objectsList.begin(), m_objectsList.end(), [id](Object* obj) {
             return obj->shape->getID() == id;
         });
 
