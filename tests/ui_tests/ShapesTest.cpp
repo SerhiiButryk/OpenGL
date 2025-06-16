@@ -181,69 +181,64 @@ namespace test {
         switch (m_shapeSelected) {
 
             case ShapeSelected::RECTANGLE_SHAPE: {
-
-                // auto shape = ComponentUIFactory::createRectShape(m_color, widthAndHeight.x,
-                                                                 // widthAndHeight.y, textIndex);
-
-                auto shape = ComponentUIFactory::createRectShape(m_color);
-
-                submitShape(shape, "base.shader");
+                submitRectangle();
             }
 
             break;
 
             case ShapeSelected::CIRCLE_SHAPE: {
-
-                // auto shape = ComponentUIFactory::createRectShape(m_color, widthAndHeight.x,
-                                                                 // widthAndHeight.y, textIndex);
-
-                auto shape = ComponentUIFactory::createRectShape(m_color);
-
-                submitShape(shape, "circle.shader");
+                submitCircle();
             }
 
             break;
 
             case ShapeSelected::TRIANGLE_SHAPE: {
-
-                auto shape = ComponentUIFactory::createTriangleShape(p1, p2, p3, m_color);
-
-                submitShape(shape, "base.shader");
+                submitTriangle();
             }
 
             break;
         }
     }
 
-    void ShapesComponentUI::submitShape(xengine::Shape *shape, const char *shaderName) {
+    void ShapesComponentUI::submitRectangle() {
 
-        auto object = new xengine::Object();
-
-        object->shape = shape;
-
-        object->shader = xengine::Shader::createShader(m_app->getResourcePath(), shaderName);
-        object->shader->bind();
-
-        object->texture = xengine::Texture::createTexture(m_app->getResourcePath(), "test.png");
-
-        if (strcasecmp(shaderName, "base.shader") == 0) {
-            object->shader->setTextureUniform("u_Texture", 0);
-        }
-
-        // Projection matrix
-        glm::mat4 proj = glm::perspective(glm::radians(45.0f), 1280.0f / 720.0f, 0.1f, 100.0f);
-
-        // View matrix
-        glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
-
-        // Model matrix
-        glm::mat4 model = glm::mat4(1.0f);
+        auto model = glm::mat4(1.0f);
         model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
-        object->shader->setUniformMat("u_Model", model);
-        object->shader->setUniformMat("u_View", view);
-        object->shader->setUniformMat("u_Projection", proj);
+        std::string shaderPath = xengine::file::buildShaderPath(m_app->getResourcePath(), "base.shader");
+        std::string texturePath = xengine::file::buildTexturePath(m_app->getResourcePath(), "wood_surface.png");
+
+        auto* object = ComponentUIFactory::createRectShape(shaderPath, texturePath, model, m_color, 1.0f, 1.0f, 1.0f);
 
         m_renderer->submit(object);
+
     }
+
+    void ShapesComponentUI::submitTriangle() {
+
+        auto model = glm::mat4(1.0f);
+        model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+        std::string shaderPath = xengine::file::buildShaderPath(m_app->getResourcePath(), "base.shader");
+
+        glm::vec3 points[] = { p1, p2, p3 };
+        auto* object = ComponentUIFactory::createTriangleShape(shaderPath, "", model, m_color, points, -1.0f);
+
+        m_renderer->submit(object);
+
+    }
+
+    void ShapesComponentUI::submitCircle() {
+
+        auto model = glm::mat4(1.0f);
+        model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+        std::string shaderPath = xengine::file::buildShaderPath(m_app->getResourcePath(), "circle.shader");
+
+        auto* object = ComponentUIFactory::createRectShape(shaderPath, "", model, m_color, 1.0f, 1.0f, -1.0f);
+
+        m_renderer->submit(object);
+
+    }
+
 }

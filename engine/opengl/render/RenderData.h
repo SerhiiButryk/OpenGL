@@ -5,7 +5,7 @@
 #include <opengl/Shader.h>
 #include <opengl/Textures.h>
 #include <opengl/VertexArray.h>
-#include <opengl/shapes/Rectangle.h>
+#include <opengl/shapes/Shape.h>
 
 namespace xengine {
 

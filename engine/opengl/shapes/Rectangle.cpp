@@ -3,10 +3,10 @@
 namespace xengine {
 
     Rectangle::Rectangle(float width, float height) : m_width(width), m_height(height) {
-        Rectangle::create();
+        Rectangle::updateBuffer();
     }
 
-    void Rectangle::create() {
+    void Rectangle::updateBuffer() {
 
         // Default texture coordinates
         glm::vec2 c1 = {0.0f, 0.0f};

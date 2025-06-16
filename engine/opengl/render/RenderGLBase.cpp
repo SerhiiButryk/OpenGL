@@ -2,8 +2,10 @@
 
 #include <common/Log.h>
 #include <opengl/render/Renderer.h>
-#include <algorithm>
+#include <opengl/shapes/Rectangle.h>
 #include <opengl/shapes/Triangle.h>
+
+#include <algorithm>
 
 namespace xengine {
 

@@ -15,15 +15,4 @@ namespace xengine {
 
     };
 
-    class RenderGLDebug : public RenderGL {
-    public:
-
-        ~RenderGLDebug() override;
-
-        void submit(Object* object) override;
-
-        void render() override;
-
-    };
-
 }

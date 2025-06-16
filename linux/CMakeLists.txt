@@ -67,6 +67,7 @@ add_library(core
     ${PROJECT_ROOT}/engine/external/GUIHelper.cpp
     ${PROJECT_ROOT}/engine/component/Layer.cpp
     ${PROJECT_ROOT}/engine/opengl/shapes/Triangle.cpp
+    ${PROJECT_ROOT}/engine/opengl/shapes/Cube.cpp
 )
 
 # Define macros

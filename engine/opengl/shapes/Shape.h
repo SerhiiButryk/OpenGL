@@ -54,12 +54,16 @@ namespace xengine {
 
             unsigned int getID() const { return m_ID; }
 
-            void setColor(glm::vec4 color) { m_color = color; create(); }
+            void setColor(glm::vec4 color) { m_color = color; updateBuffer(); }
             glm::vec4 getColor() const { return m_color; }
 
-            void setTextureIndex(float index) { m_textureIndex = index; create(); }
+            void setTextureIndex(float index) { m_textureIndex = index; updateBuffer(); }
 
-            virtual void create() {}
+            float getTextureIndex() const {
+                return m_textureIndex;
+            }
+
+            virtual void updateBuffer() {}
 
             void invalidate() { invalid = true; }
             void reset() { invalid = false; }

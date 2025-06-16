@@ -15,7 +15,7 @@ namespace xengine {
 
         Vertex* getBuffer() override { return m_dataBuffer.data(); }
 
-        void create() override;
+        void updateBuffer() override;
 
         uint32_t getVertexCount() const override { return VERTEX_COUNT; }
         uint32_t getElementCount() const override { return 6; }
@@ -26,10 +26,6 @@ namespace xengine {
 
         float getHeight() const {
             return m_height;
-        }
-
-        float getTextureIndex() const {
-            return m_textureIndex;
         }
 
     private:

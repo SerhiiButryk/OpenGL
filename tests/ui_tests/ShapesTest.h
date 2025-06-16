@@ -25,7 +25,9 @@ namespace test {
     private:
 
         void addShape();
-        void submitShape(xengine::Shape* shape, const char* shaderName);
+        void submitRectangle();
+        void submitTriangle();
+        void submitCircle();
 
         std::unique_ptr<xengine::Camera> m_camera = std::make_unique<xengine::Camera>(-1.6f, 1.6f, -0.9f, 0.9f);
         std::unique_ptr<xengine::RenderGL> m_renderer = std::make_unique<xengine::RenderGL>();

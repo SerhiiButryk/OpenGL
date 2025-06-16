@@ -19,7 +19,7 @@ namespace xengine {
 
         uint32_t getVertexCount() const override { return VERTEX_COUNT; }
 
-        void create() override;
+        void updateBuffer() override;
 
     private:
         glm::vec3 m_pointStart;

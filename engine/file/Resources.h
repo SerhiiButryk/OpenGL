@@ -26,5 +26,13 @@ namespace xengine::file {
     	return currentPath.string();
 	}
 
+	inline std::string buildShaderPath(const std::string& assetsPath, const std::string& name) {
+		return getPlatformPath(assetsPath + shaderFolder + "/" + name);
+	}
+
+	inline std::string buildTexturePath(const std::string& assetsPath, const std::string& name) {
+		return getPlatformPath(assetsPath + textureFolder + "/" + name);
+	}
+
 }
 

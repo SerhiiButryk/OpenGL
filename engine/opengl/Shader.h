@@ -38,9 +38,8 @@ namespace xengine {
 
         uint32_t getId() const { return m_RenderId; }
 
-        static Shader* createShader(const std::string& resourcesPath, const std::string& name) {
-            std::string path = resourcesPath + "/shader/" + name;
-            return new Shader(path);
+        static Shader* createShader(const std::string& shaderPath) {
+            return new Shader(shaderPath);
         }
 
 #ifdef UNIT_TESTS
