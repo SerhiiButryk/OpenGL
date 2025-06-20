@@ -17,11 +17,12 @@ namespace xengine {
 	public:
 
 		VertexBuffer();
+		~VertexBuffer();
 
 		void bind() const;
 		void unbind() const;
 
-		void createAndInitialize(float* arr, size_t size /* Buffer size in bytes */, bool isDynamic = false);
+		void fill(float* arr, size_t size /* Buffer size in bytes */, bool isDynamic = false);
 
 		// Update a buffer dynamically
 		void update(float* arr, size_t size /* Buffer size in bytes */) const;
@@ -29,8 +30,6 @@ namespace xengine {
 		bool isDynamic() const {
 			return m_IsDynamic;
 		}
-
-		void deleteBuffer();
 
 #ifdef UNIT_TESTS
 		auto getRenderId() const { return m_RenderId; }

@@ -10,6 +10,11 @@ namespace xengine {
 	    glGenBuffers(1 /* Generate 1 buffer */, &m_RenderId /* Name of the array where generated buffer is stored */);
     }
 
+    VertexBuffer::~VertexBuffer() {
+        // Delete buffer on GPU so memory can be reused
+        glDeleteBuffers(1 , &m_RenderId);
+    }
+
     void VertexBuffer::bind() const
     {
 	    glBindBuffer(GL_ARRAY_BUFFER /* Buffer type */, m_RenderId /* Buffer name */);
@@ -20,7 +25,7 @@ namespace xengine {
 	    glBindBuffer(GL_ARRAY_BUFFER /* Buffer type */, 0);
     }
 
-    void VertexBuffer::createAndInitialize(float* arr, size_t size, bool isDynamic)
+    void VertexBuffer::fill(float* arr, size_t size, bool isDynamic)
     {
         // Bind our buffer
         bind();
@@ -51,12 +56,4 @@ namespace xengine {
             arr /* Data which we want to write*/);
     }
 
-    void VertexBuffer::deleteBuffer() {
-
-        // Bind our buffer
-        bind();
-
-        // Delete buffer on GPU so memory can be reused
-        glDeleteBuffers(1 , &m_RenderId);
-    }
 }

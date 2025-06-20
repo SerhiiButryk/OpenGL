@@ -17,6 +17,7 @@ namespace xengine {
 	public:
 
 		IndexBuffer();
+		~IndexBuffer();
 
 		void bind() const;
 		void unbind() const;

@@ -11,7 +11,9 @@ namespace test {
         enum class ShapeSelected : unsigned short {
             CIRCLE_SHAPE = 1,
             TRIANGLE_SHAPE,
-            RECTANGLE_SHAPE
+            RECTANGLE_SHAPE,
+            CUBE_SHAPE,
+            BATCH_SHAPE
         };
 
         explicit ShapesComponentUI(Application* app);
@@ -28,6 +30,8 @@ namespace test {
         void submitRectangle();
         void submitTriangle();
         void submitCircle();
+        void submitBatch();
+        void submitCube();
 
         std::unique_ptr<xengine::Camera> m_camera = std::make_unique<xengine::Camera>(-1.6f, 1.6f, -0.9f, 0.9f);
         std::unique_ptr<xengine::RenderGL> m_renderer = std::make_unique<xengine::RenderGL>();

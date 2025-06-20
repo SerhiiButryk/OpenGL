@@ -19,7 +19,7 @@ namespace xengine {
 
     VertexArray::~VertexArray()
     {
-        // TODO: Check if we need to delete it
+        glDeleteVertexArrays(1 , &m_RenderId);
     }
 
     void VertexArray::bind() const

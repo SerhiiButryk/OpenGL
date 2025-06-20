@@ -15,8 +15,6 @@ namespace xengine {
 
         void drawRectangle(const Object* object) override;
 
-        void drawLine(const Object* object) override;
-
     private:
         void setCommonConfigs(const Object* object);
     };

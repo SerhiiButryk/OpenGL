@@ -18,19 +18,17 @@ namespace xengine {
                 LOG_ERROR("Renderer::setCommonConfigs: drawBuffer is not set");
             }
 
-            if (object->elementCount == 0) {
-                LOG_ERROR("Renderer::setCommonConfigs: vertex count is not set");
+            if (object->drawBufferSize == 0) {
+                LOG_ERROR("Renderer::setCommonConfigs: draw buffer size is not set");
             }
 
             object->vertexBuffer->update(
                 (float*) object->drawBuffer,
-                VERTEX_TOTAL_SIZE(object->elementCount));
+                VERTEX_BYTES_SIZE(object->drawBufferSize));
         }
     }
 
     void Renderer::drawRectangle(const Object* object) {
-
-        LOG_DEBUG("Renderer::drawRectangle() obj = '{:p}' START", fmt::ptr(&object));
 
         setCommonConfigs(object);
 
@@ -44,41 +42,17 @@ namespace xengine {
         va->bind();
         ib->bind();
 
+        LOG_DEBUG("Renderer::drawRectangle() Draw elements = '{}'", object->elementCount);
+
         /* Send a draw command */
 
-        glDrawElements(GL_TRIANGLES, ib->getCount(), GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_TRIANGLES, object->elementCount, GL_UNSIGNED_INT, nullptr);
 
         /* Unbind to be safe  */
 
         shader->unBind();
         va->unbind();
         ib->unbind();
-
-        LOG_DEBUG("Renderer::drawRectangle() obj = '{:p}' END", fmt::ptr(&object));
-
-    }
-
-    void Renderer::drawLine(const Object* object) {
-
-        setCommonConfigs(object);
-
-        // auto* va = object->vertexArray;
-        // auto* shader = object->shader;
-
-        // shader->bind();
-        // va->bind();
-
-        // TODO: Doesn't work on Ubuntu
-        // GLfloat aliasedLineRange[2];
-        // glGetFloatv(GL_LINE_WIDTH_RANGE, aliasedLineRange);
-        // glGetFloatv(GL_ALIASED_LINE_WIDTH_RANGE, aliasedLineRange);
-        // glLineWidth(aliasedLineRange[1]);
-
-        /* Send a draw command */
-
-        // uint32_t count = m_renderData->configs.vertexCount;
-
-        // glDrawArrays(GL_LINES, 0, count);
 
     }
 

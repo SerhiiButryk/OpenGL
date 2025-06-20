@@ -20,6 +20,7 @@
 #include <opengl/shapes/Line.h>
 #include <opengl/shapes/Rectangle.h>
 #include <opengl/shapes/Triangle.h>
+#include <opengl/shapes/Color.h>
 
 #include <window/input/Input.h>
 

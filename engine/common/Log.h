@@ -33,9 +33,12 @@ namespace xengine {
             return instance;
         }
 
+        void cleanup();
+
         template<typename... Args>
         auto logError(const std::string &message, Args &&... args) {
 #ifdef ENABLE_LOGGING
+            if (m_LoggerStopped) return;
             // Log to default output
             spdlog::error(message, std::forward<Args>(args)...);
             // Log to file
@@ -47,6 +50,7 @@ namespace xengine {
         template<typename... Args>
         auto logInfo(const std::string &message, Args &&... args) {
 #ifdef ENABLE_LOGGING
+            if (m_LoggerStopped) return;
             // Log to default output
             spdlog::info(message, std::forward<Args>(args)...);
             // Log to file
@@ -58,6 +62,7 @@ namespace xengine {
         template<typename... Args>
         auto logWarn(const std::string &message, Args &&... args) {
 #ifdef ENABLE_LOGGING
+            if (m_LoggerStopped) return;
             // Log to default output
             spdlog::warn(message, args...);
             // Log to file
@@ -69,6 +74,7 @@ namespace xengine {
         template<typename... Args>
         auto logDebug(const std::string &message, Args &&... args) {
 #ifdef ENABLE_LOGGING
+            if (m_LoggerStopped) return;
             // Log to default output
             spdlog::debug(message, std::forward<Args>(args)...);
             // Log to file
@@ -79,6 +85,7 @@ namespace xengine {
 
     private:
         std::shared_ptr<spdlog::logger> mFileLogger;
+        bool m_LoggerStopped = false;
     };
 
     // Helper functions

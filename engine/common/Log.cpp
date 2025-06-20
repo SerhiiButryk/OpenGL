@@ -57,6 +57,11 @@ namespace xengine {
         return spdlog::get_level() == spdlog::level::trace;
     }
 
+    void  Log::cleanup() {
+        spdlog::shutdown();
+        m_LoggerStopped = true;
+    }
+
     void logMat4(const std::string& mes, const glm::mat4& m) {
 
         std::string message = mes + "\n";

@@ -10,6 +10,11 @@ namespace xengine {
 		glGenBuffers(1 /* Create 1 buffer */, &m_RenderId /* Name of the array where generated buffer is stored */);
 	}
 
+	IndexBuffer::~IndexBuffer()
+	{
+		glDeleteBuffers(1 , &m_RenderId);
+	}
+
 	void IndexBuffer::bind() const
 	{
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER /* Buffer type */, m_RenderId /* Buffer name */);

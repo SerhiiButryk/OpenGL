@@ -140,6 +140,8 @@ namespace test {
         bool checked1 = (m_shapeSelected == ShapeSelected::CIRCLE_SHAPE);
         bool checked2 = (m_shapeSelected == ShapeSelected::TRIANGLE_SHAPE);
         bool checked3 = (m_shapeSelected == ShapeSelected::RECTANGLE_SHAPE);
+        bool checked4 = (m_shapeSelected == ShapeSelected::BATCH_SHAPE);
+        bool checked5 = (m_shapeSelected == ShapeSelected::CUBE_SHAPE);
 
         if (addCheckBox("Circle", checked1, true)) {
             m_shapeSelected = ShapeSelected::CIRCLE_SHAPE;
@@ -151,6 +153,14 @@ namespace test {
 
         if (addCheckBox("Rect", checked3, true)) {
             m_shapeSelected = ShapeSelected::RECTANGLE_SHAPE;
+        }
+
+        if (addCheckBox("Batch", checked4, true)) {
+            m_shapeSelected = ShapeSelected::BATCH_SHAPE;
+        }
+
+        if (addCheckBox("Cube", checked5, true)) {
+            m_shapeSelected = ShapeSelected::CUBE_SHAPE;
         }
 
         addSpace();
@@ -197,6 +207,19 @@ namespace test {
             }
 
             break;
+
+            case ShapeSelected::BATCH_SHAPE: {
+                submitBatch();
+            }
+
+            break;
+
+            case ShapeSelected::CUBE_SHAPE: {
+                submitCube();
+            }
+
+            break;
+
         }
     }
 
@@ -241,4 +264,53 @@ namespace test {
 
     }
 
+    void ShapesComponentUI::submitBatch() {
+
+        using namespace xengine;
+
+        m_renderer->batchStart();
+
+        {
+            glm::vec4 m_color = Color(GREY_COLOR_LIGHT);
+
+            auto model = glm::mat4(1.0f);
+            model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+            std::string shaderPath = xengine::file::buildShaderPath(m_app->getResourcePath(), "base.shader");
+            std::string texturePath = xengine::file::buildTexturePath(m_app->getResourcePath(), "wood_surface.png");
+
+            auto* object = ComponentUIFactory::createRectShape(shaderPath, texturePath, model, m_color, 1.0f, 1.0f, -1.0f);
+            m_renderer->batchSubmit(object);
+        }
+
+        {
+            glm::vec4 m_color = Color(GREY_COLOR_DARK);
+
+            auto model = glm::mat4(1.0f);
+            model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+            std::string shaderPath = xengine::file::buildShaderPath(m_app->getResourcePath(), "base.shader");
+            std::string texturePath = xengine::file::buildTexturePath(m_app->getResourcePath(), "wood_surface.png");
+
+            auto* object = ComponentUIFactory::createRectShape(shaderPath, texturePath, model, m_color, 0.5f, 0.5f, -1.0f);
+            m_renderer->batchSubmit(object);
+        }
+
+        m_renderer->batchEnd();
+
+    }
+
+    void ShapesComponentUI::submitCube() {
+
+        auto model = glm::mat4(1.0f);
+        model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+        std::string shaderPath = xengine::file::buildShaderPath(m_app->getResourcePath(), "base.shader");
+        std::string texturePath = xengine::file::buildTexturePath(m_app->getResourcePath(), "wood_surface.png");
+
+        auto* object = ComponentUIFactory::createCubeShape(shaderPath, texturePath, model);
+
+        m_renderer->submit(object);
+
+    }
 }

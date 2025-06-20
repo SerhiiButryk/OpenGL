@@ -32,13 +32,9 @@ namespace xengine {
         // Objects are owned by this class.
         std::vector<Object*> m_objectsList;
 
-        void batch(Object* object);
+        void batch(Object* objectSrc, Object* objectDst);
         void createDrawBuffer(Object* object, unsigned int size = 0);
-        void createGLBuffers(Object*);
-
-    private:
-
-        void fillIndexBufferWithData(Object* object) const;
+        void createGLBuffers(Object*, size_t indexBuffSize = 0);
 
     };
 

@@ -15,8 +15,6 @@ namespace xengine {
 
         virtual void drawRectangle(const Object* object) = 0;
 
-        virtual void drawLine(const Object* object) = 0;
-
     };
 
 }

@@ -3,15 +3,15 @@
 #include <glm/vec4.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
-#include <opengl/Layout.h>
 
+#include <opengl/Layout.h>
 #include "Color.h"
 
 namespace xengine {
 
     #define VERTEX_ELEMENT_COUNT(x) sizeof (decltype(x)) / sizeof (decltype(x)::value_type)
     // Size in bytes for N vertices
-    #define VERTEX_TOTAL_SIZE(VERTEX_COUNT) (sizeof(Vertex) * VERTEX_COUNT)
+    #define VERTEX_BYTES_SIZE(VERTEX_COUNT) (sizeof(Vertex) * VERTEX_COUNT)
 
     // TODO: For different shapes we might need to create different vertices like VertexLine VertexCircle but don't do that for simplicity
     struct Vertex {
@@ -29,6 +29,13 @@ namespace xengine {
             layout.add({VERTEX_ELEMENT_COUNT(texCoord), GL_FLOAT, GL_FALSE });
             layout.add({1, GL_FLOAT, GL_FALSE });
             return layout;
+        }
+
+        static void reset(Vertex* v) {
+            v->position = {};
+            v->color = {};
+            v->texCoord = {};
+            v->texIndex = {};
         }
     };
 
@@ -68,6 +75,8 @@ namespace xengine {
             void invalidate() { invalid = true; }
             void reset() { invalid = false; }
             bool isInvalid() const { return invalid; }
+
+            virtual void setIndicies(uint32_t* indices, uint32_t maxSize) = 0;
 
         protected:
             // RGB Color

@@ -13,5 +13,8 @@ namespace test {
 
         static xengine::Object* createTriangleShape(const std::string& shaderPath, const std::string& texturePath,
             const glm::mat4& modelMatrix, glm::vec4 color, glm::vec3 points[], float textureIndex = -1.0f);
+
+        static xengine::Object* createCubeShape(const std::string& shaderPath, const std::string& texturePath,
+            const glm::mat4& modelMatrix);
     };
 }

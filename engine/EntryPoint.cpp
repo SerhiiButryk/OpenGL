@@ -59,5 +59,7 @@ int main()
 
     LOG_INFO("Finished with code {}", retCode);
 
+    Log::getInstance().cleanup();
+
     return retCode;
 }

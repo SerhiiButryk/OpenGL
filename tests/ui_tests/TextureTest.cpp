@@ -29,7 +29,7 @@ namespace test {
         glm::vec4 color = { 1.0f, 0.0f, 0.0f, 1.0f};
 
         auto* object = ComponentUIFactory::createRectShape(shaderPath, texturePath, model, color, 1.0f, 1.0f, textureIndex);
-        shape = object->shape;
+        shape = object->getShape();
 
         glRenderer.submit(object);
 

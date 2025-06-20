@@ -20,4 +20,9 @@ namespace xengine {
         m_dataBuffer[index] = vertex;
     }
 
+    void Triangle::setIndicies(uint32_t *indices, uint32_t maxSize) {
+        indices[0] = 0;
+        indices[1] = 1;
+        indices[2] = 2;
+    }
 }
